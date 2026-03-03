@@ -1,0 +1,19 @@
+{
+  "name": "juego-ciudad",
+  "version": "1.0.0",
+  "description": "Juego web de gestión de ciudad con arquitectura por capas",
+  "type": "module",
+  "main": "ejemplo.js",
+  "scripts": {
+    "start": "node ejemplo.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "juego",
+    "ciudad",
+    "simulacion",
+    "frontend"
+  ],
+  "author": "",
+  "license": "ISC"
+}
