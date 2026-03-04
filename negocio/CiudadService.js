@@ -1,62 +1,62 @@
 document.addEventListener("DOMContentLoaded", function () {
-    console.log("DOM cargado - CiudadanoService");
+    console.log("DOM cargado - CiudadService");
 
-    cargarCiudadanos();
+    cargarCiudades();
 
     // ─── READ ALL ────────────────────────────────────────────────────────────
-    function cargarCiudadanos() {
-        const lista = StorageCiudadano.load();
-        console.log("Ciudadanos cargados:", lista);
+    function cargarCiudades() {
+        const lista = StorageCiudad.load();
+        console.log("Ciudades cargadas:", lista);
         return lista;
     }
 
     // ─── READ ONE ────────────────────────────────────────────────────────────
-    function cargarCiudadano(id) {
-        const lista = StorageCiudadano.load();
-        const ciudadano = lista.find(c => c.id === id);
-        console.log("Ciudadano encontrado:", ciudadano);
-        return ciudadano || null;
+    function cargarCiudad(id) {
+        const lista = StorageCiudad.load();
+        const ciudad = lista.find(c => c.id === id);
+        console.log("Ciudad encontrada:", ciudad);
+        return ciudad || null;
     }
 
     // ─── CREATE ──────────────────────────────────────────────────────────────
-    function crearCiudadano(id, nivelFelicidad) {
-        const lista = StorageCiudadano.load();
+    function crearCiudad(id, nombre, turno, miMapa = null) {
+        const lista = StorageCiudad.load();
         const existe = lista.some(c => c.id === id);
         if (existe) {
-            console.warn(`Ya existe un ciudadano con id ${id}`);
+            console.warn(`Ya existe una ciudad con id ${id}`);
             return false;
         }
-        const nuevoCiudadano = new Ciudadano(id, nivelFelicidad);
-        lista.push(nuevoCiudadano);
-        StorageCiudadano.save(lista);
-        console.log("Ciudadano creado:", nuevoCiudadano);
+        const nuevaCiudad = new Ciudad(id, nombre, turno, miMapa);
+        lista.push(nuevaCiudad);
+        StorageCiudad.save(lista);
+        console.log("Ciudad creada:", nuevaCiudad);
         return true;
     }
 
     // ─── UPDATE ──────────────────────────────────────────────────────────────
-    function actualizarCiudadano(id, nivelFelicidad) {
-        const lista = StorageCiudadano.load();
+    function actualizarCiudad(id, nombre, turno) {
+        const lista = StorageCiudad.load();
         const indice = lista.findIndex(c => c.id === id);
         if (indice === -1) {
-            console.warn(`No se encontró ciudadano con id ${id}`);
+            console.warn(`No se encontró ciudad con id ${id}`);
             return false;
         }
-        lista[indice] = { ...lista[indice], nivelFelicidad };
-        StorageCiudadano.save(lista);
-        console.log("Ciudadano actualizado:", lista[indice]);
+        lista[indice] = { ...lista[indice], nombre, turno };
+        StorageCiudad.save(lista);
+        console.log("Ciudad actualizada:", lista[indice]);
         return true;
     }
 
     // ─── DELETE ──────────────────────────────────────────────────────────────
-    function eliminarCiudadano(id) {
-        const lista = StorageCiudadano.load();
+    function eliminarCiudad(id) {
+        const lista = StorageCiudad.load();
         const nuevaLista = lista.filter(c => c.id !== id);
         if (nuevaLista.length === lista.length) {
-            console.warn(`No se encontró ciudadano con id ${id}`);
+            console.warn(`No se encontró ciudad con id ${id}`);
             return false;
         }
-        StorageCiudadano.save(nuevaLista);
-        console.log(`Ciudadano con id ${id} eliminado`);
+        StorageCiudad.save(nuevaLista);
+        console.log(`Ciudad con id ${id} eliminada`);
         return true;
     }
 });

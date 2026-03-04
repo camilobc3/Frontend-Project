@@ -1,62 +1,62 @@
 document.addEventListener("DOMContentLoaded", function () {
-    console.log("DOM cargado - CiudadanoService");
+    console.log("DOM cargado - ContratoService");
 
-    cargarCiudadanos();
+    cargarContratos();
 
     // ─── READ ALL ────────────────────────────────────────────────────────────
-    function cargarCiudadanos() {
-        const lista = StorageCiudadano.load();
-        console.log("Ciudadanos cargados:", lista);
+    function cargarContratos() {
+        const lista = StorageContrato.load();
+        console.log("Contratos cargados:", lista);
         return lista;
     }
 
     // ─── READ ONE ────────────────────────────────────────────────────────────
-    function cargarCiudadano(id) {
-        const lista = StorageCiudadano.load();
-        const ciudadano = lista.find(c => c.id === id);
-        console.log("Ciudadano encontrado:", ciudadano);
-        return ciudadano || null;
+    function cargarContrato(id) {
+        const lista = StorageContrato.load();
+        const contrato = lista.find(c => c.id === id);
+        console.log("Contrato encontrado:", contrato);
+        return contrato || null;
     }
 
     // ─── CREATE ──────────────────────────────────────────────────────────────
-    function crearCiudadano(id, nivelFelicidad) {
-        const lista = StorageCiudadano.load();
+    function crearContrato(id, miCiudadano = null, miEdificio = null) {
+        const lista = StorageContrato.load();
         const existe = lista.some(c => c.id === id);
         if (existe) {
-            console.warn(`Ya existe un ciudadano con id ${id}`);
+            console.warn(`Ya existe un contrato con id ${id}`);
             return false;
         }
-        const nuevoCiudadano = new Ciudadano(id, nivelFelicidad);
-        lista.push(nuevoCiudadano);
-        StorageCiudadano.save(lista);
-        console.log("Ciudadano creado:", nuevoCiudadano);
+        const nuevoContrato = new Contrato(id, miCiudadano, miEdificio);
+        lista.push(nuevoContrato);
+        StorageContrato.save(lista);
+        console.log("Contrato creado:", nuevoContrato);
         return true;
     }
 
     // ─── UPDATE ──────────────────────────────────────────────────────────────
-    function actualizarCiudadano(id, nivelFelicidad) {
-        const lista = StorageCiudadano.load();
+    function actualizarContrato(id, miCiudadano, miEdificio) {
+        const lista = StorageContrato.load();
         const indice = lista.findIndex(c => c.id === id);
         if (indice === -1) {
-            console.warn(`No se encontró ciudadano con id ${id}`);
+            console.warn(`No se encontró contrato con id ${id}`);
             return false;
         }
-        lista[indice] = { ...lista[indice], nivelFelicidad };
-        StorageCiudadano.save(lista);
-        console.log("Ciudadano actualizado:", lista[indice]);
+        lista[indice] = { ...lista[indice], miCiudadano, miEdificio };
+        StorageContrato.save(lista);
+        console.log("Contrato actualizado:", lista[indice]);
         return true;
     }
 
     // ─── DELETE ──────────────────────────────────────────────────────────────
-    function eliminarCiudadano(id) {
-        const lista = StorageCiudadano.load();
+    function eliminarContrato(id) {
+        const lista = StorageContrato.load();
         const nuevaLista = lista.filter(c => c.id !== id);
         if (nuevaLista.length === lista.length) {
-            console.warn(`No se encontró ciudadano con id ${id}`);
+            console.warn(`No se encontró contrato con id ${id}`);
             return false;
         }
-        StorageCiudadano.save(nuevaLista);
-        console.log(`Ciudadano con id ${id} eliminado`);
+        StorageContrato.save(nuevaLista);
+        console.log(`Contrato con id ${id} eliminado`);
         return true;
     }
 });
