@@ -59,4 +59,26 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log(`Ciudad con id ${id} eliminada`);
         return true;
     }
+
+    //Lista de hospitales
+    function listaHospitales(ciudad) {
+        return ciudad.misEdificios.filter(e => e instanceof Hospital);
+    }
+
+    //Lista de parques 
+    function listaParques(ciudad) {
+        return ciudad.misEdificios.filter(e => e instanceof Parque);
+    }
+
+    //Lista de estaciones de policia 
+    function listaEstacionesPolicia(ciudad) {
+        return ciudad.misEdificios.filter(e => e instanceof EstacionPolicia);
+    }
+
+    //Lista de estaciones de bomberos
+    function listaEstacionesBomberos(ciudad) {
+        return ciudad.misEdificios.filter(e => e instanceof EstacionBombero);
+    }
+
+
 });

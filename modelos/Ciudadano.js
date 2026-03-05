@@ -1,3 +1,5 @@
+import Ciudad from "./Ciudad";
+
 /**
  * Clase Ciudadano
  * Representa un ciudadano de la ciudad con su nivel de felicidad
@@ -10,6 +12,7 @@ class Ciudadano {
     constructor(id, nivelFelicidad) {
         this.id = id;
         this.nivelFelicidad = nivelFelicidad;
+        this.miCiudad = Ciudad; // Relación 1-1 con Ciudad
         this.misContratos = []; // Relación n-n con Edificio a través de Contrato
     }
 

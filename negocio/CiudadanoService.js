@@ -2,6 +2,8 @@ document.addEventListener("DOMContentLoaded", function () {
     console.log("DOM cargado - CiudadanoService");
 
     cargarCiudadanos();
+    const CiudadService = new CiudadService(); // Preguntar
+
 
     // ─── READ ALL ────────────────────────────────────────────────────────────
     function cargarCiudadanos() {
@@ -58,5 +60,74 @@ document.addEventListener("DOMContentLoaded", function () {
         StorageCiudadano.save(nuevaLista);
         console.log(`Ciudadano con id ${id} eliminado`);
         return true;
+    }
+
+    // Verificacion de si el ciudadano tiene contrato con vivienda
+    function verificarContratoVivienda(ciudadano) {
+        return ciudadano.misContratos.some(contrato => contrato.miEdificio instanceof Casa || contrato.miEdificio instanceof Apartamento);
+    }
+
+    //verificacion de si el ciudadano tiene contrato con edificio comercial
+    function verificarContratoComercial(ciudadano) {
+        return ciudadano.misContratos.some(contrato => contrato.miEdificio instanceof CentroComercial  || contrato.miEdificio instanceof Tienda);
+    }
+
+    // Calculo de la felicidad del ciudadano
+    function  calcularFelicidad(ciudadano) {  
+        let factoresPositivos = 0;
+        let factoresNegativos = 0;
+        factoresPositivos = calculoFactoresPositivos(ciudadano);
+        factoresNegativos = calculoFactoresNegativos(ciudadano);
+        return factoresPositivos + factoresNegativos; // La felicidad se calcula como la suma de factores positivos y negativos
+
+
+
+    } 
+
+
+    function calculoFactoresPositivos(ciudadano) {
+        let factoresPositivosRespuesta = 0;
+
+        //Factores positivos relacionados con la ciudad
+        if(CiudadService.listaHospitales(ciudadano.miCiudad).length > 0) {
+            factoresPositivosRespuesta += CiudadService.listaHospitales(ciudadano.miCiudad).length * 10; // Cada hospital suma 10 puntos
+        }
+
+        if(CiudadService.listaParques(ciudadano.miCiudad).length > 0) {
+            factoresPositivosRespuesta += CiudadService.listaParques(ciudadano.miCiudad).length * 5; // Cada parque suma 5 puntos
+        }
+
+        if(CiudadService.listaEstacionesPolicia(ciudadano.miCiudad).length > 0) {
+            factoresPositivosRespuesta += CiudadService.listaEstacionesPolicia(ciudadano.miCiudad).length * 10; // Cada estación de policía suma 10 puntos
+        }
+
+        if(CiudadService.listaEstacionesBomberos(ciudadano.miCiudad).length > 0) {
+            factoresPositivosRespuesta += CiudadService.listaEstacionesBomberos(ciudadano.miCiudad).length * 10; // Cada estación de bomberos suma 10 puntos
+        }
+
+        //Factores positivos relacionados con la calidad de vida del ciudadano - trabajo y vivienda
+        if(verificarContratoVivienda(ciudadano)) {
+            factoresPositivosRespuesta += 20; // Tener contrato con vivienda suma 20 puntos
+        }
+
+        if(verificarContratoComercial(ciudadano)) {
+            factoresPositivosRespuesta += 15; // Tener contrato con edificio comercial suma 15 puntos
+        }
+
+        return factoresPositivosRespuesta;
+    }
+
+    function calculoFactoresNegativos(ciudadano) {
+        let factoresNegativosRespuesta = 0;
+
+        if(!verificarContratoVivienda(ciudadano)) {
+            factoresNegativosRespuesta -=20 ; // Tener contrato con vivienda suma 20 puntos
+        }
+
+        if(!verificarContratoComercial(ciudadano)) {
+            factoresPositivos -= 15; // Tener contrato con edificio comercial suma 15 puntos
+        }
+
+        return factoresNegativosRespuesta;
     }
 });
