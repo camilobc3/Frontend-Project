@@ -40,4 +40,3 @@ class PlantaElectrica extends PlantaUtilidad {
     }
 }
 
-export default PlantaElectrica;

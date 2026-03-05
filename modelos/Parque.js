@@ -15,4 +15,3 @@ class Parque extends Edificio {
     }
 }
 
-export default Parque;

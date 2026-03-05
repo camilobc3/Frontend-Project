@@ -39,4 +39,3 @@ class CentroComercial extends EdificioComercial {
     }
 }
 
-export default CentroComercial;

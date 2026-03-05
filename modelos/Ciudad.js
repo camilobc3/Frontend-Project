@@ -66,4 +66,3 @@ class Ciudad {
     }
 }
 
-export default Ciudad;

@@ -39,4 +39,3 @@ class Granja extends EdificioIndustrial {
     }
 }
 
-export default Granja;

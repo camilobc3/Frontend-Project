@@ -39,4 +39,3 @@ class Fabrica extends EdificioIndustrial {
     }
 }
 
-export default Fabrica;

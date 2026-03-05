@@ -40,4 +40,3 @@ class Hospital extends EdificioServicio {
     }
 }
 
-export default Hospital;

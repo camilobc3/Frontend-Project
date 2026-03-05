@@ -28,4 +28,3 @@ class Mapa {
     }
 }
 
-export default Mapa;

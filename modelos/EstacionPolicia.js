@@ -40,4 +40,3 @@ class EstacionPolicia extends EdificioServicio {
     }
 }
 
-export default EstacionPolicia;

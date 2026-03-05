@@ -12,4 +12,3 @@ class Produccion {
     }
 }
 
-export default Produccion;

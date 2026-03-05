@@ -40,4 +40,3 @@ class EstacionBombero extends EdificioServicio {
     }
 }
 
-export default EstacionBombero;
