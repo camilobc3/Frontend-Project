@@ -59,7 +59,10 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log(`Alcalde con id ${id} eliminado`);
         return true;
     }
+    
+    //Feo el que lo lea
 });
 
 //Este es el service de alcalde
 // oeoeoeooe 
+//SaliGOD
