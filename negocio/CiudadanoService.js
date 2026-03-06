@@ -120,11 +120,11 @@ document.addEventListener("DOMContentLoaded", function () {
     function calculoFactoresNegativos(ciudadano) {
         let factoresNegativosRespuesta = 0;
 
-        if(!verificarContratoVivienda(ciudadano)) {
+        if(verificarContratoVivienda(ciudadano) === false) {
             factoresNegativosRespuesta -=20 ; // Tener contrato con vivienda suma 20 puntos
         }
 
-        if(!verificarContratoComercial(ciudadano)) {
+        if(!verificarContratoComercial(ciudadano) === false) {
             factoresPositivos -= 15; // Tener contrato con edificio comercial suma 15 puntos
         }
 
