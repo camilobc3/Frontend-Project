@@ -98,6 +98,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Bonus para la puntuacion
 
+        // Ciudadanos empleados
+
+        let ciudadanosEmpleados = 0;
+
+        if (ciudad.misCiudadanos.length > 0) {
+            for (let ciudadano of ciudad.misCiudadanos) {
+                if (verificarContratoComercial(ciudadano)) {
+                    ciudadanosEmpleados += 1;
+                } 
+            }
+
+            if (ciudadanosEmpleados === mciudad.misCiudadanos.length) {
+                puntuacionFinak += 500;
+            }
+        }
+
         if (felicidad > 80) {
             puntuacionFinal += 300;
         }
@@ -128,12 +144,18 @@ document.addEventListener("DOMContentLoaded", function () {
             puntuacionFinal -= 400
         }
 
-        //[IMPORTANTE] HACE FALTA AGREGAR LOS BONUS Y PENALIZACION DE TRABAJO DE CIUDADANOS
+        // Restar por ciudadano desempleado
+
+        if (ciudad.misCiudadanos.length > 0) {
+            for (let ciudadano of ciudad.misCiudadanos) {
+                if (!verificarContratoComercial(ciudadano)) {
+                    puntuacionFinal -= 10
+                } 
+            }
+        }
 
         return puntuacionFinal
 
-        
-        
     }
 
     //Lista de hospitales
