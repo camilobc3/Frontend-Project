@@ -65,5 +65,5 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 //Este es el service de alcalde
-// oeoeoeooe 
+// oeoeoeooe
 //SaliGOD
