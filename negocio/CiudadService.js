@@ -76,8 +76,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function calcularPuntuacion(ciudad) {
 
-        // Calculos de lo que corresponde con su condicion para la puntuacion final
-        // Por esta razon era necesario poner los atributos de los recursos [Cami]
+        // Variables que aportan constantemente a la puntuacion [IMPORTANTE]
 
         let poblacion = (ciudad.misCiudadanos.length * 10);
         let dinero = (ciudad.dinero/100);
@@ -85,18 +84,55 @@ document.addEventListener("DOMContentLoaded", function () {
         let electricidad = (ciudad.electricidad * 2);
         let agua = (ciudad.agua * 2);
 
-        // Calculando el promedio de felicidad de los ciudadanos de la ciudad
-        let promedioFelicidad = 0
+        let promedioFelicidad = 0;
         
-        for (let ciudadano of ciudad.misCiudadanos) {
-            promedioFelicidad += ciudadano.nivelFelicidad/ciudad.misCiudadanos.length;
+        if (ciudad.misCiudadanos.length > 0) { 
+            for (let ciudadano of ciudad.misCiudadanos) {
+                promedioFelicidad += (CiudadanoService.calcularFelicidad(ciudadano));
+            }
         }
 
-        let puntuacion = poblacion + dinero + edificios + electricidad + agua + promedioFelicidad 
+        let felicidad = ((promedioFelicidad / ciudad.misCiudadanos.length) * 5);
 
-        return puntuacion
+        let puntuacionFinal = poblacion + dinero + edificios + electricidad + agua + felicidad ;
 
-        // ESTA SIN TERMINAR CHANGUITOS [------ATENCION!-------]
+        // Bonus para la puntuacion
+
+        if (felicidad > 80) {
+            puntuacionFinal += 300;
+        }
+
+        if (ciudad.electricidad > 0 && ciudad.agua > 0) {
+            puntuacionFinal += 200;
+        }
+
+        if (ciudad.misCiudadanos.length > 1000) {
+            puntuacionFinal += 1000
+        }
+
+        // Penalizaciones para la puntuacion
+
+        if (ciudad.dinero < 0) {
+            puntuacionFinal -= 500
+        }
+
+        if (ciudad.electricidad < 0) {
+            puntuacionFinal -= 300
+        }
+
+        if (ciudad.agua < 0) {
+            puntuacionFinal -= 300
+        }
+
+        if (felicidad < 40) {
+            puntuacionFinal -= 400
+        }
+
+        //[IMPORTANTE] HACE FALTA AGREGAR LOS BONUS Y PENALIZACION DE TRABAJO DE CIUDADANOS
+
+        return puntuacionFinal
+
+        
         
     }
 
