@@ -1,6 +1,8 @@
 /**
  * Archivo de ejemplo para demostrar el uso de los modelos
  */
+
+//Hola como estan
 import { 
     Alcalde, 
     Ciudad, 
