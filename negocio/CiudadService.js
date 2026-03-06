@@ -47,6 +47,20 @@ document.addEventListener("DOMContentLoaded", function () {
         return true;
     }
 
+    function actualizarCiudadCompleta(ciudad){ //Funcion para actualizar ciudad recibiendo el objeto
+        const lista = StorageCiudad.load();
+        const indice = lista.findIndex(c => c.id === ciudad.id);
+        if (indice === -1) {
+            console.warn(`No se encontró ciudad con id ${ciudad.id}`);
+            return false;
+        }
+        lista[indice] = ciudad;
+        StorageCiudad.save(lista);
+        console.log("Ciudad actualizada:", lista[indice]);
+        return true;
+    }
+
+
     // ─── DELETE ──────────────────────────────────────────────────────────────
     function eliminarCiudad(id) {
         const lista = StorageCiudad.load();
@@ -70,7 +84,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return ciudad.misEdificios.filter(e => e instanceof Parque);
     }
 
-    //Lista de estaciones de policia 
+    //Lista de estaciones de policia
     function listaEstacionesPolicia(ciudad) {
         return ciudad.misEdificios.filter(e => e instanceof EstacionPolicia);
     }
@@ -81,4 +95,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
+    window.crearCiudad = crearCiudad;
+    window.cargarCiudad = cargarCiudad;
+    window.actualizarCiudadCompleta = actualizarCiudadCompleta;
 });
