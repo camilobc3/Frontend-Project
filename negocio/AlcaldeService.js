@@ -62,5 +62,4 @@ document.addEventListener("DOMContentLoaded", function () {
     
     //Feo el que lo lea
 });
-
-//Este es el service de alcalde 
+//SaliGOD
