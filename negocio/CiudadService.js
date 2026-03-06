@@ -74,6 +74,32 @@ document.addEventListener("DOMContentLoaded", function () {
         return true;
     }
 
+    function calcularPuntuacion(ciudad) {
+
+        // Calculos de lo que corresponde con su condicion para la puntuacion final
+        // Por esta razon era necesario poner los atributos de los recursos [Cami]
+
+        let poblacion = (ciudad.misCiudadanos.length * 10);
+        let dinero = (ciudad.dinero/100);
+        let edificios = (ciudad.misEdificios.length * 50);
+        let electricidad = (ciudad.electricidad * 2);
+        let agua = (ciudad.agua * 2);
+
+        // Calculando el promedio de felicidad de los ciudadanos de la ciudad
+        let promedioFelicidad = 0
+        
+        for (let ciudadano of ciudad.misCiudadanos) {
+            promedioFelicidad += ciudadano.nivelFelicidad/ciudad.misCiudadanos.length;
+        }
+
+        let puntuacion = poblacion + dinero + edificios + electricidad + agua + promedioFelicidad 
+
+        return puntuacion
+
+        // ESTA SIN TERMINAR CHANGUITOS [------ATENCION!-------]
+        
+    }
+
     //Lista de hospitales
     function listaHospitales(ciudad) {
         return ciudad.misEdificios.filter(e => e instanceof Hospital);
@@ -98,4 +124,6 @@ document.addEventListener("DOMContentLoaded", function () {
     window.crearCiudad = crearCiudad;
     window.cargarCiudad = cargarCiudad;
     window.actualizarCiudadCompleta = actualizarCiudadCompleta;
+
+    
 });
