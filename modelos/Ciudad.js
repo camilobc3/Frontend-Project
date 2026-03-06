@@ -22,7 +22,7 @@ class Ciudad {
         this.electricidad = 30;
         this.alimento = 30;
 
-        this.ingresosXTurno = 0;
+        this.ingresosXTurno = 100;
         this.electricidadXTurno = 0;
         this.aguaXTurno = 0;
         this.alimentoXTurno = 0;
