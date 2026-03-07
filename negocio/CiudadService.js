@@ -6,6 +6,7 @@ import {empleoDisponibleTienda} from "./TiendaService.js";
 import {empleoDisponibleCentroComercial} from "./CentroComercialService.js";
 import {empleoDisponibleFabrica} from "./FabricaService.js";
 import {empleoDisponibleGranja} from "./GranjaService.js";
+import {verificarContratoComercial} from "./CiudadanoService.js";
 
 document.addEventListener("DOMContentLoaded", function () {
     
@@ -217,6 +218,36 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             }
     }
+
+    //Estadisticas de la porblación
+
+    //numero de ciudadanos en la ciudad
+    function numeroCiudadanos(ciudad) {
+        return ciudad.misCiudadanos.length;
+    }
+
+    //numero de ciudadanos empleados en la ciudad
+    function numerociudadanosEmpleados(ciudad) {
+        let ciudadanosEmpleados = 0;
+        for (let ciudadano of ciudad.misCiudadanos) {
+            if (verificarContratoComercial(ciudadano)) {
+                ciudadanosEmpleados += 1;
+            }
+        }
+        return ciudadanosEmpleados;
+    }
+
+    //numero de ciudadanos desempleados en la ciudad
+    function numeroCiudadanosDesempleados(ciudad) {
+        let ciudadanosDesempleados = 0;
+        for (let ciudadano of ciudad.misCiudadanos) {
+            if (verificarContratoComercial(ciudadano) === false) {
+                ciudadanosDesempleados += 1;
+            }
+        }
+        return ciudadanosDesempleados;
+    }
+    
 
     window.crearCiudad = crearCiudad;
     window.cargarCiudad = cargarCiudad;
