@@ -247,7 +247,47 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         return ciudadanosDesempleados;
     }
-    
+
+    //Funcion para actualizar los recursos por turno segun el tipo de edificio
+    function actualizarRecursoXTurno(ciudad, edificio){ //Esta funcion se debe usar junto a la funcion de agregar edificio a una ciudad para actualizar los parametros de la ciudad segun el edificio agregado
+        if (edificio instanceof EdificioResidencial){
+            ciudad.electricidadXTurno -= edificio.consumoElectricidad();
+            ciudad.aguaXTurno -= edificio.consumoAgua();
+        }
+        else if (edificio instanceof EdificioComercial){
+            ciudad.ingresosXTurno += edificio.produccionXTurno();
+            ciudad.electricidadXTurno -= edificio.consumoElectricidad();
+        }
+        else if (edificio instanceof EdificioIndustrial){
+            if (edificio instanceof Fabrica){
+                ciudad.ingresosXTurno += edificio.produccionXTurno();
+                ciudad.electricidadXTurno -= edificio.consumoElectricidad();
+                ciudad.aguaXTurno -= edificio.consumoAgua();
+            }
+            else{ //Si no es fabrica, es Granja
+                ciudad.alimentoXTurno += edificio.produccionXTurno();
+                ciudad.aguaXTurno -= edificio.consumoAgua();
+            }
+        }
+        else if (edificio instanceof EdificioServicio){
+            ciudad.electricidadXTurno -= edificio.consumoElectricidad();
+            if (edificio instanceof Hospital){
+                ciudad.aguaXTurno -= edificio.consumoAgua();
+            }
+        }
+        else if (edificio instanceof PlantaUtilidad){
+            if (edificio instanceof PlantaElectrica){
+                ciudad.electricidadXTurno += edificio.produccionXTurno();
+            }
+            else{ //Si no es planta electrica, es planta de agua
+                ciudad.aguaXTurno += edificio.produccionXTurno();
+                ciudad.electricidadXTurno -= edificio.consumoElectricidad();
+            }
+        }
+        actualizarCiudadCompleta(ciudad);
+    }
+
+
 
     window.crearCiudad = crearCiudad;
     window.cargarCiudad = cargarCiudad;
