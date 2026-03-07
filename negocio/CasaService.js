@@ -53,4 +53,14 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log("Casa eliminada:", eliminada[0]);
         return true;
     }
+
+    // Esta funcón verifica si una casa tiene capacidad disponible para nuevos contratos(capacidad de vivienda), comparando la cantidad de contratos actuales con la capacidad máxima de la vivienda.
+    function capacidadDisponibleCasa(casa) {
+        if(casa.misContratos.length <= casa.capacidadVivienda){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 });

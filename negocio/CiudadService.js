@@ -1,7 +1,19 @@
+//Importaciones
+import {calcularFelicidad} from "./CiudadanoService.js";
+import {capacidadDisponibleCasa} from "./CasaService.js";
+import {capacidadDisponibleApartamento} from "./ApartamentoService.js";
+import {empleoDisponibleTienda} from "./TiendaService.js";
+import {empleoDisponibleCentroComercial} from "./CentroComercialService.js";
+import {empleoDisponibleFabrica} from "./FabricaService.js";
+import {empleoDisponibleGranja} from "./GranjaService.js";
+
 document.addEventListener("DOMContentLoaded", function () {
+    
     console.log("DOM cargado - CiudadService");
 
     cargarCiudades();
+
+
 
     // ─── READ ALL ────────────────────────────────────────────────────────────
     function cargarCiudades() {
@@ -178,6 +190,33 @@ document.addEventListener("DOMContentLoaded", function () {
         return ciudad.misEdificios.filter(e => e instanceof EstacionBombero);
     }
 
+    //Promedio de felicidad de la ciudad, calculado a partir de la felicidad de cada ciudadano
+    function promedioFelicidadCiudad(ciudad) {
+        let promedioFelicidad = 0;
+        
+        if (ciudad.misCiudadanos.length > 0) { 
+            for (let ciudadano of ciudad.misCiudadanos) {
+                promedioFelicidad += (CiudadanoService.calcularFelicidad(ciudadano));
+            }
+            return (promedioFelicidad / ciudad.misCiudadanos.length);
+        } else {
+            return 0;
+        }
+    }
+
+    //Creación automatica de ciudadanos si hay viviendas disponibles, empleos disponibles y verificando la felicidad promedio
+    function crearCiudadanosAutomaticamente(ciudad) {
+        if(promedioFelicidadCiudad(ciudad)>60 && CasaService.capacidadDisponibleCasa(ciudad) 
+            && ApartamentoService.capacidadDisponibleApartamento(ciudad) && TiendaService.empleoDisponibleTienda(ciudad) 
+            && CentroComercialService.empleoDisponibleCentroComercial(ciudad) && FabricaService.empleoDisponibleFabrica(ciudad) 
+            && GranjaService.empleoDisponibleGranja(ciudad)){
+                for (let i = 0; i < 4; i++) {
+                    const nuevoId = ciudad.misCiudadanos.length + 1
+                    let nuevoCiudadano = new Ciudadano(nuevoId,0); // Realizar función para incrementar id´s del ciudadano
+                    ciudad.misCiudadanos.push(nuevoCiudadano);
+                }
+            }
+    }
 
     window.crearCiudad = crearCiudad;
     window.cargarCiudad = cargarCiudad;

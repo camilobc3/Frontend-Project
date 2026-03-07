@@ -53,4 +53,13 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log("Apartamento eliminado:", eliminado[0]);
         return true;
     }
+
+    // Esta funcón verifica si un apartamento tiene capacidad disponible para nuevos contratos (capacidad de vivienda), comparando la cantidad de contratos actuales con la capacidad máxima de la vivienda.
+    function capacidadDisponibleApartamento(apartamento) {
+        if(apartamento.misContratos.length <= apartamento.capacidadVivienda){
+            return true;
+        } else {
+            return false;
+        }
+    }
 });

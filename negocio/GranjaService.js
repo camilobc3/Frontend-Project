@@ -53,4 +53,13 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log("Granja eliminada:", eliminada[0]);
         return true;
     }
+
+    // Esta funcón verifica si una granja tiene capacidad disponible para nuevos contratos(Empleos), comparando la cantidad de contratos actuales con la capacidad máxima de la vivienda.
+    function empleoDisponibleGranja(granja) {
+        if(granja.misContratos.length <= granja.numeroEmpleos){
+            return true;
+        } else {
+            return false;
+        }
+    }
 });
