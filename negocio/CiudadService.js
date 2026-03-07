@@ -191,6 +191,36 @@ document.addEventListener("DOMContentLoaded", function () {
         return ciudad.misEdificios.filter(e => e instanceof EstacionBombero);
     }
 
+    //Lista de casas
+    function listaCasas(ciudad) {
+        return ciudad.misEdificios.filter(e => e instanceof Casa);
+    }
+
+    //Lista de apartamentos
+    function listaApartamentos(ciudad) {
+        return ciudad.misEdificios.filter(e => e instanceof Apartamento);
+    }
+
+    //Lista de tiendas
+    function listaTiendas(ciudad) {
+        return ciudad.misEdificios.filter(e => e instanceof Tienda);
+    }
+
+    //Lista de centros comerciales
+    function listaFabricas(ciudad) {
+        return ciudad.misEdificios.filter(e => e instanceof CentroComercial);
+    }
+
+    //Lista de fabricas
+    function listaFabricas(ciudad) {
+        return ciudad.misEdificios.filter(e => e instanceof Fabrica);
+    }
+
+    //Lista de granjas
+    function listaGranjas(ciudad) {
+        return ciudad.misEdificios.filter(e => e instanceof Granja);
+    }
+
     //Promedio de felicidad de la ciudad, calculado a partir de la felicidad de cada ciudadano
     function promedioFelicidadCiudad(ciudad) {
         let promedioFelicidad = 0;
@@ -207,16 +237,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
     //Creación automatica de ciudadanos si hay viviendas disponibles, empleos disponibles y verificando la felicidad promedio
     function crearCiudadanosAutomaticamente(ciudad) {
-        if(promedioFelicidadCiudad(ciudad)>60 && CasaService.capacidadDisponibleCasa(ciudad) 
-            && ApartamentoService.capacidadDisponibleApartamento(ciudad) && TiendaService.empleoDisponibleTienda(ciudad) 
-            && CentroComercialService.empleoDisponibleCentroComercial(ciudad) && FabricaService.empleoDisponibleFabrica(ciudad) 
-            && GranjaService.empleoDisponibleGranja(ciudad)){
+        if(promedioFelicidadCiudad(ciudad)>60 && edificioDisponible(listaCasas(ciudad), capacidadDisponibleCasa)
+            && edificioDisponible(listaApartamentos(ciudad), capacidadDisponibleApartamento) && edificioDisponible(listaTiendas(ciudad), empleoDisponibleTienda) 
+            && edificioDisponible(listaCentrosComerciales(ciudad), empleoDisponibleCentroComercial) && edificioDisponible(listaFabricas(ciudad), empleoDisponibleFabrica) 
+            && edificioDisponible(listaGranjas(ciudad), empleoDisponibleGranja)){
                 for (let i = 0; i < 4; i++) {
                     const nuevoId = ciudad.misCiudadanos.length + 1
                     let nuevoCiudadano = new Ciudadano(nuevoId,0); // Realizar función para incrementar id´s del ciudadano
                     ciudad.misCiudadanos.push(nuevoCiudadano);
                 }
             }
+    }
+
+    //Disponibilidad de vivienda
+
+    //Verificar si hay alguna edificio con capacidad disponible para nuevos contratos, comparando .
+    function edificioDisponible(listaEdificios, funcionVerificacion) {
+        return listaEdificios.some(edificio => funcionVerificacion(edificio));
     }
 
     //Estadisticas de la porblación
