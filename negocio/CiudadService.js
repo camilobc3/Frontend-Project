@@ -87,90 +87,6 @@ document.addEventListener("DOMContentLoaded", function () {
         return true;
     }
 
-    function calcularPuntuacion(ciudad) {
-
-        // Variables que aportan constantemente a la puntuacion [IMPORTANTE]
-
-        let poblacion = (ciudad.misCiudadanos.length * 10);
-        let dinero = (ciudad.dinero/100);
-        let edificios = (ciudad.misEdificios.length * 50);
-        let electricidad = (ciudad.electricidad * 2);
-        let agua = (ciudad.agua * 2);
-
-        let promedioFelicidad = 0;
-        
-        if (ciudad.misCiudadanos.length > 0) { 
-            for (let ciudadano of ciudad.misCiudadanos) {
-                promedioFelicidad += (CiudadanoService.calcularFelicidad(ciudadano));
-            }
-        }
-
-        let felicidad = ((promedioFelicidad / ciudad.misCiudadanos.length) * 5);
-
-        let puntuacionFinal = poblacion + dinero + edificios + electricidad + agua + felicidad ;
-
-        // Bonus para la puntuacion
-
-        // Ciudadanos empleados
-
-        let ciudadanosEmpleados = 0;
-
-        if (ciudad.misCiudadanos.length > 0) {
-            for (let ciudadano of ciudad.misCiudadanos) {
-                if (verificarContratoComercial(ciudadano)) {
-                    ciudadanosEmpleados += 1;
-                } 
-            }
-
-            if (ciudadanosEmpleados === mciudad.misCiudadanos.length) {
-                puntuacionFinak += 500;
-            }
-        }
-
-        if (felicidad > 80) {
-            puntuacionFinal += 300;
-        }
-
-        if (ciudad.electricidad > 0 && ciudad.agua > 0) {
-            puntuacionFinal += 200;
-        }
-
-        if (ciudad.misCiudadanos.length > 1000) {
-            puntuacionFinal += 1000
-        }
-
-        // Penalizaciones para la puntuacion
-
-        if (ciudad.dinero < 0) {
-            puntuacionFinal -= 500
-        }
-
-        if (ciudad.electricidad < 0) {
-            puntuacionFinal -= 300
-        }
-
-        if (ciudad.agua < 0) {
-            puntuacionFinal -= 300
-        }
-
-        if (felicidad < 40) {
-            puntuacionFinal -= 400
-        }
-
-        // Restar por ciudadano desempleado
-
-        if (ciudad.misCiudadanos.length > 0) {
-            for (let ciudadano of ciudad.misCiudadanos) {
-                if (!verificarContratoComercial(ciudadano)) {
-                    puntuacionFinal -= 10
-                } 
-            }
-        }
-
-        return puntuacionFinal
-
-    }
-
     //Lista de hospitales
     function listaHospitales(ciudad) {
         return ciudad.misEdificios.filter(e => e instanceof Hospital);
@@ -283,6 +199,66 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
         return ciudadanosDesempleados;
+    }
+
+    function calcularPuntuacion(ciudad) {
+
+        // Variables que aportan constantemente a la puntuacion [IMPORTANTE]
+
+        let poblacion = (ciudad.misCiudadanos.length * 10);
+        let dinero = (ciudad.dinero/100);
+        let edificios = (ciudad.misEdificios.length * 50);
+        let electricidad = (ciudad.electricidad * 2);
+        let agua = (ciudad.agua * 2);
+
+        let felicidad = promedioFelicidadCiudad(ciudad)
+
+        let puntuacionFinal = poblacion + dinero + edificios + electricidad + agua + felicidad ;
+
+        // Bonus para la puntuacion
+
+        // Ciudadanos empleados
+
+        if (numerociudadanosEmpleados(ciudad) === ciudad.misCiudadanos.length) {
+            puntuacionFinal += 500;
+        }
+
+        if (felicidad > 80) {
+            puntuacionFinal += 300;
+        }
+
+        if (ciudad.electricidad > 0 && ciudad.agua > 0) {
+            puntuacionFinal += 200;
+        }
+
+        if (ciudad.misCiudadanos.length > 1000) {
+            puntuacionFinal += 1000
+        }
+
+        // Penalizaciones para la puntuacion
+
+        if (ciudad.dinero < 0) {
+            puntuacionFinal -= 500
+        }
+
+        if (ciudad.electricidad < 0) {
+            puntuacionFinal -= 300
+        }
+
+        if (ciudad.agua < 0) {
+            puntuacionFinal -= 300
+        }
+
+        if (felicidad < 40) {
+            puntuacionFinal -= 400
+        }
+
+        // Restar por ciudadano desempleado
+
+        puntuacionFinal -= (numeroCiudadanosDesempleados(ciudad) * 10)
+
+        return puntuacionFinal
+
     }
 
     //Funcion para actualizar los recursos por turno segun el tipo de edificio
