@@ -56,10 +56,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Esta funcón verifica si una fabrica tiene capacidad disponible para nuevos contratos(Empleos), comparando la cantidad de contratos actuales con la capacidad máxima de la vivienda.
     function empleoDisponibleFabrica(fabrica) {
-        if(fabrica.misContratos.length <= fabrica.numeroEmpleos){
-            return true;
-        } else {
+        if(fabrica.misContratos.length === fabrica.numeroEmpleos){
             return false;
+        } else {
+            return true;
         }
     }
 });

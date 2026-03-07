@@ -56,10 +56,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Esta funcón verifica si una centroComercial tiene capacidad disponible para nuevos contratos(Empleos), comparando la cantidad de contratos actuales con la capacidad máxima de la vivienda.
     function empleoDisponibleCentroComercial(centroComercial) {
-        if(centroComercial.misContratos.length <= centroComercial.numeroEmpleos){
-            return true;
-        } else {
+        if(centroComercial.misContratos.length === centroComercial.numeroEmpleos){
             return false;
+        } else {
+            return true;
         }
     }
 });

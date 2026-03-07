@@ -7,6 +7,7 @@ import {empleoDisponibleCentroComercial} from "./CentroComercialService.js";
 import {empleoDisponibleFabrica} from "./FabricaService.js";
 import {empleoDisponibleGranja} from "./GranjaService.js";
 import {verificarContratoComercial} from "./CiudadanoService.js";
+import {verificarContratoVivienda} from "./CiudadanoService.js";
 
 document.addEventListener("DOMContentLoaded", function () {
     
@@ -199,6 +200,28 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
         return ciudadanosDesempleados;
+    }
+
+    //Lista de ciudadanos desempleados en la ciudad
+    function listaCiudadanosDesempleados(ciudad) {
+        let ciudadanosEmpleados = [];
+        for (let ciudadano of ciudad.misCiudadanos) {
+            if (verificarContratoComercial(ciudadano) === false) {
+                ciudadanosEmpleados.push(ciudadano);
+            }
+        }
+        return ciudadanosEmpleados;
+    }
+
+    //Lista de ciudadanos sin vivienda en la ciudad
+    function listaCiudadanosSinVivienda(ciudad) {
+        let ciudadanosSinVivienda = [];
+        for (let ciudadano of ciudad.misCiudadanos) {
+            if (verificarContratoVivienda(ciudadano) === false) {
+                ciudadanosSinVivienda.push(ciudadano);
+            }
+        }
+        return ciudadanosSinVivienda;
     }
 
     function calcularPuntuacion(ciudad) {

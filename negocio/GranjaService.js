@@ -56,10 +56,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Esta funcón verifica si una granja tiene capacidad disponible para nuevos contratos(Empleos), comparando la cantidad de contratos actuales con la capacidad máxima de la vivienda.
     function empleoDisponibleGranja(granja) {
-        if(granja.misContratos.length <= granja.numeroEmpleos){
-            return true;
-        } else {
+        if(granja.misContratos.length === granja.numeroEmpleos){
             return false;
+        } else {
+            return true;
         }
     }
 });

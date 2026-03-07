@@ -56,10 +56,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Esta funcón verifica si una tienda tiene capacidad disponible para nuevos contratos(Empleos), comparando la cantidad de contratos actuales con la capacidad máxima de la vivienda.
     function empleoDisponibleTienda(tienda) {
-        if(tienda.misContratos.length <= tienda.numeroEmpleos){
-            return true;
-        } else {
+        if(tienda.misContratos.length === tienda.numeroEmpleos){
             return false;
+        } else {
+            return true;
         }
     }
 });
