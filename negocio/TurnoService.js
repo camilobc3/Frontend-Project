@@ -1,3 +1,4 @@
+import { crearCiudadanosAutomaticamente, agregarCiudadanosAViviendasDisponibles,  agregarCiudadanosATrabajosDisponibles } from "./CiudadService.js";
 document.addEventListener("DOMContentLoaded", function () {
     console.log("DOM cargado - AlcaldeService");
 
@@ -20,6 +21,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
         actualizarCiudadCompleta(ciudad);
         console.log("Turno:", ciudad.turno, "Dinero:", ciudad.dinero);
+    }
+
+    function crearCiudadanosXturno(){
+        crearCiudadanosAutomaticamente();
+        agregarCiudadanosATrabajosDisponibles();
+        agregarCiudadanosAViviendasDisponibles();
     }
 
     function detenerTurnos(){

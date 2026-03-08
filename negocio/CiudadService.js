@@ -224,6 +224,66 @@ document.addEventListener("DOMContentLoaded", function () {
         return ciudadanosSinVivienda;
     }
 
+    //Retorna el primer edificio comercial/industrial con empleo disponible, o null si no hay ninguno
+    function obtenerEdificioConEmpleoDisponible(ciudad) {
+        for (let edificio of ciudad.misEdificios) {
+            if (edificio instanceof Tienda && empleoDisponibleTienda(edificio)) return edificio;
+            if (edificio instanceof CentroComercial && empleoDisponibleCentroComercial(edificio)) return edificio;
+            if (edificio instanceof Fabrica && empleoDisponibleFabrica(edificio)) return edificio;
+            if (edificio instanceof Granja && empleoDisponibleGranja(edificio)) return edificio;
+        }
+        return null;
+    }
+
+    function agregarCiudadanosATrabajosDisponibles(ciudad) {
+        const ciudadanosDesempleados = listaCiudadanosDesempleados(ciudad);
+                    /* Recorre todos los edificios de la ciudad y suma el total de contratos existentes en todos ellos, para usarlo como punto de partida para los nuevos IDs de contrato.
+
+            Desglosado:
+
+            .reduce((acc, e) => ..., 0) — acumulador que empieza en 0 e itera sobre cada edificio e.
+            e.misContratos ? e.misContratos.length : 0 — si el edificio tiene el array misContratos, suma su cantidad; si no existe, suma 0 (evita errores).
+            El resultado es el conteo total de contratos ya creados, que se usa como base para generar IDs únicos (contratoId++ antes de cada nuevo contrato).
+            Ejemplo: si hay 3 edificios con 2, 5 y 3 contratos respectivamente, el resultado es 10, y el próximo contrato tendrá id 11. */
+        let contratoId =  ciudad.misEdificios.reduce((acc, e) => acc + (e.misContratos ? e.misContratos.length : 0), 0); // Asumiendo que el ID del contrato es incremental y único, se puede usar la cantidad de ciudadanos como base para generar nuevos IDs de contrato;
+
+        for (let ciudadano of ciudadanosDesempleados) {
+            const edificioConEmpleo = obtenerEdificioConEmpleoDisponible(ciudad);
+            if (edificioConEmpleo !== null) {
+                contratoId++;
+                const nuevoContrato = new Contrato(contratoId, ciudadano, edificioConEmpleo);
+                ciudadano.misContratos.push(nuevoContrato);
+                edificioConEmpleo.misContratos.push(nuevoContrato);
+            }
+        }
+    
+    }
+
+    //Retorna la primera vivienda con capacidad disponible, o null si no hay ninguna
+    function obtenerViviendaConCapacidadDisponible(ciudad) {
+        for (let edificio of ciudad.misEdificios) {
+            if (edificio instanceof Casa && capacidadDisponibleCasa(edificio)) return edificio;
+            if (edificio instanceof Apartamento && capacidadDisponibleApartamento(edificio)) return edificio;
+        }
+        return null;
+    }
+
+    function agregarCiudadanosAViviendasDisponibles(ciudad) {
+        const ciudadanosSinVivienda = listaCiudadanosSinVivienda(ciudad);
+        let contratoId = ciudad.misEdificios.reduce((acc, e) => acc + (e.misContratos ? e.misContratos.length : 0), 0);
+
+        for (let ciudadano of ciudadanosSinVivienda) {
+            const viviendaConCapacidad = obtenerViviendaConCapacidadDisponible(ciudad);
+            if (viviendaConCapacidad !== null) {
+                contratoId++;
+                const nuevoContrato = new Contrato(contratoId, ciudadano, viviendaConCapacidad);
+                ciudadano.misContratos.push(nuevoContrato);
+                viviendaConCapacidad.misContratos.push(nuevoContrato);
+            }
+        }
+        actualizarCiudadCompleta(ciudad);
+    }
+
     function calcularPuntuacion(ciudad) {
 
         // Variables que aportan constantemente a la puntuacion [IMPORTANTE]
