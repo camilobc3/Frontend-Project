@@ -8,6 +8,18 @@ import {empleoDisponibleFabrica} from "./FabricaService.js";
 import {empleoDisponibleGranja} from "./GranjaService.js";
 import {verificarContratoComercial} from "./CiudadanoService.js";
 import {verificarContratoVivienda} from "./CiudadanoService.js";
+import {Edificio} from "../modelos/Edificio.js";
+import { EdificioResidencial } from "../modelos/EdificioResidencial.js";
+import { EdificioComercial } from "../modelos/EdificioComercial.js";
+import { EdificioIndustrial } from "../modelos/EdificioIndustrial.js";
+import { EdificioServicio } from "../modelos/EdificioServicio.js";
+import { PlantaUtilidad } from "../modelos/PlantaUtilidad.js";
+
+import { Fabrica } from "../modelos/Fabrica.js";
+import { Granja } from "../modelos/Granja.js";
+import { Hospital } from "../modelos/Hospital.js";
+import { PlantaElectrica } from "../modelos/PlantaElectrica.js";
+import { PlantaAgua } from "../modelos/PlantaAgua.js";
 
 document.addEventListener("DOMContentLoaded", function () {
     
