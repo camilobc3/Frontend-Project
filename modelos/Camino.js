@@ -15,3 +15,4 @@ class Camino extends Edificio {
     }
 }
 
+export default Camino;

@@ -1,17 +1,17 @@
-document.addEventListener("DOMContentLoaded", function () {
-    console.log("DOM cargado - ContratoService");
+import Contrato from "../modelos/Contrato.js";
+class ContratoService {
 
-    cargarContratos();
+    //cargarContratos();
 
     // ─── READ ALL ────────────────────────────────────────────────────────────
-    function cargarContratos() {
+    cargarContratos() {
         const lista = StorageContrato.load();
         console.log("Contratos cargados:", lista);
         return lista;
     }
 
     // ─── READ ONE ────────────────────────────────────────────────────────────
-    function cargarContrato(id) {
+    cargarContrato(id) {
         const lista = StorageContrato.load();
         const contrato = lista.find(c => c.id === id);
         console.log("Contrato encontrado:", contrato);
@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── CREATE ──────────────────────────────────────────────────────────────
-    function crearContrato(id, miCiudadano = null, miEdificio = null) {
+    crearContrato(id, miCiudadano = null, miEdificio = null) {
         const lista = StorageContrato.load();
         const existe = lista.some(c => c.id === id);
         if (existe) {
@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── UPDATE ──────────────────────────────────────────────────────────────
-    function actualizarContrato(id, miCiudadano, miEdificio) {
+    actualizarContrato(id, miCiudadano, miEdificio) {
         const lista = StorageContrato.load();
         const indice = lista.findIndex(c => c.id === id);
         if (indice === -1) {
@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── DELETE ──────────────────────────────────────────────────────────────
-    function eliminarContrato(id) {
+    eliminarContrato(id) {
         const lista = StorageContrato.load();
         const nuevaLista = lista.filter(c => c.id !== id);
         if (nuevaLista.length === lista.length) {
@@ -59,4 +59,6 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log(`Contrato con id ${id} eliminado`);
         return true;
     }
-});
+};
+
+export default ContratoService;

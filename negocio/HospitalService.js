@@ -1,17 +1,17 @@
-document.addEventListener("DOMContentLoaded", function () {
-    console.log("DOM cargado - HospitalService");
+import Hospital from "../modelos/Hospital.js";
+class HospitalService {
 
-    cargarHospitales();
+    //cargarHospitales();
 
     // ─── READ ALL ────────────────────────────────────────────────────────────
-    function cargarHospitales() {
+    cargarHospitales() {
         const lista = StorageHospital.load();
         console.log("Hospitales cargados:", lista);
         return lista;
     }
 
     // ─── READ ONE ────────────────────────────────────────────────────────────
-    function cargarHospital(indice) {
+    cargarHospital(indice) {
         const lista = StorageHospital.load();
         const hospital = lista[indice];
         console.log("Hospital encontrado:", hospital);
@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── CREATE ──────────────────────────────────────────────────────────────
-    function crearHospital(costo, radio, beneficio) {
+    crearHospital(costo, radio, beneficio) {
         const lista = StorageHospital.load();
         const nuevoHospital = new Hospital(costo, radio, beneficio);
         lista.push(nuevoHospital);
@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── UPDATE ──────────────────────────────────────────────────────────────
-    function actualizarHospital(indice, costo, radio, beneficio) {
+    actualizarHospital(indice, costo, radio, beneficio) {
         const lista = StorageHospital.load();
         if (indice < 0 || indice >= lista.length) {
             console.warn(`Índice ${indice} fuera de rango`);
@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── DELETE ──────────────────────────────────────────────────────────────
-    function eliminarHospital(indice) {
+    eliminarHospital(indice) {
         const lista = StorageHospital.load();
         if (indice < 0 || indice >= lista.length) {
             console.warn(`Índice ${indice} fuera de rango`);
@@ -53,4 +53,6 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log("Hospital eliminado:", eliminado[0]);
         return true;
     }
-});
+};
+
+export default HospitalService;

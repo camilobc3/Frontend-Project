@@ -44,3 +44,4 @@ class EdificioResidencial extends Edificio {
     }
 }
 
+export default EdificioResidencial;

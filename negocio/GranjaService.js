@@ -1,17 +1,17 @@
-document.addEventListener("DOMContentLoaded", function () {
-    console.log("DOM cargado - GranjaService");
+import Granja from "../modelos/Granja.js";
+class GranjaService{
 
-    cargarGranjas();
+    //cargarGranjas();
 
     // ─── READ ALL ────────────────────────────────────────────────────────────
-    function cargarGranjas() {
+    cargarGranjas() {
         const lista = StorageGranja.load();
         console.log("Granjas cargadas:", lista);
         return lista;
     }
 
     // ─── READ ONE ────────────────────────────────────────────────────────────
-    function cargarGranja(indice) {
+    cargarGranja(indice) {
         const lista = StorageGranja.load();
         const granja = lista[indice];
         console.log("Granja encontrada:", granja);
@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── CREATE ──────────────────────────────────────────────────────────────
-    function crearGranja(costo, numeroEmpleos) {
+    crearGranja(costo, numeroEmpleos) {
         const lista = StorageGranja.load();
         const nuevaGranja = new Granja(costo, numeroEmpleos);
         lista.push(nuevaGranja);
@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── UPDATE ──────────────────────────────────────────────────────────────
-    function actualizarGranja(indice, costo, numeroEmpleos) {
+    actualizarGranja(indice, costo, numeroEmpleos) {
         const lista = StorageGranja.load();
         if (indice < 0 || indice >= lista.length) {
             console.warn(`Índice ${indice} fuera de rango`);
@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── DELETE ──────────────────────────────────────────────────────────────
-    function eliminarGranja(indice) {
+    eliminarGranja(indice) {
         const lista = StorageGranja.load();
         if (indice < 0 || indice >= lista.length) {
             console.warn(`Índice ${indice} fuera de rango`);
@@ -55,11 +55,13 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Esta funcón verifica si una granja tiene capacidad disponible para nuevos contratos(Empleos), comparando la cantidad de contratos actuales con la capacidad máxima de la vivienda.
-    function empleoDisponibleGranja(granja) {
+    empleoDisponibleGranja(granja) {
         if(granja.misContratos.length === granja.numeroEmpleos){
             return false;
         } else {
             return true;
         }
     }
-});
+};
+
+export default GranjaService;

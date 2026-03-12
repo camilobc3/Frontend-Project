@@ -44,3 +44,4 @@ class EdificioIndustrial extends Edificio {
     }
 }
 
+export default EdificioIndustrial;

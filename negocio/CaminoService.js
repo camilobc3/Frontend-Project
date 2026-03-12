@@ -1,17 +1,17 @@
-document.addEventListener("DOMContentLoaded", function () {
-    console.log("DOM cargado - CaminoService");
+import Camino from "../modelos/Camino.js";
+class CaminoService {
 
-    cargarCaminos();
+    //cargarCaminos();
 
     // ─── READ ALL ────────────────────────────────────────────────────────────
-    function cargarCaminos() {
+    cargarCaminos() {
         const lista = StorageCamino.load();
         console.log("Caminos cargados:", lista);
         return lista;
     }
 
     // ─── READ ONE ────────────────────────────────────────────────────────────
-    function cargarCamino(indice) {
+    cargarCamino(indice) {
         const lista = StorageCamino.load();
         const camino = lista[indice];
         console.log("Camino encontrado:", camino);
@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── CREATE ──────────────────────────────────────────────────────────────
-    function crearCamino(costo, beneficio) {
+    crearCamino(costo, beneficio) {
         const lista = StorageCamino.load();
         const nuevoCamino = new Camino(costo, beneficio);
         lista.push(nuevoCamino);
@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── UPDATE ──────────────────────────────────────────────────────────────
-    function actualizarCamino(indice, costo, beneficio) {
+    actualizarCamino(indice, costo, beneficio) {
         const lista = StorageCamino.load();
         if (indice < 0 || indice >= lista.length) {
             console.warn(`Índice ${indice} fuera de rango`);
@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── DELETE ──────────────────────────────────────────────────────────────
-    function eliminarCamino(indice) {
+    eliminarCamino(indice) {
         const lista = StorageCamino.load();
         if (indice < 0 || indice >= lista.length) {
             console.warn(`Índice ${indice} fuera de rango`);
@@ -53,4 +53,6 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log("Camino eliminado:", eliminado[0]);
         return true;
     }
-});
+};
+
+export default CaminoService;

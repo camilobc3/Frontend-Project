@@ -31,3 +31,4 @@ class Edificio {
     }
 }
 
+export default Edificio;

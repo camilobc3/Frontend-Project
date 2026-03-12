@@ -1,17 +1,17 @@
-document.addEventListener("DOMContentLoaded", function () {
-    console.log("DOM cargado - TiendaService");
+import Tienda from "../modelos/Tienda.js";
+class TiendaService {
 
-    cargarTiendas();
+    //cargarTiendas();
 
     // ─── READ ALL ────────────────────────────────────────────────────────────
-    function cargarTiendas() {
+    cargarTiendas() {
         const lista = StorageTienda.load();
         console.log("Tiendas cargadas:", lista);
         return lista;
     }
 
     // ─── READ ONE ────────────────────────────────────────────────────────────
-    function cargarTienda(indice) {
+    cargarTienda(indice) {
         const lista = StorageTienda.load();
         const tienda = lista[indice];
         console.log("Tienda encontrada:", tienda);
@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── CREATE ──────────────────────────────────────────────────────────────
-    function crearTienda(costo, numeroEmpleos) {
+    crearTienda(costo, numeroEmpleos) {
         const lista = StorageTienda.load();
         const nuevaTienda = new Tienda(costo, numeroEmpleos);
         lista.push(nuevaTienda);
@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── UPDATE ──────────────────────────────────────────────────────────────
-    function actualizarTienda(indice, costo, numeroEmpleos) {
+    actualizarTienda(indice, costo, numeroEmpleos) {
         const lista = StorageTienda.load();
         if (indice < 0 || indice >= lista.length) {
             console.warn(`Índice ${indice} fuera de rango`);
@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── DELETE ──────────────────────────────────────────────────────────────
-    function eliminarTienda(indice) {
+    eliminarTienda(indice) {
         const lista = StorageTienda.load();
         if (indice < 0 || indice >= lista.length) {
             console.warn(`Índice ${indice} fuera de rango`);
@@ -55,11 +55,13 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Esta funcón verifica si una tienda tiene capacidad disponible para nuevos contratos(Empleos), comparando la cantidad de contratos actuales con la capacidad máxima de la vivienda.
-    function empleoDisponibleTienda(tienda) {
+    empleoDisponibleTienda(tienda) {
         if(tienda.misContratos.length === tienda.numeroEmpleos){
             return false;
         } else {
             return true;
         }
     }
-});
+};
+
+export default TiendaService;

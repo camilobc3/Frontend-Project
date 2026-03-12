@@ -1,17 +1,17 @@
-document.addEventListener("DOMContentLoaded", function () {
-    console.log("DOM cargado - PlantaElectricaService");
+import PlantaElectrica from "../modelos/PlantaElectrica.js";
+class PlantaElectricaService {
 
-    cargarPlantasElectricas();
+    //cargarPlantasElectricas();
 
     // ─── READ ALL ────────────────────────────────────────────────────────────
-    function cargarPlantasElectricas() {
+    cargarPlantasElectricas() {
         const lista = StoragePlantaElectrica.load();
         console.log("Plantas eléctricas cargadas:", lista);
         return lista;
     }
 
     // ─── READ ONE ────────────────────────────────────────────────────────────
-    function cargarPlantaElectrica(indice) {
+    cargarPlantaElectrica(indice) {
         const lista = StoragePlantaElectrica.load();
         const planta = lista[indice];
         console.log("Planta eléctrica encontrada:", planta);
@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── CREATE ──────────────────────────────────────────────────────────────
-    function crearPlantaElectrica(costo) {
+    crearPlantaElectrica(costo) {
         const lista = StoragePlantaElectrica.load();
         const nuevaPlanta = new PlantaElectrica(costo);
         lista.push(nuevaPlanta);
@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── UPDATE ──────────────────────────────────────────────────────────────
-    function actualizarPlantaElectrica(indice, costo) {
+    actualizarPlantaElectrica(indice, costo) {
         const lista = StoragePlantaElectrica.load();
         if (indice < 0 || indice >= lista.length) {
             console.warn(`Índice ${indice} fuera de rango`);
@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── DELETE ──────────────────────────────────────────────────────────────
-    function eliminarPlantaElectrica(indice) {
+    eliminarPlantaElectrica(indice) {
         const lista = StoragePlantaElectrica.load();
         if (indice < 0 || indice >= lista.length) {
             console.warn(`Índice ${indice} fuera de rango`);
@@ -53,4 +53,6 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log("Planta eléctrica eliminada:", eliminada[0]);
         return true;
     }
-});
+};
+
+export default PlantaElectricaService;

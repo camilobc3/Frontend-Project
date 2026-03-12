@@ -34,3 +34,4 @@ class noticiasRepository {
     }
 }
 
+export default noticiasRepository;

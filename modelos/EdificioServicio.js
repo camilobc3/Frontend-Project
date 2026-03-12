@@ -46,3 +46,4 @@ class EdificioServicio extends Edificio {
     }
 }
 
+export default EdificioServicio;

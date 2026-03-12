@@ -39,3 +39,4 @@ class Casa extends EdificioResidencial {
     }
 }
 
+export default Casa;

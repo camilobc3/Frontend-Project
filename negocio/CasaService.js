@@ -1,17 +1,17 @@
-document.addEventListener("DOMContentLoaded", function () {
-    console.log("DOM cargado - CasaService");
+import Casa from "../modelos/Casa.js";
+class CasaService {
 
-    cargarCasas();
+    //cargarCasas();
 
     // ─── READ ALL ────────────────────────────────────────────────────────────
-    function cargarCasas() {
+    cargarCasas() {
         const lista = StorageCasa.load();
         console.log("Casas cargadas:", lista);
         return lista;
     }
 
     // ─── READ ONE ────────────────────────────────────────────────────────────
-    function cargarCasa(indice) {
+    cargarCasa(indice) {
         const lista = StorageCasa.load();
         const casa = lista[indice];
         console.log("Casa encontrada:", casa);
@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── CREATE ──────────────────────────────────────────────────────────────
-    function crearCasa(costo, capacidadVivienda) {
+    crearCasa(costo, capacidadVivienda) {
         const lista = StorageCasa.load();
         const nuevaCasa = new Casa(costo, capacidadVivienda);
         lista.push(nuevaCasa);
@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── UPDATE ──────────────────────────────────────────────────────────────
-    function actualizarCasa(indice, costo, capacidadVivienda) {
+    actualizarCasa(indice, costo, capacidadVivienda) {
         const lista = StorageCasa.load();
         if (indice < 0 || indice >= lista.length) {
             console.warn(`Índice ${indice} fuera de rango`);
@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── DELETE ──────────────────────────────────────────────────────────────
-    function eliminarCasa(indice) {
+    eliminarCasa(indice) {
         const lista = StorageCasa.load();
         if (indice < 0 || indice >= lista.length) {
             console.warn(`Índice ${indice} fuera de rango`);
@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Esta funcón verifica si una casa tiene capacidad disponible para nuevos contratos(capacidad de vivienda), comparando la cantidad de contratos actuales con la capacidad máxima de la vivienda.
-    function capacidadDisponibleCasa(casa) {
+    capacidadDisponibleCasa(casa) {
         if(casa.misContratos.length === casa.capacidadVivienda){
             return false;
         } else {
@@ -63,4 +63,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-});
+};
+
+export default CasaService;

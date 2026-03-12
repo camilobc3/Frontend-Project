@@ -1,17 +1,17 @@
-document.addEventListener("DOMContentLoaded", function () {
-    console.log("DOM cargado - ApartamentoService");
+import Apartamento from "../modelos/Apartamento.js";
+class ApartamentoService{
 
-    cargarApartamentos();
+    //cargarApartamentos();
 
     // ─── READ ALL ────────────────────────────────────────────────────────────
-    function cargarApartamentos() {
+    cargarApartamentos() {
         const lista = StorageApartamento.load();
         console.log("Apartamentos cargados:", lista);
         return lista;
     }
 
     // ─── READ ONE ────────────────────────────────────────────────────────────
-    function cargarApartamento(indice) {
+    cargarApartamento(indice) {
         const lista = StorageApartamento.load();
         const apartamento = lista[indice];
         console.log("Apartamento encontrado:", apartamento);
@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── CREATE ──────────────────────────────────────────────────────────────
-    function crearApartamento(costo, capacidadVivienda) {
+    crearApartamento(costo, capacidadVivienda) {
         const lista = StorageApartamento.load();
         const nuevoApartamento = new Apartamento(costo, capacidadVivienda);
         lista.push(nuevoApartamento);
@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── UPDATE ──────────────────────────────────────────────────────────────
-    function actualizarApartamento(indice, costo, capacidadVivienda) {
+    actualizarApartamento(indice, costo, capacidadVivienda) {
         const lista = StorageApartamento.load();
         if (indice < 0 || indice >= lista.length) {
             console.warn(`Índice ${indice} fuera de rango`);
@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── DELETE ──────────────────────────────────────────────────────────────
-    function eliminarApartamento(indice) {
+    eliminarApartamento(indice) {
         const lista = StorageApartamento.load();
         if (indice < 0 || indice >= lista.length) {
             console.warn(`Índice ${indice} fuera de rango`);
@@ -55,11 +55,13 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Esta funcón verifica si un apartamento tiene capacidad disponible para nuevos contratos (capacidad de vivienda), comparando la cantidad de contratos actuales con la capacidad máxima de la vivienda.
-    function capacidadDisponibleApartamento(apartamento) {
+    capacidadDisponibleApartamento(apartamento) {
         if(apartamento.misContratos.length === apartamento.capacidadVivienda){
             return false;
         } else {
             return true;
         }
     }
-});
+};
+
+export default ApartamentoService;

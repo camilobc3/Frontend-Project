@@ -31,3 +31,4 @@ class Contrato {
     }
 }
 
+export default Contrato;

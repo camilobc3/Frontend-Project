@@ -1,4 +1,24 @@
 //Importaciones
+import { //Importacion de modelos
+    Edificio,
+    EdificioResidencial,
+    EdificioComercial,
+    EdificioIndustrial,
+    EdificioServicio,
+    PlantaUtilidad,
+    Fabrica,
+    Granja,
+    Hospital,
+    PlantaElectrica,
+    PlantaAgua
+} from "../modelos/index.js";
+
+import {
+    noticiasRepository,
+    StorageAlcalde,
+    StorageCiudad
+} from "../acceso_datos/index.js";
+
 import {calcularFelicidad} from "./CiudadanoService.js";
 import {capacidadDisponibleCasa} from "./CasaService.js";
 import {capacidadDisponibleApartamento} from "./ApartamentoService.js";
@@ -8,36 +28,23 @@ import {empleoDisponibleFabrica} from "./FabricaService.js";
 import {empleoDisponibleGranja} from "./GranjaService.js";
 import {verificarContratoComercial} from "./CiudadanoService.js";
 import {verificarContratoVivienda} from "./CiudadanoService.js";
-import {Edificio} from "../modelos/Edificio.js";
-import { EdificioResidencial } from "../modelos/EdificioResidencial.js";
-import { EdificioComercial } from "../modelos/EdificioComercial.js";
-import { EdificioIndustrial } from "../modelos/EdificioIndustrial.js";
-import { EdificioServicio } from "../modelos/EdificioServicio.js";
-import { PlantaUtilidad } from "../modelos/PlantaUtilidad.js";
 
-import { Fabrica } from "../modelos/Fabrica.js";
-import { Granja } from "../modelos/Granja.js";
-import { Hospital } from "../modelos/Hospital.js";
-import { PlantaElectrica } from "../modelos/PlantaElectrica.js";
-import { PlantaAgua } from "../modelos/PlantaAgua.js";
 
-document.addEventListener("DOMContentLoaded", function () {
-    
-    console.log("DOM cargado - CiudadService");
-
-    cargarCiudades();
+class CiudadService{
+    //OJO Revisar esta funcion
+    //cargarCiudades();
 
 
 
     // ─── READ ALL ────────────────────────────────────────────────────────────
-    function cargarCiudades() {
+    cargarCiudades() {
         const lista = StorageCiudad.load();
         console.log("Ciudades cargadas:", lista);
         return lista;
     }
 
     // ─── READ ONE ────────────────────────────────────────────────────────────
-    function cargarCiudad(id) {
+    cargarCiudad(id) {
         const lista = StorageCiudad.load();
         const ciudad = lista.find(c => c.id === id);
         console.log("Ciudad encontrada:", ciudad);
@@ -45,7 +52,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── CREATE ──────────────────────────────────────────────────────────────
-    function crearCiudad(id, nombre, turno, miMapa = null) {
+    crearCiudad(id, nombre, turno, miMapa = null) {
         const lista = StorageCiudad.load();
         const existe = lista.some(c => c.id === id);
         if (existe) {
@@ -60,7 +67,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── UPDATE ──────────────────────────────────────────────────────────────
-    function actualizarCiudad(id, nombre, turno) {
+    actualizarCiudad(id, nombre, turno) {
         const lista = StorageCiudad.load();
         const indice = lista.findIndex(c => c.id === id);
         if (indice === -1) {
@@ -73,7 +80,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return true;
     }
 
-    function actualizarCiudadCompleta(ciudad){ //Funcion para actualizar ciudad recibiendo el objeto
+    actualizarCiudadCompleta(ciudad){ //Funcion para actualizar ciudad recibiendo el objeto
         const lista = StorageCiudad.load();
         const indice = lista.findIndex(c => c.id === ciudad.id);
         if (indice === -1) {
@@ -88,7 +95,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     // ─── DELETE ──────────────────────────────────────────────────────────────
-    function eliminarCiudad(id) {
+    eliminarCiudad(id) {
         const lista = StorageCiudad.load();
         const nuevaLista = lista.filter(c => c.id !== id);
         if (nuevaLista.length === lista.length) {
@@ -101,57 +108,57 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     //Lista de hospitales
-    function listaHospitales(ciudad) {
+    listaHospitales(ciudad) {
         return ciudad.misEdificios.filter(e => e instanceof Hospital);
     }
 
     //Lista de parques 
-    function listaParques(ciudad) {
+    listaParques(ciudad) {
         return ciudad.misEdificios.filter(e => e instanceof Parque);
     }
 
     //Lista de estaciones de policia
-    function listaEstacionesPolicia(ciudad) {
+    listaEstacionesPolicia(ciudad) {
         return ciudad.misEdificios.filter(e => e instanceof EstacionPolicia);
     }
 
     //Lista de estaciones de bomberos
-    function listaEstacionesBomberos(ciudad) {
+    listaEstacionesBomberos(ciudad) {
         return ciudad.misEdificios.filter(e => e instanceof EstacionBombero);
     }
 
     //Lista de casas
-    function listaCasas(ciudad) {
+    listaCasas(ciudad) {
         return ciudad.misEdificios.filter(e => e instanceof Casa);
     }
 
     //Lista de apartamentos
-    function listaApartamentos(ciudad) {
+    listaApartamentos(ciudad) {
         return ciudad.misEdificios.filter(e => e instanceof Apartamento);
     }
 
     //Lista de tiendas
-    function listaTiendas(ciudad) {
+    listaTiendas(ciudad) {
         return ciudad.misEdificios.filter(e => e instanceof Tienda);
     }
 
     //Lista de centros comerciales
-    function listaFabricas(ciudad) {
+    listaFabricas(ciudad) {
         return ciudad.misEdificios.filter(e => e instanceof CentroComercial);
     }
 
     //Lista de fabricas
-    function listaFabricas(ciudad) {
+    listaFabricas(ciudad) {
         return ciudad.misEdificios.filter(e => e instanceof Fabrica);
     }
 
     //Lista de granjas
-    function listaGranjas(ciudad) {
+    listaGranjas(ciudad) {
         return ciudad.misEdificios.filter(e => e instanceof Granja);
     }
 
     //Promedio de felicidad de la ciudad, calculado a partir de la felicidad de cada ciudadano
-    function promedioFelicidadCiudad(ciudad) {
+    promedioFelicidadCiudad(ciudad) {
         let promedioFelicidad = 0;
         
         if (ciudad.misCiudadanos.length > 0) { 
@@ -165,7 +172,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     //Creación automatica de ciudadanos si hay viviendas disponibles, empleos disponibles y verificando la felicidad promedio
-    function crearCiudadanosAutomaticamente(ciudad) {
+    crearCiudadanosAutomaticamente(ciudad) {
         if(promedioFelicidadCiudad(ciudad)>60 && edificioDisponible(listaCasas(ciudad), capacidadDisponibleCasa)
             && edificioDisponible(listaApartamentos(ciudad), capacidadDisponibleApartamento) && edificioDisponible(listaTiendas(ciudad), empleoDisponibleTienda) 
             && edificioDisponible(listaCentrosComerciales(ciudad), empleoDisponibleCentroComercial) && edificioDisponible(listaFabricas(ciudad), empleoDisponibleFabrica) 
@@ -181,19 +188,19 @@ document.addEventListener("DOMContentLoaded", function () {
     //Disponibilidad de vivienda
 
     //Verificar si hay alguna edificio con capacidad disponible para nuevos contratos, comparando .
-    function edificioDisponible(listaEdificios, funcionVerificacion) {
+    edificioDisponible(listaEdificios, funcionVerificacion) {
         return listaEdificios.some(edificio => funcionVerificacion(edificio));
     }
 
     //Estadisticas de la porblación
 
     //numero de ciudadanos en la ciudad
-    function numeroCiudadanos(ciudad) {
+    numeroCiudadanos(ciudad) {
         return ciudad.misCiudadanos.length;
     }
 
     //numero de ciudadanos empleados en la ciudad
-    function numerociudadanosEmpleados(ciudad) {
+    numerociudadanosEmpleados(ciudad) {
         let ciudadanosEmpleados = 0;
         for (let ciudadano of ciudad.misCiudadanos) {
             if (verificarContratoComercial(ciudadano)) {
@@ -204,7 +211,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     //numero de ciudadanos desempleados en la ciudad
-    function numeroCiudadanosDesempleados(ciudad) {
+    numeroCiudadanosDesempleados(ciudad) {
         let ciudadanosDesempleados = 0;
         for (let ciudadano of ciudad.misCiudadanos) {
             if (verificarContratoComercial(ciudadano) === false) {
@@ -215,7 +222,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     //Lista de ciudadanos desempleados en la ciudad
-    function listaCiudadanosDesempleados(ciudad) {
+    listaCiudadanosDesempleados(ciudad) {
         let ciudadanosEmpleados = [];
         for (let ciudadano of ciudad.misCiudadanos) {
             if (verificarContratoComercial(ciudadano) === false) {
@@ -226,7 +233,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     //Lista de ciudadanos sin vivienda en la ciudad
-    function listaCiudadanosSinVivienda(ciudad) {
+    listaCiudadanosSinVivienda(ciudad) {
         let ciudadanosSinVivienda = [];
         for (let ciudadano of ciudad.misCiudadanos) {
             if (verificarContratoVivienda(ciudadano) === false) {
@@ -237,7 +244,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     //Retorna el primer edificio comercial/industrial con empleo disponible, o null si no hay ninguno
-    function obtenerEdificioConEmpleoDisponible(ciudad) {
+    obtenerEdificioConEmpleoDisponible(ciudad) {
         for (let edificio of ciudad.misEdificios) {
             if (edificio instanceof Tienda && empleoDisponibleTienda(edificio)) return edificio;
             if (edificio instanceof CentroComercial && empleoDisponibleCentroComercial(edificio)) return edificio;
@@ -247,7 +254,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return null;
     }
 
-    function agregarCiudadanosATrabajosDisponibles(ciudad) {
+    agregarCiudadanosATrabajosDisponibles(ciudad) {
         const ciudadanosDesempleados = listaCiudadanosDesempleados(ciudad);
                     /* Recorre todos los edificios de la ciudad y suma el total de contratos existentes en todos ellos, para usarlo como punto de partida para los nuevos IDs de contrato.
 
@@ -272,7 +279,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     //Retorna la primera vivienda con capacidad disponible, o null si no hay ninguna
-    function obtenerViviendaConCapacidadDisponible(ciudad) {
+    obtenerViviendaConCapacidadDisponible(ciudad) {
         for (let edificio of ciudad.misEdificios) {
             if (edificio instanceof Casa && capacidadDisponibleCasa(edificio)) return edificio;
             if (edificio instanceof Apartamento && capacidadDisponibleApartamento(edificio)) return edificio;
@@ -280,7 +287,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return null;
     }
 
-    function agregarCiudadanosAViviendasDisponibles(ciudad) {
+    agregarCiudadanosAViviendasDisponibles(ciudad) {
         const ciudadanosSinVivienda = listaCiudadanosSinVivienda(ciudad);
         let contratoId = ciudad.misEdificios.reduce((acc, e) => acc + (e.misContratos ? e.misContratos.length : 0), 0);
 
@@ -296,7 +303,7 @@ document.addEventListener("DOMContentLoaded", function () {
         actualizarCiudadCompleta(ciudad);
     }
 
-    function calcularPuntuacion(ciudad) {
+    calcularPuntuacion(ciudad) {
 
         // Variables que aportan constantemente a la puntuacion [IMPORTANTE]
 
@@ -357,7 +364,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     //Funcion para actualizar los recursos por turno segun el tipo de edificio
-    function actualizarRecursoXTurno(ciudad, edificio){ //Esta funcion se debe usar junto a la funcion de agregar edificio a una ciudad para actualizar los parametros de la ciudad segun el edificio agregado
+    actualizarRecursoXTurno(ciudad, edificio){ //Esta funcion se debe usar junto a la funcion de agregar edificio a una ciudad para actualizar los parametros de la ciudad segun el edificio agregado
         if (edificio instanceof EdificioResidencial){
             ciudad.electricidadXTurno -= edificio.consumoElectricidad();
             ciudad.aguaXTurno -= edificio.consumoAgua();
@@ -394,12 +401,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         actualizarCiudadCompleta(ciudad);
     }
-
-
-
-    window.crearCiudad = crearCiudad;
-    window.cargarCiudad = cargarCiudad;
-    window.actualizarCiudadCompleta = actualizarCiudadCompleta;
-
     
-});
+};
+
+export default CiudadService;

@@ -1,17 +1,17 @@
-document.addEventListener("DOMContentLoaded", function () {
-    console.log("DOM cargado - MapaService");
+import Mapa from "../modelos/Mapa.js";
+class MapaService {
 
-    cargarMapas();
+    //cargarMapas();
 
     // ─── READ ALL ────────────────────────────────────────────────────────────
-    function cargarMapas() {
+    cargarMapas() {
         const lista = StorageMapa.load();
         console.log("Mapas cargados:", lista);
         return lista;
     }
 
     // ─── READ ONE ────────────────────────────────────────────────────────────
-    function cargarMapa(indice) {
+    cargarMapa(indice) {
         const lista = StorageMapa.load();
         const mapa = lista[indice];
         console.log("Mapa encontrado:", mapa);
@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── CREATE ──────────────────────────────────────────────────────────────
-    function crearMapa(tamaño) {
+    crearMapa(tamaño) {
         const lista = StorageMapa.load();
         const nuevoMapa = new Mapa(tamaño);
         lista.push(nuevoMapa);
@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── UPDATE ──────────────────────────────────────────────────────────────
-    function actualizarMapa(indice, tamaño) {
+    actualizarMapa(indice, tamaño) {
         const lista = StorageMapa.load();
         if (indice < 0 || indice >= lista.length) {
             console.warn(`Índice ${indice} fuera de rango`);
@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── DELETE ──────────────────────────────────────────────────────────────
-    function eliminarMapa(indice) {
+    eliminarMapa(indice) {
         const lista = StorageMapa.load();
         if (indice < 0 || indice >= lista.length) {
             console.warn(`Índice ${indice} fuera de rango`);
@@ -53,4 +53,6 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log("Mapa eliminado:", eliminado[0]);
         return true;
     }
-});
+};
+
+export default MapaService;
