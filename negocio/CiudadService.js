@@ -1,5 +1,6 @@
 //Importaciones
 import { //Importacion de modelos
+    Ciudad,
     Edificio,
     EdificioResidencial,
     EdificioComercial,
@@ -10,7 +11,9 @@ import { //Importacion de modelos
     Granja,
     Hospital,
     PlantaElectrica,
-    PlantaAgua
+    PlantaAgua,
+    Casa,
+    Apartamento
 } from "../modelos/index.js";
 
 import {
@@ -18,6 +21,12 @@ import {
     StorageAlcalde,
     StorageCiudad
 } from "../acceso_datos/index.js";
+
+import {
+    MapaService
+}from "./index.js";
+
+const mapaService = new MapaService();
 
 import {calcularFelicidad} from "./CiudadanoService.js";
 import {capacidadDisponibleCasa} from "./CasaService.js";
@@ -401,7 +410,51 @@ class CiudadService{
         }
         actualizarCiudadCompleta(ciudad);
     }
-    
+
+    puedeConstruir(ciudad, fila, columna, edificio){
+        if(!mapaService.celdaVacia(fila, columna, ciudad.miMapa)){
+            return {ok: false, mensaje: "Error, la celda está ocupada"}
+        }
+        if(ciudad.dinero < edificio.costo){
+            return {ok: false, mensaje: "Error, no hay dinero suficiente"}
+        }
+        if((edificio instanceof EdificioResidencial || edificio instanceof EdificioComercial) && (!mapaService.hayViaAdyacente(fila, columna, ciudad.miMapa))){
+            return {ok: false, mensaje: "Error, no hay vía adyacente"}
+        }
+
+        return {ok: true}
+
+    }
+
+    construirEdificioResidencial(ciudad, fila, columna, tipo){
+        let edificio;
+        if (tipo === 'R1'){
+            edificio = new Casa();
+        }
+        else if (tipo === 'R2'){
+            edificio = new Apartamento()
+        }
+        else{
+            return {ok:false, mensaje: "Tipo de edificio residencial no válido"}
+        }
+
+        let validacion = this.puedeConstruir(ciudad, fila, columna, edificio);
+
+        if(!validacion.ok){
+            return validacion;
+        }
+
+        ciudad.dinero -= edificio.costo;
+
+        ciudad.miMapa[fila][columna] = tipo; //De momento guarda la un String en la matriz, revisar si queda asi o si se guarda el objeto
+        ciudad.misEdificios.push(edificio);
+
+        this.actualizarRecursoXTurno(ciudad, edificio);
+        this.actualizarCiudadCompleta(ciudad);
+
+        return {ok: true, mensaje: "Edificio residencial construido exitosamente"};
+    }
+
 };
 
 export default CiudadService;

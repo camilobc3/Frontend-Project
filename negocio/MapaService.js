@@ -53,6 +53,31 @@ class MapaService {
         console.log("Mapa eliminado:", eliminado[0]);
         return true;
     }
+
+    celdaVacia(fila, columna, mapa){
+        if(mapa[fila][columna] === 'g'){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    hayViaAdyacente(fila,columna,mapa){
+        let direcciones = [
+            [-1,0], //Arriba
+            [0,1], //Derecha
+            [1,0], //Abajo
+            [0,-1]//Izquierda
+        ]
+
+        for(let dir of direcciones){
+            if(mapa[fila + dir[0]][columna + dir[1]] === "r")
+                return true;
+        }
+        return false;
+    }
+
 };
 
 export default MapaService;
