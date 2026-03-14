@@ -1,17 +1,17 @@
-document.addEventListener("DOMContentLoaded", function () {
-    console.log("DOM cargado - PlantaAguaService");
+import PlantaAgua from "../modelos/PlantaAgua.js";
+class PlantaAguaService {
 
-    cargarPlantasAgua();
+    //cargarPlantasAgua();
 
     // ─── READ ALL ────────────────────────────────────────────────────────────
-    function cargarPlantasAgua() {
+    cargarPlantasAgua() {
         const lista = StoragePlantaAgua.load();
         console.log("Plantas de agua cargadas:", lista);
         return lista;
     }
 
     // ─── READ ONE ────────────────────────────────────────────────────────────
-    function cargarPlantaAgua(indice) {
+    cargarPlantaAgua(indice) {
         const lista = StoragePlantaAgua.load();
         const planta = lista[indice];
         console.log("Planta de agua encontrada:", planta);
@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── CREATE ──────────────────────────────────────────────────────────────
-    function crearPlantaAgua(costo) {
+    crearPlantaAgua(costo) {
         const lista = StoragePlantaAgua.load();
         const nuevaPlanta = new PlantaAgua(costo);
         lista.push(nuevaPlanta);
@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── UPDATE ──────────────────────────────────────────────────────────────
-    function actualizarPlantaAgua(indice, costo) {
+    actualizarPlantaAgua(indice, costo) {
         const lista = StoragePlantaAgua.load();
         if (indice < 0 || indice >= lista.length) {
             console.warn(`Índice ${indice} fuera de rango`);
@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── DELETE ──────────────────────────────────────────────────────────────
-    function eliminarPlantaAgua(indice) {
+    eliminarPlantaAgua(indice) {
         const lista = StoragePlantaAgua.load();
         if (indice < 0 || indice >= lista.length) {
             console.warn(`Índice ${indice} fuera de rango`);
@@ -53,4 +53,6 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log("Planta de agua eliminada:", eliminada[0]);
         return true;
     }
-});
+};
+
+export default PlantaAguaService;

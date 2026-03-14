@@ -1,33 +1,45 @@
-document.addEventListener("DOMContentLoaded", function () {
-    console.log("DOM cargado - AlcaldeService");
+import CiudadService from "./CiudadService.js";
+const ciudadService = new CiudadService();
 
-    let intervalo;
+class TurnoService {
+    constructor(){
+        this.intervalo = null;
+    }
 
-    function iniciarTurnos(ciudad){
-        if (!intervalo){
-            intervalo = setInterval(function(){
-                ejecutarTurno(ciudad);
-            }, 5000); // Ejecuta cada 15 segundos
+    iniciarTurnos(ciudad){
+        if (!this.intervalo){
+            this.intervalo = setInterval(() => {
+                this.ejecutarTurno(ciudad);
+            }, 15000); // Ejecuta cada 15 segundos
         }
     }
 
-    function ejecutarTurno(ciudad){
+    ejecutarTurno(ciudad){
         ciudad.turno++;
         ciudad.dinero += ciudad.ingresosXTurno;
         ciudad.agua += ciudad.aguaXTurno;
         ciudad.electricidad += ciudad.electricidadXTurno;
         ciudad.alimento += ciudad.alimentoXTurno;
+        this.crearCiudadanosXturno();
 
-        actualizarCiudadCompleta(ciudad);
+        ciudadService.actualizarCiudadCompleta(ciudad);
         console.log("Turno:", ciudad.turno, "Dinero:", ciudad.dinero);
     }
 
-    function detenerTurnos(){
-        clearInterval(intervalo);
-        intervalo = null;
+    crearCiudadanosXturno(){
+        ciudadService.crearCiudadanosAutomaticamente();
+        ciudadService.agregarCiudadanosATrabajosDisponibles();
+        ciudadService.agregarCiudadanosAViviendasDisponibles();
     }
 
-    window.iniciarTurnos = iniciarTurnos;
-    window.detenerTurnos = detenerTurnos;
+    detenerTurnos(){
+        clearInterval(this.intervalo);
+        this.intervalo = null;
+    }
 
-});
+    //window.iniciarTurnos = iniciarTurnos;
+    //window.detenerTurnos = detenerTurnos;
+
+};
+
+export default TurnoService;

@@ -33,3 +33,4 @@ class Ciudadano {
     }
 }
 
+export default Ciudadano;

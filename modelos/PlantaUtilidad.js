@@ -42,3 +42,4 @@ class PlantaUtilidad extends Edificio {
     }
 }
 
+export default PlantaUtilidad;

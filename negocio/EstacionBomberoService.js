@@ -1,17 +1,16 @@
-document.addEventListener("DOMContentLoaded", function () {
-    console.log("DOM cargado - EstacionBomberoService");
+class EstacionBomberoService {
 
-    cargarEstacionesBombero();
+    //cargarEstacionesBombero();
 
     // ─── READ ALL ────────────────────────────────────────────────────────────
-    function cargarEstacionesBombero() {
+    cargarEstacionesBombero() {
         const lista = StorageEstacionBombero.load();
         console.log("Estaciones de bombero cargadas:", lista);
         return lista;
     }
 
     // ─── READ ONE ────────────────────────────────────────────────────────────
-    function cargarEstacionBombero(indice) {
+    cargarEstacionBombero(indice) {
         const lista = StorageEstacionBombero.load();
         const estacion = lista[indice];
         console.log("Estación de bombero encontrada:", estacion);
@@ -19,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── CREATE ──────────────────────────────────────────────────────────────
-    function crearEstacionBombero(costo, radio, beneficio) {
+    crearEstacionBombero(costo, radio, beneficio) {
         const lista = StorageEstacionBombero.load();
         const nuevaEstacion = new EstacionBombero(costo, radio, beneficio);
         lista.push(nuevaEstacion);
@@ -29,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── UPDATE ──────────────────────────────────────────────────────────────
-    function actualizarEstacionBombero(indice, costo, radio, beneficio) {
+    actualizarEstacionBombero(indice, costo, radio, beneficio) {
         const lista = StorageEstacionBombero.load();
         if (indice < 0 || indice >= lista.length) {
             console.warn(`Índice ${indice} fuera de rango`);
@@ -42,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── DELETE ──────────────────────────────────────────────────────────────
-    function eliminarEstacionBombero(indice) {
+    eliminarEstacionBombero(indice) {
         const lista = StorageEstacionBombero.load();
         if (indice < 0 || indice >= lista.length) {
             console.warn(`Índice ${indice} fuera de rango`);
@@ -53,4 +52,6 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log("Estación de bombero eliminada:", eliminada[0]);
         return true;
     }
-});
+};
+
+export default EstacionBomberoService;

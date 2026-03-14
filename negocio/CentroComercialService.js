@@ -1,17 +1,17 @@
-document.addEventListener("DOMContentLoaded", function () {
-    console.log("DOM cargado - CentroComercialService");
+import CentroComercial from "../modelos/CentroComercial.js";
+class CentroComercialService {
 
-    cargarCentrosComerciales();
+    //cargarCentrosComerciales();
 
     // ─── READ ALL ────────────────────────────────────────────────────────────
-    function cargarCentrosComerciales() {
+    cargarCentrosComerciales() {
         const lista = StorageCentroComercial.load();
         console.log("Centros comerciales cargados:", lista);
         return lista;
     }
 
     // ─── READ ONE ────────────────────────────────────────────────────────────
-    function cargarCentroComercial(indice) {
+    cargarCentroComercial(indice) {
         const lista = StorageCentroComercial.load();
         const centroComercial = lista[indice];
         console.log("Centro comercial encontrado:", centroComercial);
@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── CREATE ──────────────────────────────────────────────────────────────
-    function crearCentroComercial(costo, numeroEmpleos) {
+    crearCentroComercial(costo, numeroEmpleos) {
         const lista = StorageCentroComercial.load();
         const nuevoCentro = new CentroComercial(costo, numeroEmpleos);
         lista.push(nuevoCentro);
@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── UPDATE ──────────────────────────────────────────────────────────────
-    function actualizarCentroComercial(indice, costo, numeroEmpleos) {
+    actualizarCentroComercial(indice, costo, numeroEmpleos) {
         const lista = StorageCentroComercial.load();
         if (indice < 0 || indice >= lista.length) {
             console.warn(`Índice ${indice} fuera de rango`);
@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── DELETE ──────────────────────────────────────────────────────────────
-    function eliminarCentroComercial(indice) {
+    eliminarCentroComercial(indice) {
         const lista = StorageCentroComercial.load();
         if (indice < 0 || indice >= lista.length) {
             console.warn(`Índice ${indice} fuera de rango`);
@@ -55,11 +55,13 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Esta funcón verifica si una centroComercial tiene capacidad disponible para nuevos contratos(Empleos), comparando la cantidad de contratos actuales con la capacidad máxima de la vivienda.
-    function empleoDisponibleCentroComercial(centroComercial) {
-        if(centroComercial.misContratos.length <= centroComercial.numeroEmpleos){
-            return true;
-        } else {
+    empleoDisponibleCentroComercial(centroComercial) {
+        if(centroComercial.misContratos.length === centroComercial.numeroEmpleos){
             return false;
+        } else {
+            return true;
         }
     }
-});
+};
+
+export default CentroComercialService;

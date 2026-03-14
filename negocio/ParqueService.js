@@ -1,17 +1,17 @@
-document.addEventListener("DOMContentLoaded", function () {
-    console.log("DOM cargado - ParqueService");
+import Parque from "../modelos/Parque.js";
+class ParqueService{
 
-    cargarParques();
+    //cargarParques();
 
     // ─── READ ALL ────────────────────────────────────────────────────────────
-    function cargarParques() {
+    cargarParques() {
         const lista = StorageParque.load();
         console.log("Parques cargados:", lista);
         return lista;
     }
 
     // ─── READ ONE ────────────────────────────────────────────────────────────
-    function cargarParque(indice) {
+    cargarParque(indice) {
         const lista = StorageParque.load();
         const parque = lista[indice];
         console.log("Parque encontrado:", parque);
@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── CREATE ──────────────────────────────────────────────────────────────
-    function crearParque(costo, beneficio) {
+    crearParque(costo, beneficio) {
         const lista = StorageParque.load();
         const nuevoParque = new Parque(costo, beneficio);
         lista.push(nuevoParque);
@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── UPDATE ──────────────────────────────────────────────────────────────
-    function actualizarParque(indice, costo, beneficio) {
+    actualizarParque(indice, costo, beneficio) {
         const lista = StorageParque.load();
         if (indice < 0 || indice >= lista.length) {
             console.warn(`Índice ${indice} fuera de rango`);
@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── DELETE ──────────────────────────────────────────────────────────────
-    function eliminarParque(indice) {
+    eliminarParque(indice) {
         const lista = StorageParque.load();
         if (indice < 0 || indice >= lista.length) {
             console.warn(`Índice ${indice} fuera de rango`);
@@ -53,4 +53,6 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log("Parque eliminado:", eliminado[0]);
         return true;
     }
-});
+};
+
+export default ParqueService;

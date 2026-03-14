@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=5.0">
+    <title>City Builder Game</title>
+    
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="../estilos/newPanel.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Notifications Bar -->
+    <div class="notifications-bar" id="notificationsBar">
+        <div class="alert alert-info alert-dismissible fade show m-2" role="alert">
+            <i class="bi bi-info-circle"></i> Welcome to City Builder! Start by placing your first building.
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    </div>
+    
+    <!-- DESKTOP LAYOUT (> 1024px) -->
+    <div class="d-none d-xl-block">
+        <!-- Left Sidebar -->
+        <div class="left-sidebar desktop-sidebar">
+            <h2 class="text-center mb-4">
+                <i class="bi bi-building"></i> City Builder
+            </h2>
+            
+            <!-- Resources Panel -->
+            <div class="panel">
+                <div class="panel-header">Resources</div>
+                <div class="resource-item">
+                    <span class="resource-icon">💰</span>
+                    <div>
+                        <div class="resource-label">Gold</div>
+                        <div class="resource-value stats-value" id="goldDesktop">5000</div>
+                    </div>
+                </div>
+                <div class="resource-item">
+                    <span class="resource-icon">👥</span>
+                    <div>
+                        <div class="resource-label">Population</div>
+                        <div class="resource-value stats-value" id="populationDesktop">150</div>
+                    </div>
+                </div>
+                <div class="resource-item">
+                    <span class="resource-icon">⚡</span>
+                    <div>
+                        <div class="resource-label">Energy</div>
+                        <div class="resource-value stats-value" id="energyDesktop">75</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Building Menu -->
+            <div class="panel" id="desktopBuildMenu">
+                <div class="panel-header">Build</div>
+                <div class="building-card mb-2" data-building-type="house">
+                    <div class="building-icon">🏠</div>
+                    <div>House</div>
+                    <small class="text-muted">Cost: 100💰</small>
+                </div>
+                <div class="building-card mb-2" data-building-type="factory">
+                    <div class="building-icon">🏭</div>
+                    <div>Factory</div>
+                    <small class="text-muted">Cost: 500💰</small>
+                </div>
+                <div class="building-card mb-2" data-building-type="store">
+                    <div class="building-icon">🏪</div>
+                    <div>Store</div>
+                    <small class="text-muted">Cost: 200💰</small>
+                </div>
+                <div class="building-card mb-2" data-building-type="farm">
+                    <div class="building-icon">🌾</div>
+                    <div>Farm</div>
+                    <small class="text-muted">Cost: 150💰</small>
+                </div>
+                <div class="building-card mb-2" data-building-type="apartment">
+                    <div class="building-icon">🏢</div>
+                    <div>Apartment</div>
+                    <small class="text-muted">Cost: 300💰</small>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Center Content -->
+        <div class="center-content">
+            <div class="map-container">
+                <div class="zoom-controls">
+                    <button class="zoom-btn" id="btnZoomIn">+</button>
+                    <button class="zoom-btn" id="btnZoomOut">-</button>
+                </div>
+                <div class="game-map" id="gameMap"></div>
+            </div>
+        </div>
+        
+        <!-- Right Sidebar -->
+        <div class="right-sidebar desktop-sidebar">
+            <!-- Weather Widget -->
+            <div class="weather-widget text-center">
+                <div class="weather-icon">☀️</div>
+                <div class="temperature">24°C</div>
+                <div>Sunny</div>
+            </div>
+            
+            <!-- Summary Stats -->
+            <div class="panel">
+                <div class="panel-header">City Stats</div>
+                <div class="stat-card">
+                    <div class="stat-label">Happiness</div>
+                    <div class="stat-value stats-value">85%</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Employment</div>
+                    <div class="stat-value stats-value">92%</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Total Buildings</div>
+                    <div class="stat-value stats-value" id="buildingCountDesktop">5</div>
+                </div>
+            </div>
+            
+            <!-- News Feed -->
+            <div class="panel">
+                <div class="panel-header">News Feed</div>
+                <div class="news-item">
+                    <div class="news-time">2 minutes ago</div>
+                    <div>New factory completed! +50 jobs created.</div>
+                </div>
+                <div class="news-item">
+                    <div class="news-time">15 minutes ago</div>
+                    <div>Population milestone reached: 150 citizens!</div>
+                </div>
+                <div class="news-item">
+                    <div class="news-time">1 hour ago</div>
+                    <div>Energy production increased by 10%.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- TABLET LAYOUT (768px - 1024px) -->
+    <div class="container-fluid d-none d-md-block d-xl-none tablet-layout">
+        <div class="row mt-3">
+            <div class="col-md-8">
+                <h2 class="mb-3">
+                    <i class="bi bi-building"></i> City Builder
+                </h2>
+                <div class="map-container">
+                    <div class="game-map" id="gameMapTablet"></div>
+                </div>
+            </div>
+            <div class="col-md-4 tablet-sidebar">
+                <!-- Resources Panel -->
+                <div class="panel">
+                    <div class="panel-header">Resources</div>
+                    <div class="resource-item">
+                        <span class="resource-icon">💰</span>
+                        <div>
+                            <div class="resource-label">Gold</div>
+                            <div class="resource-value stats-value" id="goldTablet">5000</div>
+                        </div>
+                    </div>
+                    <div class="resource-item">
+                        <span class="resource-icon">👥</span>
+                        <div>
+                            <div class="resource-label">Population</div>
+                            <div class="resource-value stats-value" id="populationTablet">150</div>
+                        </div>
+                    </div>
+                    <div class="resource-item">
+                        <span class="resource-icon">⚡</span>
+                        <div>
+                            <div class="resource-label">Energy</div>
+                            <div class="resource-value stats-value" id="energyTablet">75</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Building Menu -->
+                <div class="panel" id="tabletBuildMenu">
+                    <div class="panel-header">Build</div>
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <div class="building-card" data-building-type="house">
+                                <div class="building-icon">🏠</div>
+                                <div>House</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="building-card" data-building-type="factory">
+                                <div class="building-icon">🏭</div>
+                                <div>Factory</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="building-card" data-building-type="store">
+                                <div class="building-icon">🏪</div>
+                                <div>Store</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="building-card" data-building-type="farm">
+                                <div class="building-icon">🌾</div>
+                                <div>Farm</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tabbed Content -->
+                <div class="panel">
+                    <ul class="nav nav-tabs mb-3" id="tabletTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#weatherTab">Weather</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#newsTab">News</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#statsTab">Stats</button>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="weatherTab">
+                            <div class="weather-widget text-center">
+                                <div class="weather-icon">☀️</div>
+                                <div class="temperature">24°C</div>
+                                <div>Sunny</div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="newsTab">
+                            <div class="news-item">
+                                <div class="news-time">2 minutes ago</div>
+                                <div>New factory completed!</div>
+                            </div>
+                            <div class="news-item">
+                                <div class="news-time">15 minutes ago</div>
+                                <div>Population: 150 citizens!</div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="statsTab">
+                            <div class="stat-card">
+                                <div class="stat-label">Happiness</div>
+                                <div class="stat-value stats-value">85%</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Employment</div>
+                                <div class="stat-value stats-value">92%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- MOBILE LAYOUT (< 768px) -->
+    <div class="container-fluid d-md-none mobile-only">
+        <div class="mt-5 pt-3">
+            <h3 class="text-center mb-3">
+                <i class="bi bi-building"></i> City Builder
+            </h3>
+            
+            <!-- Collapsible Resources Header -->
+            <div class="panel collapsible-header" data-bs-toggle="collapse" data-bs-target="#resourcesCollapse">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="panel-header mb-0">Resources</div>
+                    <i class="bi bi-chevron-down"></i>
+                </div>
+                <div class="collapse show" id="resourcesCollapse">
+                    <div class="d-flex justify-content-around mt-3">
+                        <div class="text-center">
+                            <div class="resource-icon">💰</div>
+                            <div class="stats-value" id="goldMobile">5000</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="resource-icon">👥</div>
+                            <div class="stats-value" id="populationMobile">150</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="resource-icon">⚡</div>
+                            <div class="stats-value" id="energyMobile">75</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Weather Widget Compact -->
+            <div class="weather-widget mb-3">
+                <span class="weather-icon">☀️</span>
+                <span class="temperature">24°C</span>
+            </div>
+            
+            <!-- Map Container -->
+            <div class="map-container mb-3">
+                <div class="game-map" id="gameMapMobile"></div>
+            </div>
+            
+            <!-- News Carousel -->
+            <div class="panel">
+                <div class="panel-header">Latest News</div>
+                <div id="newsCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-indicators">
+                        <button type="button" data-bs-target="#newsCarousel" data-bs-slide-to="0" class="active"></button>
+                        <button type="button" data-bs-target="#newsCarousel" data-bs-slide-to="1"></button>
+                        <button type="button" data-bs-target="#newsCarousel" data-bs-slide-to="2"></button>
+                    </div>
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <div class="news-item">
+                                <div class="news-time">2 minutes ago</div>
+                                <div>New factory completed! +50 jobs created.</div>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <div class="news-item">
+                                <div class="news-time">15 minutes ago</div>
+                                <div>Population milestone reached: 150 citizens!</div>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <div class="news-item">
+                                <div class="news-time">1 hour ago</div>
+                                <div>Energy production increased by 10%.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#newsCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon"></span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#newsCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Floating Action Button (Mobile) -->
+    <button class="fab" data-bs-toggle="offcanvas" data-bs-target="#statsOffcanvas">
+        <i class="bi bi-graph-up"></i>
+    </button>
+    
+    <!-- Bottom Tab Bar (Mobile) -->
+    <div class="bottom-tab-bar touch-pan-x">
+        <button class="tab-item active" data-bs-toggle="modal" data-bs-target="#buildMenuModal" data-action="build">
+            <i class="bi bi-hammer"></i>
+            <span>Build</span>
+        </button>
+        <button class="tab-item" data-action="map">
+            <i class="bi bi-map"></i>
+            <span>Map</span>
+        </button>
+        <button class="tab-item" data-action="citizens">
+            <i class="bi bi-people"></i>
+            <span>Citizens</span>
+        </button>
+        <button class="tab-item" data-action="settings">
+            <i class="bi bi-gear"></i>
+            <span>Settings</span>
+        </button>
+    </div>
+    
+    <!-- Stats Offcanvas (Mobile) -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="statsOffcanvas">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title">City Statistics</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div class="stat-card">
+                <div class="stat-label">Happiness</div>
+                <div class="stat-value stats-value">85%</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Employment</div>
+                <div class="stat-value stats-value">92%</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Total Buildings</div>
+                <div class="stat-value stats-value" id="buildingCountMobile">5</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Daily Income</div>
+                <div class="stat-value stats-value">+120💰</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Build Menu Modal (Mobile) -->
+    <div class="modal fade" id="buildMenuModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Select Building</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <div class="building-card" data-building-type="house">
+                                <div class="building-icon">🏠</div>
+                                <div>House</div>
+                                <small>100💰</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="building-card" data-building-type="factory">
+                                <div class="building-icon">🏭</div>
+                                <div>Factory</div>
+                                <small>500💰</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="building-card" data-building-type="store">
+                                <div class="building-icon">🏪</div>
+                                <div>Store</div>
+                                <small>200💰</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="building-card" data-building-type="farm">
+                                <div class="building-icon">🌾</div>
+                                <div>Farm</div>
+                                <small>150💰</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="building-card" data-building-type="apartment">
+                                <div class="building-icon">🏢</div>
+                                <div>Apartment</div>
+                                <small>300💰</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Building Info Modal -->
+    <div class="modal fade" id="buildingInfoModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="buildingInfoTitle">Building Info</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="buildingInfoBody">
+                    <!-- Dynamic content -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger" id="btnDemolish">Demolish</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap 5.3 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="js/main.js"></script>
+</body>
+</html>

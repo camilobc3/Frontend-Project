@@ -39,3 +39,4 @@ class Apartamento extends EdificioResidencial {
     }
 }
 
+export default Apartamento;

@@ -9,7 +9,7 @@ class Casa extends EdificioResidencial {
      * @param {number} costo - Costo de construcción de la casa
      * @param {number} capacidadVivienda - Número de habitantes que puede albergar
      */
-    constructor(costo, capacidadVivienda) {
+    constructor(costo=1000, capacidadVivienda=4) {
         super(costo, capacidadVivienda);
     }
 
@@ -19,7 +19,7 @@ class Casa extends EdificioResidencial {
      */
     produccionXTurno() {
         // Implementación específica para casa
-        return 30; // Valor por defecto
+        return 0; // Valor por defecto
     }
 
     /**
@@ -39,3 +39,4 @@ class Casa extends EdificioResidencial {
     }
 }
 
+export default Casa;

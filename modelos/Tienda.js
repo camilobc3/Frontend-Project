@@ -39,3 +39,4 @@ class Tienda extends EdificioComercial {
     }
 }
 
+export default Tienda;

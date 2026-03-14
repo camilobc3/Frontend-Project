@@ -1,19 +1,19 @@
-document.addEventListener("DOMContentLoaded", function () {
-    console.log("DOM cargado - CiudadanoService");
+import Ciudadano from "../modelos/Ciudadano.js";
+class CiudadanoService {
 
-    cargarCiudadanos();
-    const CiudadService = new CiudadService(); // Preguntar
+    //cargarCiudadanos();
+    //const CiudadService = new CiudadService(); // Preguntar
 
 
     // ─── READ ALL ────────────────────────────────────────────────────────────
-    function cargarCiudadanos() {
+    cargarCiudadanos() {
         const lista = StorageCiudadano.load();
         console.log("Ciudadanos cargados:", lista);
         return lista;
     }
 
     // ─── READ ONE ────────────────────────────────────────────────────────────
-    function cargarCiudadano(id) {
+    cargarCiudadano(id) {
         const lista = StorageCiudadano.load();
         const ciudadano = lista.find(c => c.id === id);
         console.log("Ciudadano encontrado:", ciudadano);
@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── CREATE ──────────────────────────────────────────────────────────────
-    function crearCiudadano(id, nivelFelicidad) {
+    crearCiudadano(id, nivelFelicidad) {
         const lista = StorageCiudadano.load();
         const existe = lista.some(c => c.id === id);
         if (existe) {
@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── UPDATE ──────────────────────────────────────────────────────────────
-    function actualizarCiudadano(id, nivelFelicidad) {
+    actualizarCiudadano(id, nivelFelicidad) {
         const lista = StorageCiudadano.load();
         const indice = lista.findIndex(c => c.id === id);
         if (indice === -1) {
@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── DELETE ──────────────────────────────────────────────────────────────
-    function eliminarCiudadano(id) {
+    eliminarCiudadano(id) {
         const lista = StorageCiudadano.load();
         const nuevaLista = lista.filter(c => c.id !== id);
         if (nuevaLista.length === lista.length) {
@@ -63,17 +63,17 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Verificacion de si el ciudadano tiene contrato con vivienda
-    function verificarContratoVivienda(ciudadano) {
+    verificarContratoVivienda(ciudadano) {
         return ciudadano.misContratos.some(contrato => contrato.miEdificio instanceof Casa || contrato.miEdificio instanceof Apartamento);
     }
 
     //verificacion de si el ciudadano tiene contrato con edificio comercial
-    function verificarContratoComercial(ciudadano) {
+    verificarContratoComercial(ciudadano) {
         return ciudadano.misContratos.some(contrato => contrato.miEdificio instanceof CentroComercial  || contrato.miEdificio instanceof Tienda);
     }
 
     // Calculo de la felicidad del ciudadano
-    function  calcularFelicidad(ciudadano) {  
+    calcularFelicidad(ciudadano) {  
         let factoresPositivos = 0;
         let factoresNegativos = 0;
         factoresPositivos = calculoFactoresPositivos(ciudadano);
@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", function () {
     } 
 
 
-    function calculoFactoresPositivos(ciudadano) {
+    calculoFactoresPositivos(ciudadano) {
         let factoresPositivosRespuesta = 0;
 
         //Factores positivos relacionados con la ciudad
@@ -117,7 +117,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return factoresPositivosRespuesta;
     }
 
-    function calculoFactoresNegativos(ciudadano) {
+    calculoFactoresNegativos(ciudadano) {
         let factoresNegativosRespuesta = 0;
 
         if(verificarContratoVivienda(ciudadano) === false) {
@@ -130,4 +130,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         return factoresNegativosRespuesta;
     }
-});
+};
+
+export default CiudadanoService;

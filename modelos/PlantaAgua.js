@@ -40,3 +40,4 @@ class PlantaAgua extends PlantaUtilidad {
     }
 }
 
+export default PlantaAgua;

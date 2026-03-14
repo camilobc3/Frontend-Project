@@ -16,3 +16,4 @@ class Alcalde {
     }
 }
 
+export default Alcalde;

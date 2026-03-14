@@ -1,17 +1,17 @@
-document.addEventListener("DOMContentLoaded", function () {
-    console.log("DOM cargado - FabricaService");
+import Fabrica from "../modelos/Fabrica.js";
+class FabricaService {
 
-    cargarFabricas();
+    //cargarFabricas();
 
     // ─── READ ALL ────────────────────────────────────────────────────────────
-    function cargarFabricas() {
+    cargarFabricas() {
         const lista = StorageFabrica.load();
         console.log("Fábricas cargadas:", lista);
         return lista;
     }
 
     // ─── READ ONE ────────────────────────────────────────────────────────────
-    function cargarFabrica(indice) {
+    cargarFabrica(indice) {
         const lista = StorageFabrica.load();
         const fabrica = lista[indice];
         console.log("Fábrica encontrada:", fabrica);
@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── CREATE ──────────────────────────────────────────────────────────────
-    function crearFabrica(costo, numeroEmpleos) {
+    crearFabrica(costo, numeroEmpleos) {
         const lista = StorageFabrica.load();
         const nuevaFabrica = new Fabrica(costo, numeroEmpleos);
         lista.push(nuevaFabrica);
@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── UPDATE ──────────────────────────────────────────────────────────────
-    function actualizarFabrica(indice, costo, numeroEmpleos) {
+    actualizarFabrica(indice, costo, numeroEmpleos) {
         const lista = StorageFabrica.load();
         if (indice < 0 || indice >= lista.length) {
             console.warn(`Índice ${indice} fuera de rango`);
@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── DELETE ──────────────────────────────────────────────────────────────
-    function eliminarFabrica(indice) {
+    eliminarFabrica(indice) {
         const lista = StorageFabrica.load();
         if (indice < 0 || indice >= lista.length) {
             console.warn(`Índice ${indice} fuera de rango`);
@@ -55,11 +55,13 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Esta funcón verifica si una fabrica tiene capacidad disponible para nuevos contratos(Empleos), comparando la cantidad de contratos actuales con la capacidad máxima de la vivienda.
-    function empleoDisponibleFabrica(fabrica) {
-        if(fabrica.misContratos.length <= fabrica.numeroEmpleos){
-            return true;
-        } else {
+    empleoDisponibleFabrica(fabrica) {
+        if(fabrica.misContratos.length === fabrica.numeroEmpleos){
             return false;
+        } else {
+            return true;
         }
     }
-});
+};
+
+export default FabricaService;

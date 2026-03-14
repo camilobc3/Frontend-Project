@@ -1,17 +1,17 @@
-document.addEventListener("DOMContentLoaded", function () {
-    console.log("DOM cargado - EstacionPoliciaService");
+import EstacionPolicia from "../modelos/EstacionPolicia.js";
+class EstacionPoliciaService {
 
-    cargarEstacionesPolicia();
+    //cargarEstacionesPolicia();
 
     // ─── READ ALL ────────────────────────────────────────────────────────────
-    function cargarEstacionesPolicia() {
+    cargarEstacionesPolicia() {
         const lista = StorageEstacionPolicia.load();
         console.log("Estaciones de policía cargadas:", lista);
         return lista;
     }
 
     // ─── READ ONE ────────────────────────────────────────────────────────────
-    function cargarEstacionPolicia(indice) {
+    cargarEstacionPolicia(indice) {
         const lista = StorageEstacionPolicia.load();
         const estacion = lista[indice];
         console.log("Estación de policía encontrada:", estacion);
@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── CREATE ──────────────────────────────────────────────────────────────
-    function crearEstacionPolicia(costo, radio, beneficio) {
+    crearEstacionPolicia(costo, radio, beneficio) {
         const lista = StorageEstacionPolicia.load();
         const nuevaEstacion = new EstacionPolicia(costo, radio, beneficio);
         lista.push(nuevaEstacion);
@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── UPDATE ──────────────────────────────────────────────────────────────
-    function actualizarEstacionPolicia(indice, costo, radio, beneficio) {
+    actualizarEstacionPolicia(indice, costo, radio, beneficio) {
         const lista = StorageEstacionPolicia.load();
         if (indice < 0 || indice >= lista.length) {
             console.warn(`Índice ${indice} fuera de rango`);
@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── DELETE ──────────────────────────────────────────────────────────────
-    function eliminarEstacionPolicia(indice) {
+    eliminarEstacionPolicia(indice) {
         const lista = StorageEstacionPolicia.load();
         if (indice < 0 || indice >= lista.length) {
             console.warn(`Índice ${indice} fuera de rango`);
@@ -53,4 +53,6 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log("Estación de policía eliminada:", eliminada[0]);
         return true;
     }
-});
+};
+
+export default EstacionPoliciaService;

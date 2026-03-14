@@ -16,3 +16,5 @@ const StorageCiudad = {
         localStorage.removeItem(this.key);
     }
 };
+
+export default StorageCiudad;

@@ -1,17 +1,18 @@
-document.addEventListener("DOMContentLoaded", function () {
-    console.log("DOM cargado - AlcaldeService");
+import Alcalde from "../modelos/Alcalde.js";
 
-    cargarAlcaldes();
+class AlcaldeService {
+
+    //cargarAlcaldes();
 
     // ─── READ ALL ────────────────────────────────────────────────────────────
-    function cargarAlcaldes() {
+    cargarAlcaldes() {
         const lista = StorageAlcalde.load();
         console.log("Alcaldes cargados:", lista);
         return lista;
     }
 
     // ─── READ ONE ────────────────────────────────────────────────────────────
-    function cargarAlcalde(id) {
+    cargarAlcalde(id) {
         const lista = StorageAlcalde.load();
         const alcalde = lista.find(a => a.id === id);
         console.log("Alcalde encontrado:", alcalde);
@@ -19,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── CREATE ──────────────────────────────────────────────────────────────
-    function crearAlcalde(id, nombre, contraseña) {
+    crearAlcalde(id, nombre, contraseña) {
         const lista = StorageAlcalde.load();
         const existe = lista.some(a => a.id === id);
         if (existe) {
@@ -34,7 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── UPDATE ──────────────────────────────────────────────────────────────
-    function actualizarAlcalde(id, nombre, contraseña) {
+    actualizarAlcalde(id, nombre, contraseña) {
         const lista = StorageAlcalde.load();
         const indice = lista.findIndex(a => a.id === id);
         if (indice === -1) {
@@ -48,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ─── DELETE ──────────────────────────────────────────────────────────────
-    function eliminarAlcalde(id) {
+    eliminarAlcalde(id) {
         const lista = StorageAlcalde.load();
         const nuevaLista = lista.filter(a => a.id !== id);
         if (nuevaLista.length === lista.length) {
@@ -62,8 +63,9 @@ document.addEventListener("DOMContentLoaded", function () {
     
     //Feo el que lo lea
     //Culpa de PEtro
-});
+};
 
+export default AlcaldeService;
 //Este es el service de alcalde
 // oeoeoeooe
 //SaliGOD
