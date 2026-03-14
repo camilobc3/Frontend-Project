@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ciudad</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+
+<body>
+    <div class="flex flex-col justify-center items-center min-h-screen 
+                bg-[url('./assets/Thumbnail_51.jpeg')] bg-cover bg-center bg-no-repeat">
+
+        <div class="absolute inset-0 bg-black/35"></div>
+        
+        <!-- Tarjeta -->
+        <div class="relative z-10 w-[350px] min-h-[400px] 
+                    flex flex-col justify-center items-center 
+                    p-8 rounded-xl">
+
+            <!-- Título -->
+            <div class="mb-2">
+                <h1 class="text-xl font-semibold text-white">INGRESAR</h1>
+            </div>
+            
+            <!-- Inputs -->
+            <div class="flex flex-col gap-3 w-full">
+                <input type="text" placeholder="Nickname" class=" bg-white border p-2 rounded-md w-full focus:outline-none">
+                <input type="password" placeholder="Contraseña" class="bg-white border p-2 rounded-md w-full focus:outline-none focus:border-blue-500">
+            </div>
+
+            <!-- Botones -->
+            <div class="flex gap-3 mt-4 w-full">
+
+                <button class="flex-1 bg-blue-500 py-2 rounded-md  hover:bg-blue-700 transition text-white shadow-lg font-bold">Crear cuenta
+                </button>
+
+                <button 
+                    class="flex-1 bg-green-500 py-2 rounded-md hover:bg-green-700 transition text-white shadow-lg font-bold">Ingresar
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>
