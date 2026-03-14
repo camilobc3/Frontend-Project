@@ -15,5 +15,18 @@
     "frontend"
   ],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/camilobc3/Frontend-Project.git"
+  },
+  "bugs": {
+    "url": "https://github.com/camilobc3/Frontend-Project/issues"
+  },
+  "homepage": "https://github.com/camilobc3/Frontend-Project#readme",
+  "devDependencies": {
+    "autoprefixer": "^10.4.27",
+    "postcss": "^8.5.8",
+    "tailwindcss": "^4.2.1"
+  }
 }

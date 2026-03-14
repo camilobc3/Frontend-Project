@@ -16,6 +16,16 @@ class Ciudad {
         this.miMapa = miMapa;          // Relación 1-1 con Mapa
         this.misCiudadanos = [];       // Relación 1-n con Ciudadano
         this.misEdificios = [];        // Relación 1-n con Edificio
+
+        this.dinero = 50000; // Dinero inicial de la ciudad
+        this.agua = 30;
+        this.electricidad = 30;
+        this.alimento = 30;
+
+        this.ingresosXTurno = 100;
+        this.electricidadXTurno = 0;
+        this.aguaXTurno = 0;
+        this.alimentoXTurno = 0;
     }
 
     /**

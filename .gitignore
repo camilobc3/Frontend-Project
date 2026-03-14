@@ -1,0 +1,6 @@
+# Variables de entorno - nunca subir al repo
+.env
+config.js
+
+# Dependencias de Node
+node_modules/
