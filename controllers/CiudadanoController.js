@@ -1,7 +1,7 @@
 ﻿import CiudadanoService from "../negocio/CiudadanoService.js";
 
 document.addEventListener("DOMContentLoaded", function () {
-    console.log("DOM cargado - CiudadanoServiceController");
+    console.log("DOM cargado - CiudadanoController");
 
 
 });
