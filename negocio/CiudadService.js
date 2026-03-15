@@ -1,6 +1,5 @@
 //Importaciones
 import { //Importacion de modelos
-    Ciudad,
     Edificio,
     EdificioResidencial,
     EdificioComercial,
@@ -15,6 +14,8 @@ import { //Importacion de modelos
     Casa,
     Apartamento
 } from "../modelos/index.js";
+
+import { Ciudad } from "../modelos/Ciudad.js";
 
 import {
     noticiasRepository,
