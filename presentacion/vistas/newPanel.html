@@ -37,7 +37,7 @@
     <div class="d-none d-xl-block">
         <!-- Left Sidebar -->
         <div class="left-sidebar desktop-sidebar">
-            <h2 class="text-center mb-4">
+            <h2 class="text-center mb-3">
                 <i class="bi bi-building"></i> City Builder
             </h2>
             
@@ -67,33 +67,128 @@
                 </div>
             </div>
             
-            <!-- Building Menu -->
-            <div class="panel" id="desktopBuildMenu">
-                <div class="panel-header">Build</div>
-                <div class="building-card mb-2" data-building-type="house">
-                    <div class="building-icon">🏠</div>
-                    <div>House</div>
-                    <small class="text-muted">Cost: 100💰</small>
-                </div>
-                <div class="building-card mb-2" data-building-type="factory">
-                    <div class="building-icon">🏭</div>
-                    <div>Factory</div>
-                    <small class="text-muted">Cost: 500💰</small>
-                </div>
-                <div class="building-card mb-2" data-building-type="store">
-                    <div class="building-icon">🏪</div>
-                    <div>Store</div>
-                    <small class="text-muted">Cost: 200💰</small>
-                </div>
-                <div class="building-card mb-2" data-building-type="farm">
-                    <div class="building-icon">🌾</div>
-                    <div>Farm</div>
-                    <small class="text-muted">Cost: 150💰</small>
-                </div>
-                <div class="building-card mb-2" data-building-type="apartment">
-                    <div class="building-icon">🏢</div>
-                    <div>Apartment</div>
-                    <small class="text-muted">Cost: 300💰</small>
+            <!-- Building Menu — scrolleable -->
+            <div class="panel p-0" id="desktopBuildMenu">
+                <div class="panel-header px-3 pt-3 pb-2">Build</div>
+                <div class="build-list">
+
+                    <!-- Camino -->
+                    <div class="build-item" data-building-type="R">
+                        <div class="build-item-icon">🛣️</div>
+                        <div class="build-item-info">
+                            <div class="build-item-name">Camino</div>
+                            <div class="build-item-cost">50 💰</div>
+                        </div>
+                    </div>
+
+                    <!-- Casa -->
+                    <div class="build-item" data-building-type="R1">
+                        <div class="build-item-icon">🏠</div>
+                        <div class="build-item-info">
+                            <div class="build-item-name">Casa</div>
+                            <div class="build-item-cost">100 💰</div>
+                        </div>
+                    </div>
+
+                    <!-- Apartamento -->
+                    <div class="build-item" data-building-type="R2">
+                        <div class="build-item-icon">🏢</div>
+                        <div class="build-item-info">
+                            <div class="build-item-name">Apartamento</div>
+                            <div class="build-item-cost">300 💰</div>
+                        </div>
+                    </div>
+
+                    <!-- Tienda -->
+                    <div class="build-item" data-building-type="C1">
+                        <div class="build-item-icon">🏪</div>
+                        <div class="build-item-info">
+                            <div class="build-item-name">Tienda</div>
+                            <div class="build-item-cost">200 💰</div>
+                        </div>
+                    </div>
+
+                    <!-- Centro Comercial -->
+                    <div class="build-item" data-building-type="C2">
+                        <div class="build-item-icon">🏬</div>
+                        <div class="build-item-info">
+                            <div class="build-item-name">Centro Comercial</div>
+                            <div class="build-item-cost">800 💰</div>
+                        </div>
+                    </div>
+
+                    <!-- Fábrica -->
+                    <div class="build-item" data-building-type="I1">
+                        <div class="build-item-icon">🏭</div>
+                        <div class="build-item-info">
+                            <div class="build-item-name">Fábrica</div>
+                            <div class="build-item-cost">500 💰</div>
+                        </div>
+                    </div>
+
+                    <!-- Granja -->
+                    <div class="build-item" data-building-type="I2">
+                        <div class="build-item-icon">🌾</div>
+                        <div class="build-item-info">
+                            <div class="build-item-name">Granja</div>
+                            <div class="build-item-cost">150 💰</div>
+                        </div>
+                    </div>
+
+                    <!-- Hospital -->
+                    <div class="build-item" data-building-type="S1">
+                        <div class="build-item-icon">🏥</div>
+                        <div class="build-item-info">
+                            <div class="build-item-name">Hospital</div>
+                            <div class="build-item-cost">1000 💰</div>
+                        </div>
+                    </div>
+
+                    <!-- Estación Bomberos -->
+                    <div class="build-item" data-building-type="S2">
+                        <div class="build-item-icon">🚒</div>
+                        <div class="build-item-info">
+                            <div class="build-item-name">Est. Bomberos</div>
+                            <div class="build-item-cost">400 💰</div>
+                        </div>
+                    </div>
+
+                    <!-- Estación Policía -->
+                    <div class="build-item" data-building-type="S3">
+                        <div class="build-item-icon">🚔</div>
+                        <div class="build-item-info">
+                            <div class="build-item-name">Est. Policía</div>
+                            <div class="build-item-cost">400 💰</div>
+                        </div>
+                    </div>
+
+                    <!-- Parque -->
+                    <div class="build-item" data-building-type="P1">
+                        <div class="build-item-icon">🌳</div>
+                        <div class="build-item-info">
+                            <div class="build-item-name">Parque</div>
+                            <div class="build-item-cost">200 💰</div>
+                        </div>
+                    </div>
+
+                    <!-- Planta Eléctrica -->
+                    <div class="build-item" data-building-type="U1">
+                        <div class="build-item-icon">⚡</div>
+                        <div class="build-item-info">
+                            <div class="build-item-name">Planta Eléctrica</div>
+                            <div class="build-item-cost">600 💰</div>
+                        </div>
+                    </div>
+
+                    <!-- Planta de Agua -->
+                    <div class="build-item" data-building-type="U2">
+                        <div class="build-item-icon">💧</div>
+                        <div class="build-item-info">
+                            <div class="build-item-name">Planta de Agua</div>
+                            <div class="build-item-cost">600 💰</div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -192,78 +287,23 @@
                     </div>
                 </div>
                 
-                <!-- Building Menu -->
-                <div class="panel" id="tabletBuildMenu">
-                    <div class="panel-header">Build</div>
-                    <div class="row g-2">
-                        <div class="col-6">
-                            <div class="building-card" data-building-type="house">
-                                <div class="building-icon">🏠</div>
-                                <div>House</div>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="building-card" data-building-type="factory">
-                                <div class="building-icon">🏭</div>
-                                <div>Factory</div>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="building-card" data-building-type="store">
-                                <div class="building-icon">🏪</div>
-                                <div>Store</div>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="building-card" data-building-type="farm">
-                                <div class="building-icon">🌾</div>
-                                <div>Farm</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Tabbed Content -->
-                <div class="panel">
-                    <ul class="nav nav-tabs mb-3" id="tabletTabs" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#weatherTab">Weather</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#newsTab">News</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#statsTab">Stats</button>
-                        </li>
-                    </ul>
-                    <div class="tab-content">
-                        <div class="tab-pane fade show active" id="weatherTab">
-                            <div class="weather-widget text-center">
-                                <div class="weather-icon">☀️</div>
-                                <div class="temperature">24°C</div>
-                                <div>Sunny</div>
-                            </div>
-                        </div>
-                        <div class="tab-pane fade" id="newsTab">
-                            <div class="news-item">
-                                <div class="news-time">2 minutes ago</div>
-                                <div>New factory completed!</div>
-                            </div>
-                            <div class="news-item">
-                                <div class="news-time">15 minutes ago</div>
-                                <div>Population: 150 citizens!</div>
-                            </div>
-                        </div>
-                        <div class="tab-pane fade" id="statsTab">
-                            <div class="stat-card">
-                                <div class="stat-label">Happiness</div>
-                                <div class="stat-value stats-value">85%</div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-label">Employment</div>
-                                <div class="stat-value stats-value">92%</div>
-                            </div>
-                        </div>
+                <!-- Building Menu Tablet — scrolleable -->
+                <div class="panel p-0" id="tabletBuildMenu">
+                    <div class="panel-header px-3 pt-3 pb-2">Build</div>
+                    <div class="build-list build-list-tablet">
+                        <div class="build-item" data-building-type="R"><div class="build-item-icon">🛣️</div><div class="build-item-info"><div class="build-item-name">Camino</div><div class="build-item-cost">50 💰</div></div></div>
+                        <div class="build-item" data-building-type="R1"><div class="build-item-icon">🏠</div><div class="build-item-info"><div class="build-item-name">Casa</div><div class="build-item-cost">100 💰</div></div></div>
+                        <div class="build-item" data-building-type="R2"><div class="build-item-icon">🏢</div><div class="build-item-info"><div class="build-item-name">Apartamento</div><div class="build-item-cost">300 💰</div></div></div>
+                        <div class="build-item" data-building-type="C1"><div class="build-item-icon">🏪</div><div class="build-item-info"><div class="build-item-name">Tienda</div><div class="build-item-cost">200 💰</div></div></div>
+                        <div class="build-item" data-building-type="C2"><div class="build-item-icon">🏬</div><div class="build-item-info"><div class="build-item-name">C. Comercial</div><div class="build-item-cost">800 💰</div></div></div>
+                        <div class="build-item" data-building-type="I1"><div class="build-item-icon">🏭</div><div class="build-item-info"><div class="build-item-name">Fábrica</div><div class="build-item-cost">500 💰</div></div></div>
+                        <div class="build-item" data-building-type="I2"><div class="build-item-icon">🌾</div><div class="build-item-info"><div class="build-item-name">Granja</div><div class="build-item-cost">150 💰</div></div></div>
+                        <div class="build-item" data-building-type="S1"><div class="build-item-icon">🏥</div><div class="build-item-info"><div class="build-item-name">Hospital</div><div class="build-item-cost">1000 💰</div></div></div>
+                        <div class="build-item" data-building-type="S2"><div class="build-item-icon">🚒</div><div class="build-item-info"><div class="build-item-name">Est. Bomberos</div><div class="build-item-cost">400 💰</div></div></div>
+                        <div class="build-item" data-building-type="S3"><div class="build-item-icon">🚔</div><div class="build-item-info"><div class="build-item-name">Est. Policía</div><div class="build-item-cost">400 💰</div></div></div>
+                        <div class="build-item" data-building-type="P1"><div class="build-item-icon">🌳</div><div class="build-item-info"><div class="build-item-name">Parque</div><div class="build-item-cost">200 💰</div></div></div>
+                        <div class="build-item" data-building-type="U1"><div class="build-item-icon">⚡</div><div class="build-item-info"><div class="build-item-name">Planta Eléctrica</div><div class="build-item-cost">600 💰</div></div></div>
+                        <div class="build-item" data-building-type="U2"><div class="build-item-icon">💧</div><div class="build-item-info"><div class="build-item-name">Planta de Agua</div><div class="build-item-cost">600 💰</div></div></div>
                     </div>
                 </div>
             </div>
@@ -323,22 +363,13 @@
                     </div>
                     <div class="carousel-inner">
                         <div class="carousel-item active">
-                            <div class="news-item">
-                                <div class="news-time">2 minutes ago</div>
-                                <div>New factory completed! +50 jobs created.</div>
-                            </div>
+                            <div class="news-item"><div class="news-time">2 minutes ago</div><div>New factory completed! +50 jobs created.</div></div>
                         </div>
                         <div class="carousel-item">
-                            <div class="news-item">
-                                <div class="news-time">15 minutes ago</div>
-                                <div>Population milestone reached: 150 citizens!</div>
-                            </div>
+                            <div class="news-item"><div class="news-time">15 minutes ago</div><div>Population milestone reached: 150 citizens!</div></div>
                         </div>
                         <div class="carousel-item">
-                            <div class="news-item">
-                                <div class="news-time">1 hour ago</div>
-                                <div>Energy production increased by 10%.</div>
-                            </div>
+                            <div class="news-item"><div class="news-time">1 hour ago</div><div>Energy production increased by 10%.</div></div>
                         </div>
                     </div>
                     <button class="carousel-control-prev" type="button" data-bs-target="#newsCarousel" data-bs-slide="prev">
@@ -384,70 +415,36 @@
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
         </div>
         <div class="offcanvas-body">
-            <div class="stat-card">
-                <div class="stat-label">Happiness</div>
-                <div class="stat-value stats-value">85%</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Employment</div>
-                <div class="stat-value stats-value">92%</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Total Buildings</div>
-                <div class="stat-value stats-value" id="buildingCountMobile">5</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Daily Income</div>
-                <div class="stat-value stats-value">+120💰</div>
-            </div>
+            <div class="stat-card"><div class="stat-label">Happiness</div><div class="stat-value stats-value">85%</div></div>
+            <div class="stat-card"><div class="stat-label">Employment</div><div class="stat-value stats-value">92%</div></div>
+            <div class="stat-card"><div class="stat-label">Total Buildings</div><div class="stat-value stats-value" id="buildingCountMobile">5</div></div>
+            <div class="stat-card"><div class="stat-label">Daily Income</div><div class="stat-value stats-value">+120💰</div></div>
         </div>
     </div>
     
-    <!-- Build Menu Modal (Mobile) -->
+    <!-- Build Menu Modal (Mobile) — lista completa -->
     <div class="modal fade" id="buildMenuModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Select Building</h5>
+                    <h5 class="modal-title"><i class="bi bi-hammer"></i> Construir</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body">
-                    <div class="row g-2">
-                        <div class="col-6">
-                            <div class="building-card" data-building-type="house">
-                                <div class="building-icon">🏠</div>
-                                <div>House</div>
-                                <small>100💰</small>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="building-card" data-building-type="factory">
-                                <div class="building-icon">🏭</div>
-                                <div>Factory</div>
-                                <small>500💰</small>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="building-card" data-building-type="store">
-                                <div class="building-icon">🏪</div>
-                                <div>Store</div>
-                                <small>200💰</small>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="building-card" data-building-type="farm">
-                                <div class="building-icon">🌾</div>
-                                <div>Farm</div>
-                                <small>150💰</small>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="building-card" data-building-type="apartment">
-                                <div class="building-icon">🏢</div>
-                                <div>Apartment</div>
-                                <small>300💰</small>
-                            </div>
-                        </div>
+                <div class="modal-body p-0">
+                    <div class="build-list">
+                        <div class="build-item" data-building-type="R"><div class="build-item-icon">🛣️</div><div class="build-item-info"><div class="build-item-name">Camino</div><div class="build-item-cost">50 💰</div></div></div>
+                        <div class="build-item" data-building-type="R1"><div class="build-item-icon">🏠</div><div class="build-item-info"><div class="build-item-name">Casa</div><div class="build-item-cost">100 💰</div></div></div>
+                        <div class="build-item" data-building-type="R2"><div class="build-item-icon">🏢</div><div class="build-item-info"><div class="build-item-name">Apartamento</div><div class="build-item-cost">300 💰</div></div></div>
+                        <div class="build-item" data-building-type="C1"><div class="build-item-icon">🏪</div><div class="build-item-info"><div class="build-item-name">Tienda</div><div class="build-item-cost">200 💰</div></div></div>
+                        <div class="build-item" data-building-type="C2"><div class="build-item-icon">🏬</div><div class="build-item-info"><div class="build-item-name">Centro Comercial</div><div class="build-item-cost">800 💰</div></div></div>
+                        <div class="build-item" data-building-type="I1"><div class="build-item-icon">🏭</div><div class="build-item-info"><div class="build-item-name">Fábrica</div><div class="build-item-cost">500 💰</div></div></div>
+                        <div class="build-item" data-building-type="I2"><div class="build-item-icon">🌾</div><div class="build-item-info"><div class="build-item-name">Granja</div><div class="build-item-cost">150 💰</div></div></div>
+                        <div class="build-item" data-building-type="S1"><div class="build-item-icon">🏥</div><div class="build-item-info"><div class="build-item-name">Hospital</div><div class="build-item-cost">1000 💰</div></div></div>
+                        <div class="build-item" data-building-type="S2"><div class="build-item-icon">🚒</div><div class="build-item-info"><div class="build-item-name">Est. Bomberos</div><div class="build-item-cost">400 💰</div></div></div>
+                        <div class="build-item" data-building-type="S3"><div class="build-item-icon">🚔</div><div class="build-item-info"><div class="build-item-name">Est. Policía</div><div class="build-item-cost">400 💰</div></div></div>
+                        <div class="build-item" data-building-type="P1"><div class="build-item-icon">🌳</div><div class="build-item-info"><div class="build-item-name">Parque</div><div class="build-item-cost">200 💰</div></div></div>
+                        <div class="build-item" data-building-type="U1"><div class="build-item-icon">⚡</div><div class="build-item-info"><div class="build-item-name">Planta Eléctrica</div><div class="build-item-cost">600 💰</div></div></div>
+                        <div class="build-item" data-building-type="U2"><div class="build-item-icon">💧</div><div class="build-item-info"><div class="build-item-name">Planta de Agua</div><div class="build-item-cost">600 💰</div></div></div>
                     </div>
                 </div>
             </div>
@@ -462,9 +459,7 @@
                     <h5 class="modal-title" id="buildingInfoTitle">Building Info</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body" id="buildingInfoBody">
-                    <!-- Dynamic content -->
-                </div>
+                <div class="modal-body" id="buildingInfoBody"></div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-danger" id="btnDemolish">Demolish</button>

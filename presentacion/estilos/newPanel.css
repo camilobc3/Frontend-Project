@@ -561,3 +561,45 @@ h1, h2, h3, h4, h5, h6 {
     transition: all var(--transition-speed) ease;
 }
 
+/* ___________________Panel Build_______________ */
+.build-list {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    max-height: 420px; /* ajusta según tu sidebar */
+    padding: 0 0.5rem 0.5rem;
+}
+
+/* scrollbar personalizado */
+.build-list::-webkit-scrollbar { width: 4px; }
+.build-list::-webkit-scrollbar-track { background: transparent; }
+.build-list::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
+
+.build-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.6rem 0.75rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color var(--transition-fast) ease;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.build-item:hover {
+    background-color: rgba(56, 189, 248, 0.15);
+}
+
+.build-item.selected {
+    background-color: rgba(56, 189, 248, 0.25);
+    border-left: 3px solid var(--accent);
+}
+
+.build-item-icon { font-size: 1.6rem; min-width: 2rem; text-align: center; }
+
+.build-item-name { font-size: 0.9rem; font-weight: 600; color: var(--text-primary); }
+
+.build-item-cost { font-size: 0.75rem; color: var(--accent); font-family: 'Roboto Mono', monospace; }
+
+/* Tablet: lista más compacta */
+.build-list-tablet { max-height: 300px; }
