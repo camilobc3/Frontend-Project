@@ -1,4 +1,4 @@
-import Ciudad from "./Ciudad";
+import Ciudad from "/modelos/Ciudad.js";
 
 /**
  * Clase Ciudadano

@@ -13,7 +13,9 @@ import { //Importacion de modelos
     PlantaElectrica,
     PlantaAgua,
     Casa,
-    Apartamento
+    Apartamento,
+    EstacionBombero,
+    Camino
 } from "../modelos/index.js";
 
 import {
@@ -28,15 +30,18 @@ import {
 
 const mapaService = new MapaService();
 
-import {calcularFelicidad} from "./CiudadanoService.js";
-import {capacidadDisponibleCasa} from "./CasaService.js";
-import {capacidadDisponibleApartamento} from "./ApartamentoService.js";
-import {empleoDisponibleTienda} from "./TiendaService.js";
-import {empleoDisponibleCentroComercial} from "./CentroComercialService.js";
-import {empleoDisponibleFabrica} from "./FabricaService.js";
-import {empleoDisponibleGranja} from "./GranjaService.js";
-import {verificarContratoComercial} from "./CiudadanoService.js";
-import {verificarContratoVivienda} from "./CiudadanoService.js";
+import { capacidadDisponibleCasa } from "../negocio/CasaService.js";
+
+import { CiudadanoService, CasaService, ApartamentoService, TiendaService, CentroComercialService, FabricaService, GranjaService
+ } from "./index.js";
+
+const ciudadanoService = new CiudadanoService();
+const casaService = new CasaService();
+const apartamentoService = new ApartamentoService();
+const tiendaService = new TiendaService();
+const centroComercialService = new CentroComercialService();
+const fabricaService = new FabricaService();
+const granjaService = new GranjaService();
 
 
 class CiudadService{
@@ -182,10 +187,10 @@ class CiudadService{
 
     //Creación automatica de ciudadanos si hay viviendas disponibles, empleos disponibles y verificando la felicidad promedio
     crearCiudadanosAutomaticamente(ciudad) {
-        if(promedioFelicidadCiudad(ciudad)>60 && edificioDisponible(listaCasas(ciudad), capacidadDisponibleCasa)
-            && edificioDisponible(listaApartamentos(ciudad), capacidadDisponibleApartamento) && edificioDisponible(listaTiendas(ciudad), empleoDisponibleTienda) 
-            && edificioDisponible(listaCentrosComerciales(ciudad), empleoDisponibleCentroComercial) && edificioDisponible(listaFabricas(ciudad), empleoDisponibleFabrica) 
-            && edificioDisponible(listaGranjas(ciudad), empleoDisponibleGranja)){
+        if(promedioFelicidadCiudad(ciudad)>60 && this.edificioDisponible(listaCasas(ciudad), CasaService.capacidadDisponibleCasa)
+            && this.edificioDisponible(listaApartamentos(ciudad), ApartamentoService.capacidadDisponibleApartamento) && this.edificioDisponible(listaTiendas(ciudad), TiendaService.empleoDisponibleTienda) 
+            && this.edificioDisponible(listaCentrosComerciales(ciudad), CentroComercialService.empleoDisponibleCentroComercial) && this.edificioDisponible(listaFabricas(ciudad), FabricaService.empleoDisponibleFabrica) 
+            && this.edificioDisponible(listaGranjas(ciudad), GranjaService.empleoDisponibleGranja)){
                 for (let i = 0; i < 4; i++) {
                     const nuevoId = ciudad.misCiudadanos.length + 1
                     let nuevoCiudadano = new Ciudadano(nuevoId,0); // Realizar función para incrementar id´s del ciudadano
@@ -204,7 +209,7 @@ class CiudadService{
     //Estadisticas de la porblación
 
     //numero de ciudadanos en la ciudad
-    numeroCiudadanos(ciudad) {
+    numeroCiudadanos(ciudad) { 
         return ciudad.misCiudadanos.length;
     }
 
@@ -212,7 +217,7 @@ class CiudadService{
     numerociudadanosEmpleados(ciudad) {
         let ciudadanosEmpleados = 0;
         for (let ciudadano of ciudad.misCiudadanos) {
-            if (verificarContratoComercial(ciudadano)) {
+            if (ciudadanoService.verificarContratoComercial(ciudadano)) {
                 ciudadanosEmpleados += 1;
             }
         }
@@ -223,7 +228,7 @@ class CiudadService{
     numeroCiudadanosDesempleados(ciudad) {
         let ciudadanosDesempleados = 0;
         for (let ciudadano of ciudad.misCiudadanos) {
-            if (verificarContratoComercial(ciudadano) === false) {
+            if (ciudadanoService.verificarContratoComercial(ciudadano) === false) {
                 ciudadanosDesempleados += 1;
             }
         }
@@ -234,7 +239,7 @@ class CiudadService{
     listaCiudadanosDesempleados(ciudad) {
         let ciudadanosEmpleados = [];
         for (let ciudadano of ciudad.misCiudadanos) {
-            if (verificarContratoComercial(ciudadano) === false) {
+            if (CiudadanoService.verificarContratoComercial(ciudadano) === false) {
                 ciudadanosEmpleados.push(ciudadano);
             }
         }
@@ -245,7 +250,7 @@ class CiudadService{
     listaCiudadanosSinVivienda(ciudad) {
         let ciudadanosSinVivienda = [];
         for (let ciudadano of ciudad.misCiudadanos) {
-            if (verificarContratoVivienda(ciudadano) === false) {
+            if (CiudadanoService.verificarContratoVivienda(ciudadano) === false) {
                 ciudadanosSinVivienda.push(ciudadano);
             }
         }
@@ -255,16 +260,16 @@ class CiudadService{
     //Retorna el primer edificio comercial/industrial con empleo disponible, o null si no hay ninguno
     obtenerEdificioConEmpleoDisponible(ciudad) {
         for (let edificio of ciudad.misEdificios) {
-            if (edificio instanceof Tienda && empleoDisponibleTienda(edificio)) return edificio;
-            if (edificio instanceof CentroComercial && empleoDisponibleCentroComercial(edificio)) return edificio;
-            if (edificio instanceof Fabrica && empleoDisponibleFabrica(edificio)) return edificio;
-            if (edificio instanceof Granja && empleoDisponibleGranja(edificio)) return edificio;
+            if (edificio instanceof Tienda && TiendaService.empleoDisponibleTienda(edificio)) return edificio;
+            if (edificio instanceof CentroComercial && CentroComercialService.empleoDisponibleCentroComercial(edificio)) return edificio;
+            if (edificio instanceof Fabrica && FabricaService.empleoDisponibleFabrica(edificio)) return edificio;
+            if (edificio instanceof Granja && GranjaService.empleoDisponibleGranja(edificio)) return edificio;
         }
         return null;
     }
 
     agregarCiudadanosATrabajosDisponibles(ciudad) {
-        const ciudadanosDesempleados = listaCiudadanosDesempleados(ciudad);
+        const ciudadanosDesempleados = this.listaCiudadanosDesempleados(ciudad);
                     /* Recorre todos los edificios de la ciudad y suma el total de contratos existentes en todos ellos, para usarlo como punto de partida para los nuevos IDs de contrato.
 
             Desglosado:
@@ -276,7 +281,7 @@ class CiudadService{
         let contratoId =  ciudad.misEdificios.reduce((acc, e) => acc + (e.misContratos ? e.misContratos.length : 0), 0); // Asumiendo que el ID del contrato es incremental y único, se puede usar la cantidad de ciudadanos como base para generar nuevos IDs de contrato;
 
         for (let ciudadano of ciudadanosDesempleados) {
-            const edificioConEmpleo = obtenerEdificioConEmpleoDisponible(ciudad);
+            const edificioConEmpleo = this.obtenerEdificioConEmpleoDisponible(ciudad);
             if (edificioConEmpleo !== null) {
                 contratoId++;
                 const nuevoContrato = new Contrato(contratoId, ciudadano, edificioConEmpleo);
@@ -290,18 +295,18 @@ class CiudadService{
     //Retorna la primera vivienda con capacidad disponible, o null si no hay ninguna
     obtenerViviendaConCapacidadDisponible(ciudad) {
         for (let edificio of ciudad.misEdificios) {
-            if (edificio instanceof Casa && capacidadDisponibleCasa(edificio)) return edificio;
-            if (edificio instanceof Apartamento && capacidadDisponibleApartamento(edificio)) return edificio;
+            if (edificio instanceof Casa && CasaService.capacidadDisponibleCasa(edificio)) return edificio;
+            if (edificio instanceof Apartamento && ApartamentoService.capacidadDisponibleApartamento(edificio)) return edificio;
         }
         return null;
     }
 
     agregarCiudadanosAViviendasDisponibles(ciudad) {
-        const ciudadanosSinVivienda = listaCiudadanosSinVivienda(ciudad);
+        const ciudadanosSinVivienda = this.listaCiudadanosSinVivienda(ciudad);
         let contratoId = ciudad.misEdificios.reduce((acc, e) => acc + (e.misContratos ? e.misContratos.length : 0), 0);
 
         for (let ciudadano of ciudadanosSinVivienda) {
-            const viviendaConCapacidad = obtenerViviendaConCapacidadDisponible(ciudad);
+            const viviendaConCapacidad = this.obtenerViviendaConCapacidadDisponible(ciudad);
             if (viviendaConCapacidad !== null) {
                 contratoId++;
                 const nuevoContrato = new Contrato(contratoId, ciudadano, viviendaConCapacidad);
@@ -411,50 +416,7 @@ class CiudadService{
         actualizarCiudadCompleta(ciudad);
     }
 
-    puedeConstruir(ciudad, fila, columna, edificio){
-        if(!mapaService.celdaVacia(fila, columna, ciudad.miMapa)){
-            return {ok: false, mensaje: "Error, la celda está ocupada"}
-        }
-        if(ciudad.dinero < edificio.costo){
-            return {ok: false, mensaje: "Error, no hay dinero suficiente"}
-        }
-        if((edificio instanceof EdificioResidencial || edificio instanceof EdificioComercial) && (!mapaService.hayViaAdyacente(fila, columna, ciudad.miMapa))){
-            return {ok: false, mensaje: "Error, no hay vía adyacente"}
-        }
 
-        return {ok: true}
-
-    }
-
-    construirEdificioResidencial(ciudad, fila, columna, tipo){
-        let edificio;
-        if (tipo === 'R1'){
-            edificio = new Casa();
-        }
-        else if (tipo === 'R2'){
-            edificio = new Apartamento()
-        }
-        else{
-            return {ok:false, mensaje: "Tipo de edificio residencial no válido"}
-        }
-
-        let validacion = this.puedeConstruir(ciudad, fila, columna, edificio);
-
-        if(!validacion.ok){
-            return validacion;
-        }
-
-        ciudad.dinero -= edificio.costo;
-
-        ciudad.miMapa[fila][columna] = tipo; //De momento guarda la un String en la matriz, revisar si queda asi o si se guarda el objeto
-        ciudad.misEdificios.push(edificio);
-
-        this.actualizarRecursoXTurno(ciudad, edificio);
-        this.actualizarCiudadCompleta(ciudad);
-
-        return {ok: true, mensaje: "Edificio residencial construido exitosamente"};
-    }
-
-};
+};   
 
 export default CiudadService;

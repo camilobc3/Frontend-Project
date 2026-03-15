@@ -1,3 +1,3 @@
-export { default as noticiasRepository } from './noticiasRepository.js';
-export { default as StorageAlcalde } from './StorageAlcalde.js';
-export { default as StorageCiudad } from './StorageCiudad.js';
+export { default as noticiasRepository } from "/acceso_datos/noticiasRepository.js";
+export { default as StorageAlcalde } from "/acceso_datos/StorageAlcalde.js";
+export { default as StorageCiudad } from "/acceso_datos/StorageCiudad.js";

@@ -1,4 +1,4 @@
-import Noticia from "../modelos/Noticia.js";
+
 
 class noticiasRepository {
     constructor(baseUrl = "https://newsapi.org/v2/top-headlines", apiKey) {

@@ -1,4 +1,6 @@
 import Ciudadano from "../modelos/Ciudadano.js";
+import { CiudadService } from "./index.js";
+CiudadService = new CiudadService(); 
 class CiudadanoService {
 
     //cargarCiudadanos();
@@ -76,12 +78,9 @@ class CiudadanoService {
     calcularFelicidad(ciudadano) {  
         let factoresPositivos = 0;
         let factoresNegativos = 0;
-        factoresPositivos = calculoFactoresPositivos(ciudadano);
-        factoresNegativos = calculoFactoresNegativos(ciudadano);
+        factoresPositivos = this.calculoFactoresPositivos(ciudadano);
+        factoresNegativos = this.calculoFactoresNegativos(ciudadano);
         return factoresPositivos + factoresNegativos; // La felicidad se calcula como la suma de factores positivos y negativos
-
-
-
     } 
 
 
@@ -106,11 +105,11 @@ class CiudadanoService {
         }
 
         //Factores positivos relacionados con la calidad de vida del ciudadano - trabajo y vivienda
-        if(verificarContratoVivienda(ciudadano)) {
+        if(this.verificarContratoVivienda(ciudadano)) {
             factoresPositivosRespuesta += 20; // Tener contrato con vivienda suma 20 puntos
         }
 
-        if(verificarContratoComercial(ciudadano)) {
+        if(this.verificarContratoComercial(ciudadano)) {
             factoresPositivosRespuesta += 15; // Tener contrato con edificio comercial suma 15 puntos
         }
 
@@ -120,11 +119,11 @@ class CiudadanoService {
     calculoFactoresNegativos(ciudadano) {
         let factoresNegativosRespuesta = 0;
 
-        if(verificarContratoVivienda(ciudadano) === false) {
+        if(this.verificarContratoVivienda(ciudadano) === false) {
             factoresNegativosRespuesta -=20 ; // Tener contrato con vivienda suma 20 puntos
         }
 
-        if(!verificarContratoComercial(ciudadano) === false) {
+        if(this.verificarContratoComercial(ciudadano) === false) {
             factoresPositivos -= 15; // Tener contrato con edificio comercial suma 15 puntos
         }
 
