@@ -1,14 +1,36 @@
-import noticiasRepository from "../acceso_datos/noticiasRepository.js";
-import { NEWS_API_KEY } from "../../config.js";
+// negocio/NoticiaService.js
 
-class noticiasService {
-    constructor() {
-        this.repo = new noticiasRepository(undefined, NEWS_API_KEY);
+class NoticiaService {
+
+    constructor(noticiasRepository) {
+        this.repo = noticiasRepository;
     }
 
-    obtenerUltimasNoticias(codigoPais = "us") {
-        return this.repo.getUltimasNoticias(codigoPais, 5);
+    /**
+     * Obtiene las últimas 5 noticias de una región y las convierte en objetos Noticia.
+     * @param {string} codigoPais - Ej: "co"
+     */
+    obtenerUltimasNoticias(codigoPais) {
+        return this.repo
+            .getNoticias(codigoPais, 5)
+            .then(function (articulos) {
+
+                // Filtrar artículos sin título o removidos por NewsAPI
+                const validos = articulos.filter(function (a) {
+                    return a.title && a.title !== "[Removed]";
+                });
+
+                // Mapear artículos crudos → objetos Noticia
+                return validos.slice(0, 5).map(function (a) {
+                    return new Noticia(
+                        a.title,
+                        a.description,
+                        a.urlToImage,
+                        a.url,
+                        a.publishedAt,
+                        a.source ? a.source.name : "Desconocida"
+                    );
+                });
+            });
     }
 }
-
-export default noticiasService;

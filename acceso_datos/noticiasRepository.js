@@ -1,29 +1,33 @@
+// acceso_datos/noticiasRepository.js
 
+class NoticiasRepository {
 
-class noticiasRepository {
-    constructor(baseUrl = "https://newsapi.org/v2/top-headlines", apiKey) {
+    constructor(apiKey, baseUrl = "https://newsapi.org/v2/top-headlines") {
+        this.apiKey  = apiKey;
         this.baseUrl = baseUrl;
-        this.apiKey = apiKey;
     }
-/* https://newsapi.org/v2/top-headlines?country={code} */
-    getUltimasNoticias(codigoPais, cantidad = 5) {
-        return fetch(`${this.baseUrl}?country=${codigoPais}&apiKey=${this.apiKey}`)
-            .then(res => {
-                if (!res.ok) throw new Error("Error al obtener noticias");
+
+    /**
+     * Obtiene las últimas noticias por código de país.
+     * @param {string} codigoPais  - Ej: "co", "us", "mx"
+     * @param {number} cantidad    - Cuántas noticias traer (default 5)
+     */
+    getNoticias(codigoPais, cantidad = 5) {
+        const url = `${this.baseUrl}?country=${codigoPais}&pageSize=${cantidad}&apiKey=${this.apiKey}`;
+
+        return fetch(url)
+            .then(function (res) {
+                if (!res.ok) {
+                    throw new Error("Error al obtener noticias: " + res.status);
+                }
                 return res.json();
             })
-            .then(response => {
-                return response.articles.slice(0, cantidad).map(article =>
-                    new Noticia(
-                        article.title,
-                        article.description,
-                        article.urlToImage,
-                        article.url,
-                        article.publishedAt
-                    )
-                );
+            .then(function (data) {
+                // NewsAPI devuelve { status, totalResults, articles: [...] }
+                if (data.status !== "ok") {
+                    throw new Error("NewsAPI respondió con error: " + data.message);
+                }
+                return data.articles; // ← array crudo de artículos
             });
     }
 }
-
-export default noticiasRepository;
