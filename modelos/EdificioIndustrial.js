@@ -1,7 +1,4 @@
 import Edificio from './Edificio.js';
-import Produccion from './Produccion.js';
-import ConsumoServicios from './ConsumoServicios.js';
-
 /**
  * Clase abstracta EdificioIndustrial
  * Hereda de Edificio e implementa las interfaces Produccion y ConsumoServicios

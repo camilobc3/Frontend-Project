@@ -20,7 +20,8 @@ document.addEventListener("DOMContentLoaded", function () {
             console.error("Ciudad no encontrada");
             return;
         }
-        mapaActual = ciudadActual.miMapa;
+        mapaActual = ciudadActual.miMapa.matriz; // ✅ sin const, usando ciudadActual
+        console.log("Mapa cargado:", mapaActual);
         renderizarMapa();
     }
 
@@ -39,14 +40,28 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Función para renderizar el mapa en el DOM
-    function renderizarMapa() {
-        const contenedorMapa = document.getElementById("mapa-container");
+// MapaController.js — reemplaza la función renderizarMapa
+function renderizarMapa() {
+    // Renderiza en los TRES contenedores a la vez
+    const contenedores = [
+        document.getElementById("gameMap"),
+        document.getElementById("gameMapTablet"),
+        document.getElementById("gameMapMobile")
+    ].filter(c => c !== null); // elimina los que no existan
+
+    if (contenedores.length === 0) {
+        console.error("No se encontró ningún contenedor del mapa");
+        return;
+    }
+
+    // Renderiza la misma matriz en cada contenedor
+    contenedores.forEach(contenedorMapa => {
         contenedorMapa.innerHTML = "";
 
         for (let fila = 0; fila < mapaActual.length; fila++) {
             for (let columna = 0; columna < mapaActual[fila].length; columna++) {
                 const celda = document.createElement("div");
-                celda.className = "celda";
+                celda.className = "map-cell";
                 celda.dataset.fila = fila;
                 celda.dataset.columna = columna;
 
@@ -62,8 +77,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 contenedorMapa.appendChild(celda);
             }
         }
-    }
-
+    });
+}
     // Función para mostrar opciones de construcción
     function mostrarOpciones(fila, columna) {
         const opciones = [
@@ -81,7 +96,7 @@ document.addEventListener("DOMContentLoaded", function () {
             {tipo: 'U2', nombre: 'Planta Agua'},
             {tipo: 'R', nombre: 'Camino'}
         ];
-
+/* 
         const menu = document.createElement("div");
         menu.className = "menu-construccion";
 
@@ -95,7 +110,7 @@ document.addEventListener("DOMContentLoaded", function () {
             menu.appendChild(btn);
         });
 
-        document.body.appendChild(menu);
+        document.body.appendChild(menu); */
     }
 
     // Función para actualizar UI (dinero, recursos, etc)

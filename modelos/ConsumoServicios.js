@@ -20,4 +20,4 @@ class ConsumoServicios {
     }
 }
 
-export default ConsumoServicio;
+//export default ConsumoServicio;

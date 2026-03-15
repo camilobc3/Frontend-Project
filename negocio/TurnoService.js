@@ -1,9 +1,10 @@
 import CiudadService from "./CiudadService.js";
-const ciudadService = new CiudadService();
+
 
 class TurnoService {
     constructor(){
         this.intervalo = null;
+        this.ciudadService = new CiudadService();
     }
 
     iniciarTurnos(ciudad){

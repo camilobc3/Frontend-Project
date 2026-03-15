@@ -1,6 +1,5 @@
 import Edificio from './Edificio.js';
-import Produccion from './Produccion.js';
-import ConsumoServicios from './ConsumoServicios.js';
+
 
 /**
  * Clase abstracta EdificioComercial

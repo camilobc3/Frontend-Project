@@ -1,5 +1,5 @@
-//Importaciones
-import { //Importacion de modelos
+// Importaciones de modelos
+import {
     Ciudad,
     Edificio,
     EdificioResidencial,
@@ -24,31 +24,12 @@ import {
     StorageCiudad
 } from "../acceso_datos/index.js";
 
-import {
-    MapaService
-}from "./index.js";
+import { MapaService } from "./index.js";
 
-const mapaService = new MapaService();
+// ✅ Las instancias se crean DENTRO de los métodos o se pasan como parámetros
+// NO se instancian aquí arriba para evitar el ciclo de importaciones
 
-import { capacidadDisponibleCasa } from "../negocio/CasaService.js";
-
-import { CiudadanoService, CasaService, ApartamentoService, TiendaService, CentroComercialService, FabricaService, GranjaService
- } from "./index.js";
-
-const ciudadanoService = new CiudadanoService();
-const casaService = new CasaService();
-const apartamentoService = new ApartamentoService();
-const tiendaService = new TiendaService();
-const centroComercialService = new CentroComercialService();
-const fabricaService = new FabricaService();
-const granjaService = new GranjaService();
-
-
-class CiudadService{
-    //OJO Revisar esta funcion
-    //cargarCiudades();
-
-
+class CiudadService {
 
     // ─── READ ALL ────────────────────────────────────────────────────────────
     cargarCiudades() {
@@ -94,7 +75,7 @@ class CiudadService{
         return true;
     }
 
-    actualizarCiudadCompleta(ciudad){ //Funcion para actualizar ciudad recibiendo el objeto
+    actualizarCiudadCompleta(ciudad) {
         const lista = StorageCiudad.load();
         const indice = lista.findIndex(c => c.id === ciudad.id);
         if (indice === -1) {
@@ -106,7 +87,6 @@ class CiudadService{
         console.log("Ciudad actualizada:", lista[indice]);
         return true;
     }
-
 
     // ─── DELETE ──────────────────────────────────────────────────────────────
     eliminarCiudad(id) {
@@ -121,302 +101,245 @@ class CiudadService{
         return true;
     }
 
-    //Lista de hospitales
+    // ─── LISTAS DE EDIFICIOS ─────────────────────────────────────────────────
     listaHospitales(ciudad) {
         return ciudad.misEdificios.filter(e => e instanceof Hospital);
     }
 
-    //Lista de parques 
     listaParques(ciudad) {
         return ciudad.misEdificios.filter(e => e instanceof Parque);
     }
 
-    //Lista de estaciones de policia
     listaEstacionesPolicia(ciudad) {
         return ciudad.misEdificios.filter(e => e instanceof EstacionPolicia);
     }
 
-    //Lista de estaciones de bomberos
     listaEstacionesBomberos(ciudad) {
         return ciudad.misEdificios.filter(e => e instanceof EstacionBombero);
     }
 
-    //Lista de casas
     listaCasas(ciudad) {
         return ciudad.misEdificios.filter(e => e instanceof Casa);
     }
 
-    //Lista de apartamentos
     listaApartamentos(ciudad) {
         return ciudad.misEdificios.filter(e => e instanceof Apartamento);
     }
 
-    //Lista de tiendas
     listaTiendas(ciudad) {
         return ciudad.misEdificios.filter(e => e instanceof Tienda);
     }
 
-    //Lista de centros comerciales
-    listaFabricas(ciudad) {
+    listaCentrosComerciales(ciudad) {
         return ciudad.misEdificios.filter(e => e instanceof CentroComercial);
     }
 
-    //Lista de fabricas
     listaFabricas(ciudad) {
         return ciudad.misEdificios.filter(e => e instanceof Fabrica);
     }
 
-    //Lista de granjas
     listaGranjas(ciudad) {
         return ciudad.misEdificios.filter(e => e instanceof Granja);
     }
 
-    //Promedio de felicidad de la ciudad, calculado a partir de la felicidad de cada ciudadano
-    promedioFelicidadCiudad(ciudad) {
-        let promedioFelicidad = 0;
-        
-        if (ciudad.misCiudadanos.length > 0) { 
-            for (let ciudadano of ciudad.misCiudadanos) {
-                promedioFelicidad += (CiudadanoService.calcularFelicidad(ciudadano));
-            }
-            return (promedioFelicidad / ciudad.misCiudadanos.length);
-        } else {
-            return 0;
+    // ─── ESTADÍSTICAS ────────────────────────────────────────────────────────
+
+    // ✅ ciudadanoService se recibe como parámetro — no se importa ni instancia aquí
+    promedioFelicidadCiudad(ciudad, ciudadanoService) {
+        if (ciudad.misCiudadanos.length === 0) return 0;
+
+        let total = 0;
+        for (let ciudadano of ciudad.misCiudadanos) {
+            total += ciudadanoService.calcularFelicidad(ciudadano);
         }
+        return total / ciudad.misCiudadanos.length;
     }
 
-    //Creación automatica de ciudadanos si hay viviendas disponibles, empleos disponibles y verificando la felicidad promedio
-    crearCiudadanosAutomaticamente(ciudad) {
-        if(promedioFelicidadCiudad(ciudad)>60 && this.edificioDisponible(listaCasas(ciudad), CasaService.capacidadDisponibleCasa)
-            && this.edificioDisponible(listaApartamentos(ciudad), ApartamentoService.capacidadDisponibleApartamento) && this.edificioDisponible(listaTiendas(ciudad), TiendaService.empleoDisponibleTienda) 
-            && this.edificioDisponible(listaCentrosComerciales(ciudad), CentroComercialService.empleoDisponibleCentroComercial) && this.edificioDisponible(listaFabricas(ciudad), FabricaService.empleoDisponibleFabrica) 
-            && this.edificioDisponible(listaGranjas(ciudad), GranjaService.empleoDisponibleGranja)){
-                for (let i = 0; i < 4; i++) {
-                    const nuevoId = ciudad.misCiudadanos.length + 1
-                    let nuevoCiudadano = new Ciudadano(nuevoId,0); // Realizar función para incrementar id´s del ciudadano
-                    ciudad.misCiudadanos.push(nuevoCiudadano);
-                }
+    numeroCiudadanos(ciudad) {
+        return ciudad.misCiudadanos.length;
+    }
+
+    // ✅ ciudadanoService se recibe como parámetro
+    numeroCiudadanosEmpleados(ciudad, ciudadanoService) {
+        let empleados = 0;
+        for (let ciudadano of ciudad.misCiudadanos) {
+            if (ciudadanoService.verificarContratoComercial(ciudadano)) {
+                empleados += 1;
             }
+        }
+        return empleados;
     }
 
-    //Disponibilidad de vivienda
+    // ✅ ciudadanoService se recibe como parámetro
+    numeroCiudadanosDesempleados(ciudad, ciudadanoService) {
+        let desempleados = 0;
+        for (let ciudadano of ciudad.misCiudadanos) {
+            if (!ciudadanoService.verificarContratoComercial(ciudadano)) {
+                desempleados += 1;
+            }
+        }
+        return desempleados;
+    }
 
-    //Verificar si hay alguna edificio con capacidad disponible para nuevos contratos, comparando .
+    // ✅ ciudadanoService se recibe como parámetro
+    listaCiudadanosDesempleados(ciudad, ciudadanoService) {
+        return ciudad.misCiudadanos.filter(
+            c => !ciudadanoService.verificarContratoComercial(c)
+        );
+    }
+
+    // ✅ ciudadanoService se recibe como parámetro
+    listaCiudadanosSinVivienda(ciudad, ciudadanoService) {
+        return ciudad.misCiudadanos.filter(
+            c => !ciudadanoService.verificarContratoVivienda(c)
+        );
+    }
+
+    // ─── DISPONIBILIDAD ──────────────────────────────────────────────────────
+
     edificioDisponible(listaEdificios, funcionVerificacion) {
         return listaEdificios.some(edificio => funcionVerificacion(edificio));
     }
 
-    //Estadisticas de la porblación
+    // ✅ servicios se reciben como parámetros
+    crearCiudadanosAutomaticamente(ciudad, ciudadanoService, casaService, apartamentoService,
+        tiendaService, centroComercialService, fabricaService, granjaService) {
 
-    //numero de ciudadanos en la ciudad
-    numeroCiudadanos(ciudad) { 
-        return ciudad.misCiudadanos.length;
-    }
+        const felicidad = this.promedioFelicidadCiudad(ciudad, ciudadanoService);
+        const hayVivienda =
+            this.edificioDisponible(this.listaCasas(ciudad), e => casaService.capacidadDisponibleCasa(e)) ||
+            this.edificioDisponible(this.listaApartamentos(ciudad), e => apartamentoService.capacidadDisponibleApartamento(e));
+        const hayEmpleo =
+            this.edificioDisponible(this.listaTiendas(ciudad), e => tiendaService.empleoDisponibleTienda(e)) ||
+            this.edificioDisponible(this.listaCentrosComerciales(ciudad), e => centroComercialService.empleoDisponibleCentroComercial(e)) ||
+            this.edificioDisponible(this.listaFabricas(ciudad), e => fabricaService.empleoDisponibleFabrica(e)) ||
+            this.edificioDisponible(this.listaGranjas(ciudad), e => granjaService.empleoDisponibleGranja(e));
 
-    //numero de ciudadanos empleados en la ciudad
-    numerociudadanosEmpleados(ciudad) {
-        let ciudadanosEmpleados = 0;
-        for (let ciudadano of ciudad.misCiudadanos) {
-            if (ciudadanoService.verificarContratoComercial(ciudadano)) {
-                ciudadanosEmpleados += 1;
+        if (felicidad > 60 && hayVivienda && hayEmpleo) {
+            for (let i = 0; i < 4; i++) {
+                const nuevoId = ciudad.misCiudadanos.length + 1;
+                const nuevoCiudadano = new Ciudadano(nuevoId, 0);
+                ciudad.misCiudadanos.push(nuevoCiudadano);
             }
         }
-        return ciudadanosEmpleados;
     }
 
-    //numero de ciudadanos desempleados en la ciudad
-    numeroCiudadanosDesempleados(ciudad) {
-        let ciudadanosDesempleados = 0;
-        for (let ciudadano of ciudad.misCiudadanos) {
-            if (ciudadanoService.verificarContratoComercial(ciudadano) === false) {
-                ciudadanosDesempleados += 1;
-            }
-        }
-        return ciudadanosDesempleados;
-    }
-
-    //Lista de ciudadanos desempleados en la ciudad
-    listaCiudadanosDesempleados(ciudad) {
-        let ciudadanosEmpleados = [];
-        for (let ciudadano of ciudad.misCiudadanos) {
-            if (CiudadanoService.verificarContratoComercial(ciudadano) === false) {
-                ciudadanosEmpleados.push(ciudadano);
-            }
-        }
-        return ciudadanosEmpleados;
-    }
-
-    //Lista de ciudadanos sin vivienda en la ciudad
-    listaCiudadanosSinVivienda(ciudad) {
-        let ciudadanosSinVivienda = [];
-        for (let ciudadano of ciudad.misCiudadanos) {
-            if (CiudadanoService.verificarContratoVivienda(ciudadano) === false) {
-                ciudadanosSinVivienda.push(ciudadano);
-            }
-        }
-        return ciudadanosSinVivienda;
-    }
-
-    //Retorna el primer edificio comercial/industrial con empleo disponible, o null si no hay ninguno
-    obtenerEdificioConEmpleoDisponible(ciudad) {
+    // ✅ servicios se reciben como parámetros
+    obtenerEdificioConEmpleoDisponible(ciudad, tiendaService, centroComercialService, fabricaService, granjaService) {
         for (let edificio of ciudad.misEdificios) {
-            if (edificio instanceof Tienda && TiendaService.empleoDisponibleTienda(edificio)) return edificio;
-            if (edificio instanceof CentroComercial && CentroComercialService.empleoDisponibleCentroComercial(edificio)) return edificio;
-            if (edificio instanceof Fabrica && FabricaService.empleoDisponibleFabrica(edificio)) return edificio;
-            if (edificio instanceof Granja && GranjaService.empleoDisponibleGranja(edificio)) return edificio;
+            if (edificio instanceof Tienda && tiendaService.empleoDisponibleTienda(edificio)) return edificio;
+            if (edificio instanceof CentroComercial && centroComercialService.empleoDisponibleCentroComercial(edificio)) return edificio;
+            if (edificio instanceof Fabrica && fabricaService.empleoDisponibleFabrica(edificio)) return edificio;
+            if (edificio instanceof Granja && granjaService.empleoDisponibleGranja(edificio)) return edificio;
         }
         return null;
     }
 
-    agregarCiudadanosATrabajosDisponibles(ciudad) {
-        const ciudadanosDesempleados = this.listaCiudadanosDesempleados(ciudad);
-                    /* Recorre todos los edificios de la ciudad y suma el total de contratos existentes en todos ellos, para usarlo como punto de partida para los nuevos IDs de contrato.
-
-            Desglosado:
-
-            .reduce((acc, e) => ..., 0) — acumulador que empieza en 0 e itera sobre cada edificio e.
-            e.misContratos ? e.misContratos.length : 0 — si el edificio tiene el array misContratos, suma su cantidad; si no existe, suma 0 (evita errores).
-            El resultado es el conteo total de contratos ya creados, que se usa como base para generar IDs únicos (contratoId++ antes de cada nuevo contrato).
-            Ejemplo: si hay 3 edificios con 2, 5 y 3 contratos respectivamente, el resultado es 10, y el próximo contrato tendrá id 11. */
-        let contratoId =  ciudad.misEdificios.reduce((acc, e) => acc + (e.misContratos ? e.misContratos.length : 0), 0); // Asumiendo que el ID del contrato es incremental y único, se puede usar la cantidad de ciudadanos como base para generar nuevos IDs de contrato;
+    // ✅ servicios se reciben como parámetros
+    agregarCiudadanosATrabajosDisponibles(ciudad, ciudadanoService, tiendaService, centroComercialService, fabricaService, granjaService) {
+        const ciudadanosDesempleados = this.listaCiudadanosDesempleados(ciudad, ciudadanoService);
+        let contratoId = ciudad.misEdificios.reduce((acc, e) => acc + (e.misContratos ? e.misContratos.length : 0), 0);
 
         for (let ciudadano of ciudadanosDesempleados) {
-            const edificioConEmpleo = this.obtenerEdificioConEmpleoDisponible(ciudad);
-            if (edificioConEmpleo !== null) {
+            const edificio = this.obtenerEdificioConEmpleoDisponible(ciudad, tiendaService, centroComercialService, fabricaService, granjaService);
+            if (edificio !== null) {
                 contratoId++;
-                const nuevoContrato = new Contrato(contratoId, ciudadano, edificioConEmpleo);
+                const nuevoContrato = new Contrato(contratoId, ciudadano, edificio);
                 ciudadano.misContratos.push(nuevoContrato);
-                edificioConEmpleo.misContratos.push(nuevoContrato);
+                edificio.misContratos.push(nuevoContrato);
             }
         }
-    
     }
 
-    //Retorna la primera vivienda con capacidad disponible, o null si no hay ninguna
-    obtenerViviendaConCapacidadDisponible(ciudad) {
+    obtenerViviendaConCapacidadDisponible(ciudad, casaService, apartamentoService) {
         for (let edificio of ciudad.misEdificios) {
-            if (edificio instanceof Casa && CasaService.capacidadDisponibleCasa(edificio)) return edificio;
-            if (edificio instanceof Apartamento && ApartamentoService.capacidadDisponibleApartamento(edificio)) return edificio;
+            if (edificio instanceof Casa && casaService.capacidadDisponibleCasa(edificio)) return edificio;
+            if (edificio instanceof Apartamento && apartamentoService.capacidadDisponibleApartamento(edificio)) return edificio;
         }
         return null;
     }
 
-    agregarCiudadanosAViviendasDisponibles(ciudad) {
-        const ciudadanosSinVivienda = this.listaCiudadanosSinVivienda(ciudad);
+    // ✅ servicios se reciben como parámetros
+    agregarCiudadanosAViviendasDisponibles(ciudad, ciudadanoService, casaService, apartamentoService) {
+        const ciudadanosSinVivienda = this.listaCiudadanosSinVivienda(ciudad, ciudadanoService);
         let contratoId = ciudad.misEdificios.reduce((acc, e) => acc + (e.misContratos ? e.misContratos.length : 0), 0);
 
         for (let ciudadano of ciudadanosSinVivienda) {
-            const viviendaConCapacidad = this.obtenerViviendaConCapacidadDisponible(ciudad);
-            if (viviendaConCapacidad !== null) {
+            const vivienda = this.obtenerViviendaConCapacidadDisponible(ciudad, casaService, apartamentoService);
+            if (vivienda !== null) {
                 contratoId++;
-                const nuevoContrato = new Contrato(contratoId, ciudadano, viviendaConCapacidad);
+                const nuevoContrato = new Contrato(contratoId, ciudadano, vivienda);
                 ciudadano.misContratos.push(nuevoContrato);
-                viviendaConCapacidad.misContratos.push(nuevoContrato);
+                vivienda.misContratos.push(nuevoContrato);
             }
         }
-        actualizarCiudadCompleta(ciudad);
+        this.actualizarCiudadCompleta(ciudad); // ✅ usar this.
     }
 
-    calcularPuntuacion(ciudad) {
+    // ─── PUNTUACIÓN ──────────────────────────────────────────────────────────
 
-        // Variables que aportan constantemente a la puntuacion [IMPORTANTE]
+    // ✅ ciudadanoService se recibe como parámetro
+    calcularPuntuacion(ciudad, ciudadanoService) {
+        const felicidad = this.promedioFelicidadCiudad(ciudad, ciudadanoService);
+        const empleados = this.numeroCiudadanosEmpleados(ciudad, ciudadanoService);
+        const desempleados = this.numeroCiudadanosDesempleados(ciudad, ciudadanoService);
 
-        let poblacion = (ciudad.misCiudadanos.length * 10);
-        let dinero = (ciudad.dinero/100);
-        let edificios = (ciudad.misEdificios.length * 50);
-        let electricidad = (ciudad.electricidad * 2);
-        let agua = (ciudad.agua * 2);
+        let puntuacion =
+            ciudad.misCiudadanos.length * 10 +
+            ciudad.dinero / 100 +
+            ciudad.misEdificios.length * 50 +
+            ciudad.electricidad * 2 +
+            ciudad.agua * 2 +
+            felicidad;
 
-        let felicidad = promedioFelicidadCiudad(ciudad)
+        // Bonus
+        if (empleados === ciudad.misCiudadanos.length) puntuacion += 500;
+        if (felicidad > 80) puntuacion += 300;
+        if (ciudad.electricidad > 0 && ciudad.agua > 0) puntuacion += 200;
+        if (ciudad.misCiudadanos.length > 1000) puntuacion += 1000;
 
-        let puntuacionFinal = poblacion + dinero + edificios + electricidad + agua + felicidad ;
+        // Penalizaciones
+        if (ciudad.dinero < 0) puntuacion -= 500;
+        if (ciudad.electricidad < 0) puntuacion -= 300;
+        if (ciudad.agua < 0) puntuacion -= 300;
+        if (felicidad < 40) puntuacion -= 400;
+        puntuacion -= desempleados * 10;
 
-        // Bonus para la puntuacion
-
-        // Ciudadanos empleados
-
-        if (numerociudadanosEmpleados(ciudad) === ciudad.misCiudadanos.length) {
-            puntuacionFinal += 500;
-        }
-
-        if (felicidad > 80) {
-            puntuacionFinal += 300;
-        }
-
-        if (ciudad.electricidad > 0 && ciudad.agua > 0) {
-            puntuacionFinal += 200;
-        }
-
-        if (ciudad.misCiudadanos.length > 1000) {
-            puntuacionFinal += 1000
-        }
-
-        // Penalizaciones para la puntuacion
-
-        if (ciudad.dinero < 0) {
-            puntuacionFinal -= 500
-        }
-
-        if (ciudad.electricidad < 0) {
-            puntuacionFinal -= 300
-        }
-
-        if (ciudad.agua < 0) {
-            puntuacionFinal -= 300
-        }
-
-        if (felicidad < 40) {
-            puntuacionFinal -= 400
-        }
-
-        // Restar por ciudadano desempleado
-
-        puntuacionFinal -= (numeroCiudadanosDesempleados(ciudad) * 10)
-
-        return puntuacionFinal
-
+        return puntuacion;
     }
 
-    //Funcion para actualizar los recursos por turno segun el tipo de edificio
-    actualizarRecursoXTurno(ciudad, edificio){ //Esta funcion se debe usar junto a la funcion de agregar edificio a una ciudad para actualizar los parametros de la ciudad segun el edificio agregado
-        if (edificio instanceof EdificioResidencial){
+    // ─── RECURSOS POR TURNO ──────────────────────────────────────────────────
+    actualizarRecursoXTurno(ciudad, edificio) {
+        if (edificio instanceof EdificioResidencial) {
             ciudad.electricidadXTurno -= edificio.consumoElectricidad();
             ciudad.aguaXTurno -= edificio.consumoAgua();
-        }
-        else if (edificio instanceof EdificioComercial){
+        } else if (edificio instanceof EdificioComercial) {
             ciudad.ingresosXTurno += edificio.produccionXTurno();
             ciudad.electricidadXTurno -= edificio.consumoElectricidad();
-        }
-        else if (edificio instanceof EdificioIndustrial){
-            if (edificio instanceof Fabrica){
+        } else if (edificio instanceof EdificioIndustrial) {
+            if (edificio instanceof Fabrica) {
                 ciudad.ingresosXTurno += edificio.produccionXTurno();
                 ciudad.electricidadXTurno -= edificio.consumoElectricidad();
                 ciudad.aguaXTurno -= edificio.consumoAgua();
-            }
-            else{ //Si no es fabrica, es Granja
+            } else { // Granja
                 ciudad.alimentoXTurno += edificio.produccionXTurno();
                 ciudad.aguaXTurno -= edificio.consumoAgua();
             }
-        }
-        else if (edificio instanceof EdificioServicio){
+        } else if (edificio instanceof EdificioServicio) {
             ciudad.electricidadXTurno -= edificio.consumoElectricidad();
-            if (edificio instanceof Hospital){
+            if (edificio instanceof Hospital) {
                 ciudad.aguaXTurno -= edificio.consumoAgua();
             }
-        }
-        else if (edificio instanceof PlantaUtilidad){
-            if (edificio instanceof PlantaElectrica){
+        } else if (edificio instanceof PlantaUtilidad) {
+            if (edificio instanceof PlantaElectrica) {
                 ciudad.electricidadXTurno += edificio.produccionXTurno();
-            }
-            else{ //Si no es planta electrica, es planta de agua
+            } else { // PlantaAgua
                 ciudad.aguaXTurno += edificio.produccionXTurno();
                 ciudad.electricidadXTurno -= edificio.consumoElectricidad();
             }
         }
-        actualizarCiudadCompleta(ciudad);
+        this.actualizarCiudadCompleta(ciudad); // ✅ usar this.
     }
-
-
-};   
+}
 
 export default CiudadService;

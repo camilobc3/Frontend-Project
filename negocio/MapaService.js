@@ -131,6 +131,65 @@ class MapaService {
 
         return false;
     }
+
+    // negocio/MapaService.js
+
+    parsearArchivoMapa(contenidoTexto) {
+        const lineas = contenidoTexto.trim().split("\n");
+        
+        // Validar encabezado
+        const encabezado = lineas[0].trim();
+        if (!encabezado.match(/^\d+x\d+$/)) {
+            throw new Error("Formato inválido: la primera línea debe ser NxN (ej: 20x20)");
+        }
+
+        const [filas, columnas] = encabezado.split("x").map(Number);
+        const lineasMapa = lineas.slice(1);
+
+        if (lineasMapa.length !== filas) {
+            throw new Error(`El mapa debe tener ${filas} filas, pero tiene ${lineasMapa.length}`);
+        }
+
+        const matriz = [];
+
+        for (let i = 0; i < lineasMapa.length; i++) {
+            const celdas = lineasMapa[i].trim().split(",");
+
+            if (celdas.length !== columnas) {
+                throw new Error(`La fila ${i + 1} debe tener ${columnas} columnas, pero tiene ${celdas.length}`);
+            }
+
+            const fila = celdas.map(celda => this.parsearCelda(celda.trim()));
+            matriz.push(fila);
+        }
+
+        return { filas, columnas, matriz };
+    }
+
+    parsearCelda(codigo) {
+        const mapa = {
+            "g": null,
+            "R":  new Camino(),
+            "R1": new Casa(),
+            "R2": new Apartamento(),
+            "C1": new Tienda(),
+            "C2": new CentroComercial(),
+            "I1": new Fabrica(),
+            "I2": new Granja(),
+            "S1": new Hospital(),
+            "S2": new EstacionBombero(),
+            "S3": new EstacionPolicia(),
+            "P1": new Parque(),
+            "U1": new PlantaElectrica(),
+            "U2": new PlantaAgua()
+        };
+
+        if (!(codigo in mapa)) {
+            throw new Error(`Código desconocido: "${codigo}"`);
+        }
+
+        return mapa[codigo];
+    }
 }
 
 export default MapaService;

@@ -1,11 +1,9 @@
 import Ciudadano from "../modelos/Ciudadano.js";
-import { CiudadService } from "./index.js";
-CiudadService = new CiudadService(); 
+// ✅ Se eliminó: import CiudadService from "./CiudadService.js" — causaba el ciclo
+
 class CiudadanoService {
 
-    //cargarCiudadanos();
-    //const CiudadService = new CiudadService(); // Preguntar
-
+    // ✅ Se eliminó el constructor con new CiudadService() — causaba el ciclo
 
     // ─── READ ALL ────────────────────────────────────────────────────────────
     cargarCiudadanos() {
@@ -64,71 +62,58 @@ class CiudadanoService {
         return true;
     }
 
-    // Verificacion de si el ciudadano tiene contrato con vivienda
+    // ─── CONTRATOS ───────────────────────────────────────────────────────────
     verificarContratoVivienda(ciudadano) {
-        return ciudadano.misContratos.some(contrato => contrato.miEdificio instanceof Casa || contrato.miEdificio instanceof Apartamento);
+        return ciudadano.misContratos.some(
+            contrato => contrato.miEdificio instanceof Casa || contrato.miEdificio instanceof Apartamento
+        );
     }
 
-    //verificacion de si el ciudadano tiene contrato con edificio comercial
     verificarContratoComercial(ciudadano) {
-        return ciudadano.misContratos.some(contrato => contrato.miEdificio instanceof CentroComercial  || contrato.miEdificio instanceof Tienda);
+        return ciudadano.misContratos.some(
+            contrato => contrato.miEdificio instanceof CentroComercial || contrato.miEdificio instanceof Tienda
+        );
     }
 
-    // Calculo de la felicidad del ciudadano
-    calcularFelicidad(ciudadano) {  
-        let factoresPositivos = 0;
-        let factoresNegativos = 0;
-        factoresPositivos = this.calculoFactoresPositivos(ciudadano);
-        factoresNegativos = this.calculoFactoresNegativos(ciudadano);
-        return factoresPositivos + factoresNegativos; // La felicidad se calcula como la suma de factores positivos y negativos
-    } 
+    // ─── FELICIDAD ───────────────────────────────────────────────────────────
 
-
-    calculoFactoresPositivos(ciudadano) {
-        let factoresPositivosRespuesta = 0;
-
-        //Factores positivos relacionados con la ciudad
-        if(CiudadService.listaHospitales(ciudadano.miCiudad).length > 0) {
-            factoresPositivosRespuesta += CiudadService.listaHospitales(ciudadano.miCiudad).length * 10; // Cada hospital suma 10 puntos
-        }
-
-        if(CiudadService.listaParques(ciudadano.miCiudad).length > 0) {
-            factoresPositivosRespuesta += CiudadService.listaParques(ciudadano.miCiudad).length * 5; // Cada parque suma 5 puntos
-        }
-
-        if(CiudadService.listaEstacionesPolicia(ciudadano.miCiudad).length > 0) {
-            factoresPositivosRespuesta += CiudadService.listaEstacionesPolicia(ciudadano.miCiudad).length * 10; // Cada estación de policía suma 10 puntos
-        }
-
-        if(CiudadService.listaEstacionesBomberos(ciudadano.miCiudad).length > 0) {
-            factoresPositivosRespuesta += CiudadService.listaEstacionesBomberos(ciudadano.miCiudad).length * 10; // Cada estación de bomberos suma 10 puntos
-        }
-
-        //Factores positivos relacionados con la calidad de vida del ciudadano - trabajo y vivienda
-        if(this.verificarContratoVivienda(ciudadano)) {
-            factoresPositivosRespuesta += 20; // Tener contrato con vivienda suma 20 puntos
-        }
-
-        if(this.verificarContratoComercial(ciudadano)) {
-            factoresPositivosRespuesta += 15; // Tener contrato con edificio comercial suma 15 puntos
-        }
-
-        return factoresPositivosRespuesta;
+    // ✅ Ya no depende de CiudadService — recibe la ciudad directamente como parámetro
+    calcularFelicidad(ciudadano) {
+        const positivos = this.calcularFactoresPositivos(ciudadano);
+        const negativos = this.calcularFactoresNegativos(ciudadano);
+        return positivos + negativos;
     }
 
-    calculoFactoresNegativos(ciudadano) {
-        let factoresNegativosRespuesta = 0;
+    calcularFactoresPositivos(ciudadano) {
+        let puntos = 0;
+        const ciudad = ciudadano.miCiudad; // ✅ Se accede a la ciudad desde el ciudadano
 
-        if(this.verificarContratoVivienda(ciudadano) === false) {
-            factoresNegativosRespuesta -=20 ; // Tener contrato con vivienda suma 20 puntos
-        }
+        // Edificios de servicio en la ciudad
+        const hospitales = ciudad.misEdificios.filter(e => e instanceof Hospital).length;
+        const parques = ciudad.misEdificios.filter(e => e instanceof Parque).length;
+        const policia = ciudad.misEdificios.filter(e => e instanceof EstacionPolicia).length;
+        const bomberos = ciudad.misEdificios.filter(e => e instanceof EstacionBombero).length;
 
-        if(this.verificarContratoComercial(ciudadano) === false) {
-            factoresPositivos -= 15; // Tener contrato con edificio comercial suma 15 puntos
-        }
+        puntos += hospitales * 10;
+        puntos += parques * 5;
+        puntos += policia * 10;
+        puntos += bomberos * 10;
 
-        return factoresNegativosRespuesta;
+        // Calidad de vida del ciudadano
+        if (this.verificarContratoVivienda(ciudadano)) puntos += 20;
+        if (this.verificarContratoComercial(ciudadano)) puntos += 15;
+
+        return puntos;
     }
-};
+
+    calcularFactoresNegativos(ciudadano) {
+        let puntos = 0;
+
+        if (!this.verificarContratoVivienda(ciudadano)) puntos -= 20;
+        if (!this.verificarContratoComercial(ciudadano)) puntos -= 15; // ✅ estaba como factoresPositivos
+
+        return puntos;
+    }
+}
 
 export default CiudadanoService;
