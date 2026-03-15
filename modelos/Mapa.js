@@ -9,6 +9,8 @@ class Mapa {
     constructor(tamaño) {
         this.tamaño = tamaño;
         this.misEdificios = []; // Relación 1-n con Edificio
+        // Equivalente a: [[None]*tamaño for _ in range(tamaño)]
+        this.matriz = Array.from({ length: tamaño }, () => Array(tamaño).fill(null));
     }
 
     /**

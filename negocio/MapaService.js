@@ -1,83 +1,195 @@
-import Mapa from "../modelos/Mapa.js";
+// MapaService.js
+import {
+    Mapa, Casa, Apartamento, Camino,
+    CentroComercial, Tienda, Fabrica, Granja,
+    EstacionPolicia, EstacionBombero, Hospital,
+    PlantaElectrica, PlantaAgua, Parque
+} from "/modelos/index.js";
+//import StorageMapa from "/acceso_datos/StorageMapa.js";
 class MapaService {
-
-    //cargarMapas();
-
-    // ─── READ ALL ────────────────────────────────────────────────────────────
-    cargarMapas() {
-        const lista = StorageMapa.load();
-        console.log("Mapas cargados:", lista);
-        return lista;
-    }
-
-    // ─── READ ONE ────────────────────────────────────────────────────────────
-    cargarMapa(indice) {
-        const lista = StorageMapa.load();
-        const mapa = lista[indice];
-        console.log("Mapa encontrado:", mapa);
-        return mapa || null;
-    }
-
-    // ─── CREATE ──────────────────────────────────────────────────────────────
-    crearMapa(tamaño) {
-        const lista = StorageMapa.load();
-        const nuevoMapa = new Mapa(tamaño);
-        lista.push(nuevoMapa);
-        StorageMapa.save(lista);
-        console.log("Mapa creado:", nuevoMapa);
-        return true;
-    }
-
-    // ─── UPDATE ──────────────────────────────────────────────────────────────
-    actualizarMapa(indice, tamaño) {
-        const lista = StorageMapa.load();
-        if (indice < 0 || indice >= lista.length) {
-            console.warn(`Índice ${indice} fuera de rango`);
-            return false;
+    mapa = Mapa.matriz; // Matriz del mapa
+    tipoEdificio(tipo){
+        let edificio;
+        switch (tipo) {
+            case 'R1':
+                edificio = new Casa();
+                break;
+            case 'R2':
+                edificio = new Apartamento();
+                break;
+            case 'C1':
+                edificio = new Tienda();
+                break;
+            case 'C2':
+                edificio = new CentroComercial();
+                break;
+            case 'I1':
+                edificio = new Fabrica();
+                break;
+            case 'I2':
+                edificio = new Granja();
+                break;
+            case 'S1':
+                edificio = new Hospital();
+                break;
+            case 'S2':
+                edificio = new EstacionBombero();
+                break;
+            case 'S3':
+                edificio = new EstacionPolicia();
+                break;
+            case 'P1':
+                edificio = new Parque();
+                break;
+            case 'U1':
+                edificio = new PlantaElectrica();
+                break;
+            case 'U2':
+                edificio = new PlantaAgua();
+                break;
+            case 'R':
+                edificio = new Camino();
+                break;
+            default:
+                return null;
         }
-        lista[indice] = { ...lista[indice], tamaño };
-        StorageMapa.save(lista);
-        console.log("Mapa actualizado:", lista[indice]);
-        return true;
+        return edificio;
     }
 
-    // ─── DELETE ──────────────────────────────────────────────────────────────
-    eliminarMapa(indice) {
-        const lista = StorageMapa.load();
-        if (indice < 0 || indice >= lista.length) {
-            console.warn(`Índice ${indice} fuera de rango`);
-            return false;
+    construirEdificio(ciudad, mapa, fila, columna, tipo){
+        let edificio = this.tipoEdificio(tipo);
+
+        if(edificio === null){
+            return {ok: false, mensaje: "Tipo de edificio no válido"}
         }
-        const eliminado = lista.splice(indice, 1);
-        StorageMapa.save(lista);
-        console.log("Mapa eliminado:", eliminado[0]);
-        return true;
+
+        let validacion = this.puedeConstruir(mapa, edificio, fila, columna, ciudad);
+
+        if(!validacion.ok){
+            return validacion;
+        }
+
+        ciudad.dinero -= edificio.costo;
+        mapa[fila][columna] = edificio;
+        ciudad.misEdificios.push(edificio);
+
+        return {ok: true, mensaje: `Edificio ${edificio.constructor.name} construido exitosamente`};
     }
 
-    celdaVacia(fila, columna, mapa){
-        if(mapa[fila][columna] === 'g'){
-            return true;
+    puedeConstruir(mapa, edificio, fila, columna, ciudad){
+        if(!this.celdaVacia(mapa, fila, columna)){
+            return {ok: false, mensaje: "Error, la celda está ocupada"}
         }
-        else{
-            return false;
+        if(ciudad.dinero < edificio.costo){
+            return {ok: false, mensaje: "Error, no hay dinero suficiente"}
         }
+
+        const requiereVia = (edificio instanceof Casa ||
+                            edificio instanceof Apartamento ||
+                            edificio instanceof Tienda ||
+                            edificio instanceof CentroComercial ||
+                            edificio instanceof Fabrica ||
+                            edificio instanceof Granja ||
+                            edificio instanceof Hospital ||
+                            edificio instanceof EstacionBombero ||
+                            edificio instanceof EstacionPolicia ||
+                            edificio instanceof Parque ||
+                            edificio instanceof PlantaElectrica ||
+                            edificio instanceof PlantaAgua);
+        
+        if(requiereVia && !this.hayViaAdyacente(mapa, fila, columna)){
+            return {ok: false, mensaje: "Error, no hay vía adyacente"}
+        }
+
+        return {ok: true}
     }
 
-    hayViaAdyacente(fila,columna,mapa){
-        let direcciones = [
-            [-1,0], //Arriba
-            [0,1], //Derecha
-            [1,0], //Abajo
-            [0,-1]//Izquierda
-        ]
+    celdaVacia(mapa, fila, columna){
+        return mapa[fila][columna] === null;
+    }
 
-        for(let dir of direcciones){
-            if(mapa[fila + dir[0]][columna + dir[1]] === "r")
-                return true;
+    hayViaAdyacente(mapa, fila, columna) {
+        const direcciones = [
+            [-1, 0], // arriba
+            [1, 0],  // abajo
+            [0, -1], // izquierda
+            [0, 1]   // derecha
+        ];
+
+        for (let [df, dc] of direcciones) {
+            const nuevaFila = fila + df;
+            const nuevaColumna = columna + dc;
+
+            if (nuevaFila >= 0 && nuevaFila < mapa.length && 
+                nuevaColumna >= 0 && nuevaColumna < mapa[0].length) {
+                
+                if (mapa[nuevaFila][nuevaColumna] instanceof Camino) {
+                    return true;
+                }
+            }
         }
+
         return false;
     }
 
-};
+    // negocio/MapaService.js
+
+    parsearArchivoMapa(contenidoTexto) {
+        const lineas = contenidoTexto.trim().split("\n");
+        
+        // Validar encabezado
+        const encabezado = lineas[0].trim();
+        if (!encabezado.match(/^\d+x\d+$/)) {
+            throw new Error("Formato inválido: la primera línea debe ser NxN (ej: 20x20)");
+        }
+
+        const [filas, columnas] = encabezado.split("x").map(Number);
+        const lineasMapa = lineas.slice(1);
+
+        if (lineasMapa.length !== filas) {
+            throw new Error(`El mapa debe tener ${filas} filas, pero tiene ${lineasMapa.length}`);
+        }
+
+        const matriz = [];
+
+        for (let i = 0; i < lineasMapa.length; i++) {
+            const celdas = lineasMapa[i].trim().split(",");
+
+            if (celdas.length !== columnas) {
+                throw new Error(`La fila ${i + 1} debe tener ${columnas} columnas, pero tiene ${celdas.length}`);
+            }
+
+            const fila = celdas.map(celda => this.parsearCelda(celda.trim()));
+            matriz.push(fila);
+        }
+
+        return { filas, columnas, matriz };
+    }
+
+    parsearCelda(codigo) {
+        const mapa = {
+            "g": null,
+            "R":  new Camino(),
+            "R1": new Casa(),
+            "R2": new Apartamento(),
+            "C1": new Tienda(),
+            "C2": new CentroComercial(),
+            "I1": new Fabrica(),
+            "I2": new Granja(),
+            "S1": new Hospital(),
+            "S2": new EstacionBombero(),
+            "S3": new EstacionPolicia(),
+            "P1": new Parque(),
+            "U1": new PlantaElectrica(),
+            "U2": new PlantaAgua()
+        };
+
+        if (!(codigo in mapa)) {
+            throw new Error(`Código desconocido: "${codigo}"`);
+        }
+
+        return mapa[codigo];
+    }
+}
 
 export default MapaService;

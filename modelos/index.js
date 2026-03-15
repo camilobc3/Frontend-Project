@@ -5,7 +5,7 @@ export { default as Casa } from './Casa.js';
 export { default as CentroComercial } from './CentroComercial.js';
 export { default as Ciudad } from './Ciudad.js';
 export { default as Ciudadano } from './Ciudadano.js';
-export { default as ConsumoServicios } from './ConsumoServicios.js';
+//export { default as ConsumoServicios } from './ConsumoServicios.js';
 export { default as Contrato } from './Contrato.js';
 export { default as Edificio } from './Edificio.js';
 export { default as EdificioComercial } from './EdificioComercial.js';

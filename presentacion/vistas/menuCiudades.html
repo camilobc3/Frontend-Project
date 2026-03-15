@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=5.0">
+    <title>Seleccionar Ciudad - City Builder</title>
+    
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Menu Ciudades Styles -->
+    <link rel="stylesheet" href="../estilos/menuCiudades.css">
+</head>
+<body>
+    <!-- ======================= NAVBAR SUPERIOR ======================= -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-top">
+        <div class="container-fluid">
+            <!-- Botón Hamburguesa -->
+            <button class="navbar-toggler me-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMobile">
+                <i class="bi bi-list"></i>
+            </button>
+            
+            <!-- Título -->
+            <span class="navbar-brand mb-0 h1">
+                <i class="bi bi-building"></i> City Builder
+            </span>
+        </div>
+    </nav>
+
+    <!-- ======================= CONTENEDOR PRINCIPAL ======================= -->
+    <div class="main-container">
+        
+        <!-- ======================= SIDEBAR IZQUIERDO (DESKTOP) ======================= -->
+        <aside class="sidebar sidebar-desktop" id="sidebar">
+            <!-- Avatar Circular -->
+            <div class="avatar-container">
+                <div class="avatar" id="avatarUsuario">
+                    <i class="bi bi-person-circle"></i>
+                </div>
+            </div>
+            
+            <!-- Nombre de Usuario -->
+            <div class="user-info">
+                <h4 class="username" id="nombreUsuario">Jugador 1</h4>
+            </div>
+            
+            <!-- Información adicional del usuario -->
+            <div class="user-stats">
+                <div class="stat-item">
+                    <span class="stat-label">Ciudades:</span>
+                    <span class="stat-value" id="ciudadCount">3</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Nivel:</span>
+                    <span class="stat-value" id="userLevel">5</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- ======================= SIDEBAR OFFCANVAS (MOBILE) ======================= -->
+        <div class="offcanvas offcanvas-start offcanvas-sidebar" tabindex="-1" id="sidebarMobile">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title">Perfil</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+            </div>
+            <div class="offcanvas-body">
+                <div class="avatar-container">
+                    <div class="avatar" id="avatarUsuarioMobile">
+                        <i class="bi bi-person-circle"></i>
+                    </div>
+                </div>
+                <div class="user-info">
+                    <h4 class="username" id="nombreUsuarioMobile">Jugador 1</h4>
+                </div>
+                <div class="user-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Ciudades:</span>
+                        <span class="stat-value" id="ciudadCountMobile">3</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Nivel:</span>
+                        <span class="stat-value" id="userLevelMobile">5</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======================= ÁREA PRINCIPAL CON GRILLA ======================= -->
+        <main class="main-content">
+            <!-- Encabezado de la sección -->
+            <div class="content-header">
+                <h2>Selecciona una ciudad</h2>
+                <p class="text-muted">O crea una nueva para comenzar</p>
+            </div>
+
+            <!-- Grilla de Ciudades -->
+            <div class="ciudades-grid-container">
+                <div class="grid-wrapper" id="gridCiudades">
+                    
+                    <!-- Tarjeta de Ciudad 1 -->
+                    <div class="ciudad-card">
+                        <div class="ciudad-card-image">
+                            <img src="https://via.placeholder.com/250x250/4a6fa5/ffffff?text=Ciudad+1" alt="Ciudad 1">
+                        </div>
+                        <div class="ciudad-card-name">Gran Metropolis</div>
+                    </div>
+
+                    <!-- Tarjeta de Ciudad 2 -->
+                    <div class="ciudad-card">
+                        <div class="ciudad-card-image">
+                            <img src="https://via.placeholder.com/250x250/2d5016/ffffff?text=Ciudad+2" alt="Ciudad 2">
+                        </div>
+                        <div class="ciudad-card-name">Villa Verde</div>
+                    </div>
+
+                    <!-- Tarjeta de Ciudad 3 -->
+                    <div class="ciudad-card">
+                        <div class="ciudad-card-image">
+                            <img src="https://via.placeholder.com/250x250/8b5a3c/ffffff?text=Ciudad+3" alt="Ciudad 3">
+                        </div>
+                        <div class="ciudad-card-name">Puerto Dorado</div>
+                    </div>
+
+                    <!-- Tarjeta Nueva Ciudad (+) -->
+                    <div class="ciudad-card" id="btnNuevaCiudad">
+                        <div class="ciudad-card-image ciudad-card-crear">
+                            <div class="crear-icon">
+                                <i class="bi bi-plus"></i>
+                            </div>
+                        </div>
+                        <div class="ciudad-card-name">Nueva Ciudad</div>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Bootstrap 5.3 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
