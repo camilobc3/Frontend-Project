@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="../estilos/newPanel.css">
  
     <!-- Importar el Controller -->
-    <script type="module" src="../../controllers/MapaController.js" defer></script>
+    <script     type="module" src="../../controllers/MapaController.js" defer></script>
     <script type="module" src="../../ejemplo.js"></script>
     
 </head>
@@ -50,20 +50,39 @@
                         <div class="resource-label">Gold</div>
                         <div class="resource-value stats-value" id="goldDesktop">5000</div>
                     </div>
+
                 </div>
-                <div class="resource-item">
-                    <span class="resource-icon">👥</span>
-                    <div>
-                        <div class="resource-label">Population</div>
-                        <div class="resource-value stats-value" id="populationDesktop">150</div>
-                    </div>
+
+                <!-- Construcción -->
+
+                <div class="bg-slate-800 p-4 rounded-xl shadow">
+
+                <h2 class="font-semibold mb-3 text-slate-300">Build</h2>
+
+                <div class="grid grid-cols-2 gap-2">
+
+                <button class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3">
+                🏠 House
+                </button>
+
+                <button class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3">
+                🏭 Factory
+                </button>
+
+                <button class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3">
+                🏪 Store
+                </button>
+
+                <button class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3">
+                🌾 Farm
+                </button>
+
+                <button class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3 col-span-2">
+                🏢 Apartment
+                </button>
+
                 </div>
-                <div class="resource-item">
-                    <span class="resource-icon">⚡</span>
-                    <div>
-                        <div class="resource-label">Energy</div>
-                        <div class="resource-value stats-value" id="energyDesktop">75</div>
-                    </div>
+
                 </div>
             </div>
             
@@ -394,25 +413,11 @@
             <i class="bi bi-hammer"></i>
             <span>Build</span>
         </button>
-        <button class="tab-item" data-action="map">
-            <i class="bi bi-map"></i>
-            <span>Map</span>
+
+        <button id="btnZoomOut" class="bg-slate-700 hover:bg-indigo-600 rounded-lg px-3 py-1">
+        -
         </button>
-        <button class="tab-item" data-action="citizens">
-            <i class="bi bi-people"></i>
-            <span>Citizens</span>
-        </button>
-        <button class="tab-item" data-action="settings">
-            <i class="bi bi-gear"></i>
-            <span>Settings</span>
-        </button>
-    </div>
-    
-    <!-- Stats Offcanvas (Mobile) -->
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="statsOffcanvas">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title">City Statistics</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+
         </div>
         <div class="offcanvas-body">
             <div class="stat-card"><div class="stat-label">Happiness</div><div class="stat-value stats-value">85%</div></div>

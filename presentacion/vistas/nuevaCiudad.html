@@ -13,66 +13,48 @@
 
         <div class="max-w-md mx-auto bg-white rounded-2xl shadow-xl p-8">
 
-            <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">
-                Crear ciudad
-            </h2>
-
-            <form class="space-y-5">
+            <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Crear ciudad</h2>
+                
+            <form id="createCityForm" class="space-y-5">
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">
-                        Nickname
-                    </label>
-                    <input
-                        type="text"
-                        placeholder="Tu nickname"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">
-                        Nombre de la ciudad
-                    </label>
-                    <input
-                        type="text"
-                        placeholder="Nombre de la ciudad"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Nickname</label>
+                    <input id="nickname" type="text" placeholder="Tu nickname"class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400">
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">
-                        Tamaño del mapa
-                    </label>
-                    <select
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Nombre de la ciudad</label>
+                        
+                    
+                    <input id="cityName" type="text" placeholder="Nombre de la ciudad" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Tamaño del mapa</label>
+                
+                    <select id="mapSize" name="mapSize"
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400">
                         <option value="">Selecciona un tamaño</option>
                         <option value="15x15">15 x 15</option>
                         <option value="30x30">30 x 30</option>
                     </select>
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">
-                        Región geográfica
-                    </label>
 
-                    <!-- falta integrar la api -->
-                    <select>
-                        id="region"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400">
-                        <option value="">Cargando regiones...</option>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Region geografica</label>
+                    <select id="region" name="region" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400">
+                        <option value="">Regiones</option>
                     </select>
                 </div>
 
-                <button
-                    type="submit"
-                    class="w-full bg-indigo-500 text-white py-2 rounded-lg font-semibold hover:bg-indigo-600 transition">
-                    Continuar
-                </button>
-
+                <button type="submit" class="w-full bg-indigo-500 text-white py-2 rounded-lg font-semibold hover:bg-indigo-600 transition">Continuar</button>
+                
             </form>
 
         </div>
 
-    </div>
-
+    </div>   
+     <script type="module" src="../../api/RegionesApi.js"></script>    
+     <script type="module" src="../../controllers/CiudadController.js"></script>
     </body>
 </html>
