@@ -29,14 +29,14 @@ class TurnoService {
         ciudad.alimento += ciudad.alimentoXTurno;
         this.crearCiudadanosXturno();
 
-        ciudadService.actualizarCiudadCompleta(ciudad);
+        this.ciudadService.actualizarCiudadCompleta(ciudad);
         console.log("Turno:", ciudad.turno, "Dinero:", ciudad.dinero);
     }
 
     crearCiudadanosXturno(){
-        ciudadService.crearCiudadanosAutomaticamente();
-        ciudadService.agregarCiudadanosATrabajosDisponibles();
-        ciudadService.agregarCiudadanosAViviendasDisponibles();
+        this.ciudadService.crearCiudadanosAutomaticamente();
+        this.ciudadService.agregarCiudadanosATrabajosDisponibles();
+        this.ciudadService.agregarCiudadanosAViviendasDisponibles();
     }
 
     detenerTurnos(){
