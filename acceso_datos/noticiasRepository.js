@@ -13,7 +13,7 @@ class NoticiasRepository {
      * @param {number} cantidad    - Cuántas noticias traer (default 5)
      */
     getNoticias(codigoPais, cantidad = 5) {
-        const url = `${this.baseUrl}?country=${codigoPais}&pageSize=${cantidad}&apiKey=${this.apiKey}`;
+        const url = `${this.baseUrl}?q=${codigoPais}&pageSize=${cantidad}&apiKey=${this.apiKey}`;
 
         return fetch(url)
             .then(function (res) {

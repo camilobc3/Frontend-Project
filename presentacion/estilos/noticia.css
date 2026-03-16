@@ -1,0 +1,178 @@
+/* ── News card stack ─────────────────────────────────────── */
+#noticias-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.nc-card {
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #0f172a 60%, #1e293b);
+    border: 1px solid rgba(16, 185, 129, 0.18);
+    cursor: pointer;
+    transition: border-color 0.25s, transform 0.2s;
+    margin-bottom: 8px;
+}
+.nc-card:last-child { margin-bottom: 0; }
+.nc-card:hover {
+    border-color: rgba(16, 185, 129, 0.55);
+    transform: translateY(-1px);
+}
+
+/* thumbnail strip */
+.nc-thumb {
+    width: 100%;
+    height: 72px;
+    object-fit: cover;
+    display: block;
+    opacity: 0.82;
+    filter: saturate(0.75);
+    transition: opacity 0.25s, filter 0.25s;
+}
+.nc-card:hover .nc-thumb {
+    opacity: 1;
+    filter: saturate(1);
+}
+.nc-thumb-placeholder {
+    width: 100%;
+    height: 56px;
+    background: linear-gradient(90deg, #0f172a, #1e3a2f 60%, #0f172a);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* green accent bar */
+.nc-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: linear-gradient(180deg, #10b981, #065f46);
+    border-radius: 10px 0 0 10px;
+}
+
+.nc-body {
+    padding: 6px 8px 8px 11px;
+}
+
+.nc-source {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #10b981;
+    margin-bottom: 2px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.nc-source::before {
+    content: "";
+    display: inline-block;
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: #10b981;
+    box-shadow: 0 0 5px #10b981;
+    flex-shrink: 0;
+    animation: nc-blink 2s ease-in-out infinite;
+}
+
+@keyframes nc-blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.25; }
+}
+
+.nc-title {
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.35;
+    color: #f1f5f9;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: 4px;
+}
+
+.nc-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px;
+    border-top: 1px solid rgba(16, 185, 129, 0.12);
+    padding-top: 5px;
+    margin-top: 2px;
+}
+
+.nc-date {
+    font-size: 9px;
+    color: #64748b;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+}
+
+.nc-link {
+    flex-shrink: 0;
+    font-size: 9px;
+    font-weight: 700;
+    color: #0f172a;
+    background: #10b981;
+    border-radius: 4px;
+    padding: 2px 6px;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.2s;
+}
+.nc-link:hover { background: #059669; }
+
+/* ── "Ver más" expander ──────────────────────────────────── */
+.nc-expand-btn {
+    width: 100%;
+    background: none;
+    border: none;
+    border-top: 1px solid rgba(16, 185, 129, 0.12);
+    color: #475569;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    padding: 4px 0;
+    cursor: pointer;
+    transition: color 0.2s;
+    text-align: center;
+}
+.nc-expand-btn:hover { color: #10b981; }
+
+/* ── Skeleton loader ─────────────────────────────────────── */
+.nc-skeleton {
+    border-radius: 10px;
+    overflow: hidden;
+    background: #0f172a;
+    border: 1px solid rgba(16, 185, 129, 0.1);
+    margin-bottom: 8px;
+    height: 100px;
+    position: relative;
+}
+.nc-skeleton::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent 0%, rgba(16, 185, 129, 0.07) 50%, transparent 100%);
+    animation: nc-shimmer 1.4s infinite;
+}
+@keyframes nc-shimmer {
+    0%   { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* ── Status text ─────────────────────────────────────────── */
+#noticias-estado {
+    font-size: 10px;
+    color: #475569;
+    margin-bottom: 6px;
+}

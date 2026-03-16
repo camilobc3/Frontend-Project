@@ -1,104 +1,147 @@
-// controllers/NoticiasController.js
+document.addEventListener("DOMContentLoaded", function () {
+    var codigoPais = "Colombia";
+    var intervaloMs = 30 * 60 * 1000;
 
-class NoticiasController {
+    var panelContenedor = document.getElementById("noticias-lista");
+    var panelEstado = document.getElementById("noticias-estado");
 
-    /**
-     * @param {NoticiaService} noticiaService
-     * @param {string} codigoPais  - Ej: "co"
-     */
-    constructor(noticiaService, codigoPais) {
-        this.service     = noticiaService;
-        this.codigoPais  = codigoPais;
-        this.intervaloId = null;
+    var repo = new NoticiasRepository(NEWS_API_KEY);
+    var service = new NoticiaService(repo);
 
-        // Referencias al DOM
-        this.panelContenedor = document.getElementById("noticias-lista");
-        this.panelEstado     = document.getElementById("noticias-estado");
+    function mostrarEstado(mensaje) {
+        if (panelEstado) panelEstado.textContent = mensaje;
     }
 
-    /** Carga noticias y arranca la actualización automática cada 30 min */
-    iniciar() {
-        this._cargarNoticias();
-
-        // Actualizar cada 30 minutos (30 * 60 * 1000 ms)
-        this.intervaloId = setInterval(() => {
-            this._cargarNoticias();
-        }, 30 * 60 * 1000);
-    }
-
-    /** Detiene la actualización automática */
-    detener() {
-        if (this.intervaloId) {
-            clearInterval(this.intervaloId);
-            this.intervaloId = null;
+    function formatearFecha(iso) {
+        try {
+            return new Date(iso).toLocaleDateString("es-CO", {
+                day: "2-digit",
+                month: "short",
+                year: "2-digit"
+            });
+        } catch (_) {
+            return "";
         }
     }
 
-    /** Llama al service y delega el renderizado */
-    _cargarNoticias() {
-        this._mostrarEstado("Cargando noticias...");
-
-        this.service
-            .obtenerUltimasNoticias(this.codigoPais)
-            .then((noticias) => {
-                this._renderizarNoticias(noticias);
-                this._mostrarEstado(""); // limpiar mensaje de estado
-            })
-            .catch((error) => {
-                console.error(error);
-                this._mostrarEstado("No se pudieron cargar las noticias.");
-            });
+    function mostrarSkeletons() {
+        if (!panelContenedor) return;
+        panelContenedor.innerHTML = "";
+        for (var i = 0; i < 3; i++) {
+            var sk = document.createElement("div");
+            sk.className = "nc-skeleton";
+            panelContenedor.appendChild(sk);
+        }
     }
 
-    /** Genera el HTML de cada tarjeta de noticia */
-    _renderizarNoticias(noticias) {
-        if (!this.panelContenedor) return;
+    function makePlaceholder() {
+        var ph = document.createElement("div");
+        ph.className = "nc-thumb-placeholder";
+        ph.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(16,185,129,0.35)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="18" rx="2"/><line x1="6" y1="8" x2="18" y2="8"/><line x1="6" y1="12" x2="18" y2="12"/><line x1="6" y1="16" x2="12" y2="16"/></svg>';
+        return ph;
+    }
 
-        if (noticias.length === 0) {
-            this.panelContenedor.innerHTML =
-                "<p class='text-gray-400 text-sm'>No hay noticias disponibles.</p>";
+    function renderizarNoticias(noticias) {
+        if (!panelContenedor) return;
+        panelContenedor.innerHTML = "";
+
+        if (!noticias || noticias.length === 0) {
+            var p = document.createElement("p");
+            p.textContent = "No hay noticias disponibles.";
+            panelContenedor.appendChild(p);
             return;
         }
 
-        this.panelContenedor.innerHTML = noticias.map(function (n) {
+        var VISIBLE_DEFAULT = 3;
 
-            // Formatear timestamp
-            const fecha = new Date(n.fechaPublicacion).toLocaleString("es-CO", {
-                day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit"
+        noticias.forEach(function (n, idx) {
+            var card = document.createElement("div");
+            card.className = "nc-card" + (idx >= VISIBLE_DEFAULT ? " nc-hidden-extra" : "");
+            if (idx >= VISIBLE_DEFAULT) card.style.display = "none";
+
+            if (n.urlImagen) {
+                var img = document.createElement("img");
+                img.src = n.urlImagen;
+                img.alt = "";
+                img.className = "nc-thumb";
+                img.loading = "lazy";
+                img.onerror = function () { img.replaceWith(makePlaceholder()); };
+                card.appendChild(img);
+            } else {
+                card.appendChild(makePlaceholder());
+            }
+
+            var body = document.createElement("div");
+            body.className = "nc-body";
+
+            var source = document.createElement("div");
+            source.className = "nc-source";
+            source.textContent = n.fuente || "Desconocida";
+
+            var titulo = document.createElement("div");
+            titulo.className = "nc-title";
+            titulo.textContent = n.titulo || "Sin título";
+
+            var footer = document.createElement("div");
+            footer.className = "nc-footer";
+
+            var fecha = document.createElement("span");
+            fecha.className = "nc-date";
+            fecha.textContent = formatearFecha(n.fechaPublicacion);
+
+            var link = document.createElement("a");
+            link.href = n.urlNoticia || "#";
+            link.target = "_blank";
+            link.rel = "noopener noreferrer";
+            link.className = "nc-link";
+            link.textContent = "Leer →";
+
+            footer.appendChild(fecha);
+            footer.appendChild(link);
+
+            body.appendChild(source);
+            body.appendChild(titulo);
+            body.appendChild(footer);
+            card.appendChild(body);
+
+            panelContenedor.appendChild(card);
+        });
+
+        if (noticias.length > VISIBLE_DEFAULT) {
+            var expandBtn = document.createElement("button");
+            expandBtn.className = "nc-expand-btn";
+            var expanded = false;
+            expandBtn.textContent = "▼ ver " + (noticias.length - VISIBLE_DEFAULT) + " más";
+
+            expandBtn.addEventListener("click", function () {
+                expanded = !expanded;
+                panelContenedor.querySelectorAll(".nc-hidden-extra").forEach(function (el) {
+                    el.style.display = expanded ? "block" : "none";
+                });
+                expandBtn.textContent = expanded
+                    ? "▲ ver menos"
+                    : "▼ ver " + (noticias.length - VISIBLE_DEFAULT) + " más";
             });
 
-            // Imagen (si está disponible)
-            const imgHtml = n.urlImagen
-                ? `<img src="${n.urlImagen}" alt="imagen noticia"
-                        onerror="this.style.display='none'"
-                        class="noticia-img">`
-                : "";
-
-            // Descripción truncada
-            const desc = n.descripcion
-                ? n.descripcion.substring(0, 120) + "..."
-                : "Sin descripción disponible.";
-
-            return `
-                <article class="noticia-card">
-                    ${imgHtml}
-                    <div class="noticia-body">
-                        <h4 class="noticia-titulo">${n.titulo}</h4>
-                        <p class="noticia-desc">${desc}</p>
-                        <div class="noticia-footer">
-                            <span class="noticia-tiempo">🕐 ${fecha}</span>
-                            <a href="${n.urlNoticia}" target="_blank"
-                               rel="noopener noreferrer"
-                               class="noticia-link">Leer más →</a>
-                        </div>
-                    </div>
-                </article>`;
-        }).join("");
-    }
-
-    _mostrarEstado(mensaje) {
-        if (this.panelEstado) {
-            this.panelEstado.textContent = mensaje;
+            panelContenedor.appendChild(expandBtn);
         }
     }
-}
+
+    function cargarNoticias() {
+        mostrarEstado("Cargando…");
+        mostrarSkeletons();
+        service.obtenerUltimasNoticias(codigoPais)
+            .then(function (noticias) {
+                renderizarNoticias(noticias);
+                mostrarEstado("");
+            })
+            .catch(function (error) {
+                console.error(error);
+                panelContenedor.innerHTML = "";
+                mostrarEstado("Error al cargar noticias.");
+            });
+    }
+
+    cargarNoticias();
+    setInterval(cargarNoticias, intervaloMs);
+});

@@ -1,417 +1,111 @@
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=5.0">
-    <title>City Builder Game</title>
-    
-    <!-- Bootstrap 5.3 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.min.css">
-    
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
-    
-    <!-- Custom Styles -->
-    <link rel="stylesheet" href="../estilos/newPanel.css">
- 
-    <!-- Importar el Controller -->
-    <script type="module" src="../../controllers/MapaController.js" defer></script>
-    <script type="module" src="../../ejemplo.js" defer></script>
-    
-</head>
-<body>
-    <!-- Notifications Bar -->
-    <div class="notifications-bar" id="notificationsBar">
-        <div class="alert alert-info alert-dismissible fade show m-2" role="alert">
-            <i class="bi bi-info-circle"></i> Welcome to City Builder! Start by placing your first building.
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+<html lang="en">
+    <head>
+
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>City Builder</title>
+        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+        <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700&display=swap" rel="stylesheet">
+        <script type="module" src="../../controllers/MapaController.js"></script>
+        <link rel="stylesheet" href="../estilos/noticia.css">
+
+    </head>
+
+
+    <body class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white font-[Exo_2] min-h-screen">
+
+        <div class="grid grid-cols-12 min-h-screen">
+
+        <!-- SIDEBAR IZQUIERDA -->
+
+        <aside class="col-span-2 p-4 space-y-6 bg-slate-900/60 backdrop-blur-lg border-r border-slate-700">
+
+        <h1 class="text-xl font-bold text-center">City Builder</h1>
+
+        <!-- Recursos -->
+
+        <div class="bg-slate-800 p-4 rounded-xl shadow">
+
+        <h2 class="font-semibold mb-3 text-slate-300">Resources</h2>
+
+            <div class="space-y-2 text-sm">
+
+            <div class="flex justify-between"> 
+                <span>💵 Dinero</span> 
+                <span id="dinero">5000</span> 
+            </div>
+
+            <div class="flex justify-between">
+                <span>👥 Poblacion</span>
+                <span id="poblacion">150</span>
+            </div>
+
+            <div class="flex justify-between"> 
+                <span>⚡ Energia</span> 
+                <span id="energia">75</span> 
+            </div>
+
+            <div class="flex justify-between"> 
+                <span>💧 Agua</span> 
+                <span id="agua">75</span> 
+            </div>
+
+            <div class="flex justify-between"> 
+                <span>😄 Felicidad</span> 
+                <span id="felicidad">75</span> 
+            </div>
+
+            
+            </div>
+
         </div>
-    </div>
-    
-    <!-- DESKTOP LAYOUT (> 1024px) -->
-    <div class="d-none d-xl-block">
-        <!-- Left Sidebar -->
-        <div class="left-sidebar desktop-sidebar">
-            <h2 class="text-center mb-3">
-                <i class="bi bi-building"></i> City Builder
-            </h2>
-            
-            <!-- Resources Panel -->
-            <div class="panel">
-                <div class="panel-header">Resources</div>
-                <div class="resource-item">
-                    <span class="resource-icon">💰</span>
-                    <div>
-                        <div class="resource-label">Gold</div>
-                        <div class="resource-value stats-value" id="goldDesktop">5000</div>
-                    </div>
 
-                </div>
+        <!-- Construcción -->
 
-                <!-- Construcción -->
+        <div class="bg-slate-800 p-4 rounded-xl shadow">
 
-                <div class="bg-slate-800 p-4 rounded-xl shadow">
+        <h2 class="font-semibold mb-3 text-slate-300">Build</h2>
 
-                <h2 class="font-semibold mb-3 text-slate-300">Build</h2>
+        <div class="grid grid-cols-2 gap-2">
 
-                <div class="grid grid-cols-2 gap-2">
+        <button class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3">
+        🏠 House
+        </button>
 
-                <button class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3">
-                🏠 House
-                </button>
+        <button class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3">
+        🏭 Factory
+        </button>
 
-                <button class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3">
-                🏭 Factory
-                </button>
+        <button class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3">
+        🏪 Store
+        </button>
 
-                <button class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3">
-                🏪 Store
-                </button>
+        <button class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3">
+        🌾 Farm
+        </button>
 
-                <button class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3">
-                🌾 Farm
-                </button>
+        <button class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3 col-span-2">
+        🏢 Apartment
+        </button>
 
-                <button class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3 col-span-2">
-                🏢 Apartment
-                </button>
-
-                </div>
-
-                </div>
-            </div>
-            
-            <!-- Building Menu — scrolleable -->
-            <div class="panel p-0" id="desktopBuildMenu">
-                <div class="panel-header px-3 pt-3 pb-2">Build</div>
-                <div class="build-list">
-
-                    <!-- Camino -->
-                    <div class="build-item" data-building-type="R">
-                        <div class="build-item-icon">🛣️</div>
-                        <div class="build-item-info">
-                            <div class="build-item-name">Camino</div>
-                            <div class="build-item-cost">50 💰</div>
-                        </div>
-                    </div>
-
-                    <!-- Casa -->
-                    <div class="build-item" data-building-type="R1">
-                        <div class="build-item-icon">🏠</div>
-                        <div class="build-item-info">
-                            <div class="build-item-name">Casa</div>
-                            <div class="build-item-cost">100 💰</div>
-                        </div>
-                    </div>
-
-                    <!-- Apartamento -->
-                    <div class="build-item" data-building-type="R2">
-                        <div class="build-item-icon">🏢</div>
-                        <div class="build-item-info">
-                            <div class="build-item-name">Apartamento</div>
-                            <div class="build-item-cost">300 💰</div>
-                        </div>
-                    </div>
-
-                    <!-- Tienda -->
-                    <div class="build-item" data-building-type="C1">
-                        <div class="build-item-icon">🏪</div>
-                        <div class="build-item-info">
-                            <div class="build-item-name">Tienda</div>
-                            <div class="build-item-cost">200 💰</div>
-                        </div>
-                    </div>
-
-                    <!-- Centro Comercial -->
-                    <div class="build-item" data-building-type="C2">
-                        <div class="build-item-icon">🏬</div>
-                        <div class="build-item-info">
-                            <div class="build-item-name">Centro Comercial</div>
-                            <div class="build-item-cost">800 💰</div>
-                        </div>
-                    </div>
-
-                    <!-- Fábrica -->
-                    <div class="build-item" data-building-type="I1">
-                        <div class="build-item-icon">🏭</div>
-                        <div class="build-item-info">
-                            <div class="build-item-name">Fábrica</div>
-                            <div class="build-item-cost">500 💰</div>
-                        </div>
-                    </div>
-
-                    <!-- Granja -->
-                    <div class="build-item" data-building-type="I2">
-                        <div class="build-item-icon">🌾</div>
-                        <div class="build-item-info">
-                            <div class="build-item-name">Granja</div>
-                            <div class="build-item-cost">150 💰</div>
-                        </div>
-                    </div>
-
-                    <!-- Hospital -->
-                    <div class="build-item" data-building-type="S1">
-                        <div class="build-item-icon">🏥</div>
-                        <div class="build-item-info">
-                            <div class="build-item-name">Hospital</div>
-                            <div class="build-item-cost">1000 💰</div>
-                        </div>
-                    </div>
-
-                    <!-- Estación Bomberos -->
-                    <div class="build-item" data-building-type="S2">
-                        <div class="build-item-icon">🚒</div>
-                        <div class="build-item-info">
-                            <div class="build-item-name">Est. Bomberos</div>
-                            <div class="build-item-cost">400 💰</div>
-                        </div>
-                    </div>
-
-                    <!-- Estación Policía -->
-                    <div class="build-item" data-building-type="S3">
-                        <div class="build-item-icon">🚔</div>
-                        <div class="build-item-info">
-                            <div class="build-item-name">Est. Policía</div>
-                            <div class="build-item-cost">400 💰</div>
-                        </div>
-                    </div>
-
-                    <!-- Parque -->
-                    <div class="build-item" data-building-type="P1">   
-                        <div class="build-item-icon">🌳</div>
-                        <div class="build-item-info">
-                            <div class="build-item-name">Parque</div>
-                            <div class="build-item-cost">200 💰</div>
-                        </div>
-                    </div>
-
-                    <!-- Planta Eléctrica -->
-                    <div class="build-item" data-building-type="U1">
-                        <div class="build-item-icon">⚡</div>
-                        <div class="build-item-info">
-                            <div class="build-item-name">Planta Eléctrica</div>
-                            <div class="build-item-cost">600 💰</div>
-                        </div>
-                    </div>
-
-                    <!-- Planta de Agua -->
-                    <div class="build-item" data-building-type="U2">
-                        <div class="build-item-icon">💧</div>
-                        <div class="build-item-info">
-                            <div class="build-item-name">Planta de Agua</div>
-                            <div class="build-item-cost">600 💰</div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
         </div>
-        
-        <!-- Center Content -->
-        <div class="center-content">
-            <div class="map-container">
-                <div class="zoom-controls">
-                    <button class="zoom-btn" id="btnZoomIn">+</button>
-                    <button class="zoom-btn" id="btnZoomOut">-</button>
-                </div>
-                <div class="game-map" id="gameMap"></div>
-            </div>
+
         </div>
-        
-        <!-- Right Sidebar -->
-        <div class="right-sidebar desktop-sidebar">
-            <!-- Weather Widget -->
-            <div class="weather-widget text-center">
-                <div class="weather-icon">☀️</div>
-                <div class="temperature">24°C</div>
-                <div>Sunny</div>
-            </div>
-            
-            <!-- Summary Stats -->
-            <div class="panel">
-                <div class="panel-header">City Stats</div>
-                <div class="stat-card">
-                    <div class="stat-label">Happiness</div>
-                    <div class="stat-value stats-value">85%</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Employment</div>
-                    <div class="stat-value stats-value">92%</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Total Buildings</div>
-                    <div class="stat-value stats-value" id="buildingCountDesktop">5</div>
-                </div>
-            </div>
-            
-            <!-- News Feed -->
-            <div class="panel">
-                <div class="panel-header">News Feed</div>
-                <div class="news-item">
-                    <div class="news-time">2 minutes ago</div>
-                    <div>New factory completed! +50 jobs created.</div>
-                </div>
-                <div class="news-item">
-                    <div class="news-time">15 minutes ago</div>
-                    <div>Population milestone reached: 150 citizens!</div>
-                </div>
-                <div class="news-item">
-                    <div class="news-time">1 hour ago</div>
-                    <div>Energy production increased by 10%.</div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- TABLET LAYOUT (768px - 1024px) -->
-    <div class="container-fluid d-none d-md-block d-xl-none tablet-layout">
-        <div class="row mt-3">
-            <div class="col-md-8">
-                <h2 class="mb-3">
-                    <i class="bi bi-building"></i> City Builder
-                </h2>
-                <div class="map-container">
-                    <div class="game-map" id="gameMapTablet"></div>
-                </div>
-            </div>
-            <div class="col-md-4 tablet-sidebar">
-                <!-- Resources Panel -->
-                <div class="panel">
-                    <div class="panel-header">Resources</div>
-                    <div class="resource-item">
-                        <span class="resource-icon">💰</span>
-                        <div>
-                            <div class="resource-label">Gold</div>
-                            <div class="resource-value stats-value" id="goldTablet">5000</div>
-                        </div>
-                    </div>
-                    <div class="resource-item">
-                        <span class="resource-icon">👥</span>
-                        <div>
-                            <div class="resource-label">Population</div>
-                            <div class="resource-value stats-value" id="populationTablet">150</div>
-                        </div>
-                    </div>
-                    <div class="resource-item">
-                        <span class="resource-icon">⚡</span>
-                        <div>
-                            <div class="resource-label">Energy</div>
-                            <div class="resource-value stats-value" id="energyTablet">75</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Building Menu Tablet — scrolleable -->
-                <div class="panel p-0" id="tabletBuildMenu">
-                    <div class="panel-header px-3 pt-3 pb-2">Build</div>
-                    <div class="build-list build-list-tablet">
-                        <div class="build-item" data-building-type="R"><div class="build-item-icon">🛣️</div><div class="build-item-info"><div class="build-item-name">Camino</div><div class="build-item-cost">50 💰</div></div></div>
-                        <div class="build-item" data-building-type="R1"><div class="build-item-icon">🏠</div><div class="build-item-info"><div class="build-item-name">Casa</div><div class="build-item-cost">100 💰</div></div></div>
-                        <div class="build-item" data-building-type="R2"><div class="build-item-icon">🏢</div><div class="build-item-info"><div class="build-item-name">Apartamento</div><div class="build-item-cost">300 💰</div></div></div>
-                        <div class="build-item" data-building-type="C1"><div class="build-item-icon">🏪</div><div class="build-item-info"><div class="build-item-name">Tienda</div><div class="build-item-cost">200 💰</div></div></div>
-                        <div class="build-item" data-building-type="C2"><div class="build-item-icon">🏬</div><div class="build-item-info"><div class="build-item-name">C. Comercial</div><div class="build-item-cost">800 💰</div></div></div>
-                        <div class="build-item" data-building-type="I1"><div class="build-item-icon">🏭</div><div class="build-item-info"><div class="build-item-name">Fábrica</div><div class="build-item-cost">500 💰</div></div></div>
-                        <div class="build-item" data-building-type="I2"><div class="build-item-icon">🌾</div><div class="build-item-info"><div class="build-item-name">Granja</div><div class="build-item-cost">150 💰</div></div></div>
-                        <div class="build-item" data-building-type="S1"><div class="build-item-icon">🏥</div><div class="build-item-info"><div class="build-item-name">Hospital</div><div class="build-item-cost">1000 💰</div></div></div>
-                        <div class="build-item" data-building-type="S2"><div class="build-item-icon">🚒</div><div class="build-item-info"><div class="build-item-name">Est. Bomberos</div><div class="build-item-cost">400 💰</div></div></div>
-                        <div class="build-item" data-building-type="S3"><div class="build-item-icon">🚔</div><div class="build-item-info"><div class="build-item-name">Est. Policía</div><div class="build-item-cost">400 💰</div></div></div>
-                        <div class="build-item" data-building-type="P1"><div class="build-item-icon">🌳</div><div class="build-item-info"><div class="build-item-name">Parque</div><div class="build-item-cost">200 💰</div></div></div>
-                        <div class="build-item" data-building-type="U1"><div class="build-item-icon">⚡</div><div class="build-item-info"><div class="build-item-name">Planta Eléctrica</div><div class="build-item-cost">600 💰</div></div></div>
-                        <div class="build-item" data-building-type="U2"><div class="build-item-icon">💧</div><div class="build-item-info"><div class="build-item-name">Planta de Agua</div><div class="build-item-cost">600 💰</div></div></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- MOBILE LAYOUT (< 768px) -->
-    <div class="container-fluid d-md-none mobile-only">
-        <div class="mt-5 pt-3">
-            <h3 class="text-center mb-3">
-                <i class="bi bi-building"></i> City Builder
-            </h3>
-            
-            <!-- Collapsible Resources Header -->
-            <div class="panel collapsible-header" data-bs-toggle="collapse" data-bs-target="#resourcesCollapse">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div class="panel-header mb-0">Resources</div>
-                    <i class="bi bi-chevron-down"></i>
-                </div>
-                <div class="collapse show" id="resourcesCollapse">
-                    <div class="d-flex justify-content-around mt-3">
-                        <div class="text-center">
-                            <div class="resource-icon">💰</div>
-                            <div class="stats-value" id="goldMobile">5000</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="resource-icon">👥</div>
-                            <div class="stats-value" id="populationMobile">150</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="resource-icon">⚡</div>
-                            <div class="stats-value" id="energyMobile">75</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Weather Widget Compact -->
-            <div class="weather-widget mb-3">
-                <span class="weather-icon">☀️</span>
-                <span class="temperature">24°C</span>
-            </div>
-            
-            <!-- Map Container -->
-            <div class="map-container mb-3">
-                <div class="game-map" id="gameMapMobile"></div>
-            </div>
-            
-            <!-- News Carousel -->
-            <div class="panel">
-                <div class="panel-header">Latest News</div>
-                <div id="newsCarousel" class="carousel slide" data-bs-ride="carousel">
-                    <div class="carousel-indicators">
-                        <button type="button" data-bs-target="#newsCarousel" data-bs-slide-to="0" class="active"></button>
-                        <button type="button" data-bs-target="#newsCarousel" data-bs-slide-to="1"></button>
-                        <button type="button" data-bs-target="#newsCarousel" data-bs-slide-to="2"></button>
-                    </div>
-                    <div class="carousel-inner">
-                        <div class="carousel-item active">
-                            <div class="news-item"><div class="news-time">2 minutes ago</div><div>New factory completed! +50 jobs created.</div></div>
-                        </div>
-                        <div class="carousel-item">
-                            <div class="news-item"><div class="news-time">15 minutes ago</div><div>Population milestone reached: 150 citizens!</div></div>
-                        </div>
-                        <div class="carousel-item">
-                            <div class="news-item"><div class="news-time">1 hour ago</div><div>Energy production increased by 10%.</div></div>
-                        </div>
-                    </div>
-                    <button class="carousel-control-prev" type="button" data-bs-target="#newsCarousel" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon"></span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#newsCarousel" data-bs-slide="next">
-                        <span class="carousel-control-next-icon"></span>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Floating Action Button (Mobile) -->
-    <button class="fab" data-bs-toggle="offcanvas" data-bs-target="#statsOffcanvas">
-        <i class="bi bi-graph-up"></i>
-    </button>
-    
-    <!-- Bottom Tab Bar (Mobile) -->
-    <div class="bottom-tab-bar touch-pan-x">
-        <button class="tab-item active" data-bs-toggle="modal" data-bs-target="#buildMenuModal" data-action="build">
-            <i class="bi bi-hammer"></i>
-            <span>Build</span>
+
+        </aside>
+
+
+        <!-- MAPA -->
+
+        <main class="col-span-8 flex items-center justify-center">
+
+        <div class="relative">
+
+        <div class="absolute top-3 right-3 flex flex-col gap-2">
+
+        <button id="btnZoomIn" class="bg-slate-700 hover:bg-indigo-600 rounded-lg px-3 py-1">
+        +
         </button>
 
         <button id="btnZoomOut" class="bg-slate-700 hover:bg-indigo-600 rounded-lg px-3 py-1">
@@ -419,62 +113,86 @@
         </button>
 
         </div>
-        <div class="offcanvas-body">
-            <div class="stat-card"><div class="stat-label">Happiness</div><div class="stat-value stats-value">85%</div></div>
-            <div class="stat-card"><div class="stat-label">Employment</div><div class="stat-value stats-value">92%</div></div>
-            <div class="stat-card"><div class="stat-label">Total Buildings</div><div class="stat-value stats-value" id="buildingCountMobile">5</div></div>
-            <div class="stat-card"><div class="stat-label">Daily Income</div><div class="stat-value stats-value">+120💰</div></div>
+
+        <div id="gameMap"
+        class="w-[700px] h-[700px] bg-slate-800 border border-slate-600 rounded-xl shadow-2xl">
         </div>
-    </div>
-    
-    <!-- Build Menu Modal (Mobile) — lista completa -->
-    <div class="modal fade" id="buildMenuModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title"><i class="bi bi-hammer"></i> Construir</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body p-0">
-                    <div class="build-list">
-                        <div class="build-item" data-building-type="R"><div class="build-item-icon">🛣️</div><div class="build-item-info"><div class="build-item-name">Camino</div><div class="build-item-cost">50 💰</div></div></div>
-                        <div class="build-item" data-building-type="R1"><div class="build-item-icon">🏠</div><div class="build-item-info"><div class="build-item-name">Casa</div><div class="build-item-cost">100 💰</div></div></div>
-                        <div class="build-item" data-building-type="R2"><div class="build-item-icon">🏢</div><div class="build-item-info"><div class="build-item-name">Apartamento</div><div class="build-item-cost">300 💰</div></div></div>
-                        <div class="build-item" data-building-type="C1"><div class="build-item-icon">🏪</div><div class="build-item-info"><div class="build-item-name">Tienda</div><div class="build-item-cost">200 💰</div></div></div>
-                        <div class="build-item" data-building-type="C2"><div class="build-item-icon">🏬</div><div class="build-item-info"><div class="build-item-name">Centro Comercial</div><div class="build-item-cost">800 💰</div></div></div>
-                        <div class="build-item" data-building-type="I1"><div class="build-item-icon">🏭</div><div class="build-item-info"><div class="build-item-name">Fábrica</div><div class="build-item-cost">500 💰</div></div></div>
-                        <div class="build-item" data-building-type="I2"><div class="build-item-icon">🌾</div><div class="build-item-info"><div class="build-item-name">Granja</div><div class="build-item-cost">150 💰</div></div></div>
-                        <div class="build-item" data-building-type="S1"><div class="build-item-icon">🏥</div><div class="build-item-info"><div class="build-item-name">Hospital</div><div class="build-item-cost">1000 💰</div></div></div>
-                        <div class="build-item" data-building-type="S2"><div class="build-item-icon">🚒</div><div class="build-item-info"><div class="build-item-name">Est. Bomberos</div><div class="build-item-cost">400 💰</div></div></div>
-                        <div class="build-item" data-building-type="S3"><div class="build-item-icon">🚔</div><div class="build-item-info"><div class="build-item-name">Est. Policía</div><div class="build-item-cost">400 💰</div></div></div>
-                        <div class="build-item" data-building-type="P1"><div class="build-item-icon">🌳</div><div class="build-item-info"><div class="build-item-name">Parque</div><div class="build-item-cost">200 💰</div></div></div>
-                        <div class="build-item" data-building-type="U1"><div class="build-item-icon">⚡</div><div class="build-item-info"><div class="build-item-name">Planta Eléctrica</div><div class="build-item-cost">600 💰</div></div></div>
-                        <div class="build-item" data-building-type="U2"><div class="build-item-icon">💧</div><div class="build-item-info"><div class="build-item-name">Planta de Agua</div><div class="build-item-cost">600 💰</div></div></div>
-                    </div>
-                </div>
+
+        </div>
+
+        </main>
+
+
+        <!-- SIDEBAR DERECHA -->
+
+            <aside class="col-span-2 p-4 space-y-6 bg-slate-900/60 backdrop-blur-lg border-l border-slate-700">
+
+            <!-- Clima -->
+
+            <div class="bg-slate-800 p-4 rounded-xl text-center shadow">
+
+            <div class="text-4xl">☀️</div>
+
+            <div class="text-xl font-semibold">24°C</div>
+
+            <div class="text-sm text-slate-400">Sunny</div>
+
             </div>
-        </div>
-    </div>
-    
-    <!-- Building Info Modal -->
-    <div class="modal fade" id="buildingInfoModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="buildingInfoTitle">Building Info</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body" id="buildingInfoBody"></div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-danger" id="btnDemolish">Demolish</button>
-                </div>
+
+            <!-- Stats -->
+
+            <div class="bg-slate-800 p-4 rounded-xl shadow">
+
+            <h2 class="font-semibold mb-3 text-slate-300">City Stats</h2>
+
+            <div class="space-y-2 text-sm">
+
+            <div class="flex justify-between">
+            <span>Happiness</span>
+            <span>85%</span>
             </div>
+
+            <div class="flex justify-between">
+            <span>Employment</span>
+            <span>92%</span>
+            </div>
+
+            <div class="flex justify-between">
+            <span>Total Buildings</span>
+            <span id="buildingCountDesktop">5</span>
+            </div>
+
+            </div>
+
+            </div>
+
+            <!-- Noticias -->
+
+            <div class="bg-slate-800 p-4 rounded-xl shadow">
+
+            <h2 class="font-semibold mb-3 text-slate-300">News</h2>
+
+            <p id="noticias-estado" class="mb-3 text-xs text-slate-400">Cargando noticias...</p>
+
+            <div id="noticias-lista" class="space-y-2 text-sm text-slate-300">
+
+            <p>Factory completed</p>
+            <p>Population reached 150</p>
+            <p>Energy production increased</p>
+
+            </div>
+
+            </div>
+
+            </aside>
+
         </div>
-    </div>
-    
-    <!-- Bootstrap 5.3 JS Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
-</body>
+
+        <script src="../../config.js"></script>
+        <script src="../../modelos/Noticia.js"></script>
+        <script src="../../acceso_datos/NoticiasRepository.js"></script>
+        <script src="../../negocio/NoticiaService.js"></script>
+        <script src="../../controllers/NoticiaController.js"></script>
+
+    </body>
 </html>
