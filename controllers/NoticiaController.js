@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-    var codigoPais = "Colombia";
+    var codigoPais = "us";
     var intervaloMs = 30 * 60 * 1000;
 
     var panelContenedor = document.getElementById("noticias-lista");

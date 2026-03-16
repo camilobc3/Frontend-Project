@@ -7,183 +7,177 @@
         <title>City Builder</title>
         <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
         <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="../../css/noticias.css">
         <script type="module" src="../../controllers/MapaController.js"></script>
-        <link rel="stylesheet" href="../estilos/noticia.css">
 
     </head>
 
-
     <body class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white font-[Exo_2] min-h-screen">
 
-        <div class="grid grid-cols-12 min-h-screen">
+        <div class="grid grid-cols-1 md:grid-cols-12 lg:grid-cols-12 min-h-screen">
 
-            <!-- SIDEBAR IZQUIERDA -->
+            <!-- ═══════════════════════════════════════════════════════
+                 SIDEBAR IZQUIERDA
+                 • Móvil  (base): oculta
+                 • Tablet (md):   oculta — el espacio es para el mapa
+                 • Desktop (lg):  visible, 2 cols
+            ════════════════════════════════════════════════════════ -->
+            <aside class="hidden lg:flex lg:col-span-2 flex-col p-4 space-y-6 bg-slate-900/60 backdrop-blur-lg border-r border-slate-700">
 
-            <aside class="col-span-2 p-4 space-y-6 bg-slate-900/60 backdrop-blur-lg border-r border-slate-700">
+                <h1 class="text-xl font-bold text-center">City Builder</h1>
 
-            <h1 class="text-xl font-bold text-center">City Builder</h1>
-
-            <!-- Recursos -->
-
+                <!-- Recursos -->
                 <div class="bg-slate-800 p-4 rounded-xl shadow">
-
                     <h2 class="font-semibold mb-3 text-slate-300">Resources</h2>
-
                     <div class="space-y-2 text-sm">
-
-                        <div class="flex justify-between"> 
-                            <span>💵 Dinero</span> 
-                            <span id="dinero">5000</span> 
+                        <div class="flex justify-between">
+                            <span>💵 Dinero</span>
+                            <span id="dinero">5000</span>
                         </div>
-
-                        <div class="flex justify-between"> 
-                            <span>👥 Poblacion</span> 
-                            <span id="poblacion">150</span> 
+                        <div class="flex justify-between">
+                            <span>👥 Poblacion</span>
+                            <span id="poblacion">150</span>
                         </div>
-
-                        <div class="flex justify-between"> 
-                            <span>⚡ Energia</span> 
-                            <span id="energia">75</span> 
+                        <div class="flex justify-between">
+                            <span>⚡ Energia</span>
+                            <span id="energia">75</span>
                         </div>
-
-                        <div class="flex justify-between"> 
-                            <span>⚡ Energia</span> 
-                            <span id="energia">75</span> 
+                        <div class="flex justify-between">
+                            <span>💧 Agua</span>
+                            <span id="agua">75</span>
                         </div>
-
-                        <div class="flex justify-between"> 
+                        <div class="flex justify-between">
                             <span>😄 Felicidad</span>
-                            <span id="felicidad">75</span> 
+                            <span id="felicidad">75</span>
                         </div>
-
                     </div>
-
                 </div>
 
-                    <!-- Construcción -->
-
+                <!-- Construcción -->
                 <div class="bg-slate-800 p-4 rounded-xl shadow">
-
                     <h2 class="font-semibold mb-3 text-slate-300">Build</h2>
-
                     <div class="grid grid-cols-2 gap-2">
-
-                        <button class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3">
-                        🏠 House
-                        </button>
-
-                    <button class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3">
-                    🏭 Factory
-                    </button>
-
-                    <button class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3">
-                    🏪 Store
-                    </button>
-
-                    <button class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3">
-                    🌾 Farm
-                    </button>
-
-                    <button class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3 col-span-2">
-                    🏢 Apartment
-                    </button>
-
+                        <button class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3">🏠 House</button>
+                        <button class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3">🏭 Factory</button>
+                        <button class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3">🏪 Store</button>
+                        <button class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3">🌾 Farm</button>
+                        <button class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3 col-span-2">🏢 Apartment</button>
                     </div>
-
                 </div>
 
             </aside>
 
 
-        <!-- MAPA -->
+            <!-- ═══════════════════════════════════════════════════════
+                 MAPA + header contextual
+                 • Móvil  (base): col completa, apilado
+                 • Tablet (md):   8 cols
+                 • Desktop (lg):  8 cols
+            ════════════════════════════════════════════════════════ -->
+            <main class="col-span-1 md:col-span-8 lg:col-span-8 flex flex-col items-center justify-start md:justify-center gap-4 p-4">
 
-        <main class="col-span-8 flex items-center justify-center">
+                <!-- Header: visible en móvil y tablet, oculto en desktop -->
+                <div class="w-full flex items-center justify-between lg:hidden">
+                    <h1 class="text-lg font-bold">City Builder</h1>
+                    <!-- Móvil: solo 3 recursos clave -->
+                    <div class="flex md:hidden gap-3 text-xs text-slate-300">
+                        <span>💵 <span id="dinero-mobile">5000</span></span>
+                        <span>👥 <span id="poblacion-mobile">150</span></span>
+                        <span>⚡ <span id="energia-mobile">75</span></span>
+                    </div>
+                    <!-- Tablet: los 5 recursos en fila -->
+                    <div class="hidden md:flex gap-4 text-xs text-slate-300">
+                        <span>💵 <span id="dinero-tablet">5000</span></span>
+                        <span>👥 <span id="poblacion-tablet">150</span></span>
+                        <span>⚡ <span id="energia-tablet">75</span></span>
+                        <span>💧 <span id="agua-tablet">75</span></span>
+                        <span>😄 <span id="felicidad-tablet">75</span></span>
+                    </div>
+                </div>
 
-        <div class="relative">
+                <!-- Mapa -->
+                <div class="relative w-full">
+                    <div class="absolute top-3 right-3 flex flex-col gap-2 z-10">
+                        <button id="btnZoomIn" class="bg-slate-700 hover:bg-indigo-600 rounded-lg px-3 py-1">+</button>
+                        <button id="btnZoomOut" class="bg-slate-700 hover:bg-indigo-600 rounded-lg px-3 py-1">-</button>
+                    </div>
+                    <div id="gameMap"
+                         class="w-full h-[360px] md:h-[560px] lg:h-[700px] mx-auto bg-slate-800 border border-slate-600 rounded-xl shadow-2xl">
+                    </div>
+                </div>
 
-        <div class="absolute top-3 right-3 flex flex-col gap-2">
+                <!-- Barra de construcción
+                     • Móvil:  iconos en fila de 5
+                     • Tablet: iconos + etiqueta en fila de 5
+                     • Desktop: oculta (está en el sidebar izquierdo)
+                -->
+                <div class="w-full lg:hidden bg-slate-800 p-4 rounded-xl shadow">
+                    <h2 class="font-semibold mb-3 text-slate-300 text-sm">Build</h2>
+                    <!-- Móvil: solo emojis -->
+                    <div class="grid grid-cols-5 gap-2 md:hidden">
+                        <button class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-2 text-xl">🏠</button>
+                        <button class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-2 text-xl">🏭</button>
+                        <button class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-2 text-xl">🏪</button>
+                        <button class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-2 text-xl">🌾</button>
+                        <button class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-2 text-xl">🏢</button>
+                    </div>
+                    <!-- Tablet: emoji + texto -->
+                    <div class="hidden md:grid grid-cols-5 gap-2">
+                        <button class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3 text-sm">🏠 House</button>
+                        <button class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3 text-sm">🏭 Factory</button>
+                        <button class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3 text-sm">🏪 Store</button>
+                        <button class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3 text-sm">🌾 Farm</button>
+                        <button class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3 text-sm">🏢 Apartment</button>
+                    </div>
+                </div>
 
-        <button id="btnZoomIn" class="bg-slate-700 hover:bg-indigo-600 rounded-lg px-3 py-1">
-        +
-        </button>
-
-        <button id="btnZoomOut" class="bg-slate-700 hover:bg-indigo-600 rounded-lg px-3 py-1">
-        -
-        </button>
-
-        </div>
-
-        <div id="gameMap"
-        class="w-[700px] h-[700px] bg-slate-800 border border-slate-600 rounded-xl shadow-2xl">
-        </div>
-
-        </div>
-
-        </main>
+            </main>
 
 
-        <!-- SIDEBAR DERECHA -->
+            <!-- ═══════════════════════════════════════════════════════
+                 SIDEBAR DERECHA — siempre visible
+                 • Móvil  (base): col completa, apilado debajo del mapa
+                 • Tablet (md):   4 cols
+                 • Desktop (lg):  2 cols
+            ════════════════════════════════════════════════════════ -->
+            <aside class="col-span-1 md:col-span-4 lg:col-span-2 p-4 space-y-4 bg-slate-900/60 backdrop-blur-lg md:border-l border-slate-700 overflow-y-auto">
 
-        <aside class="col-span-2 p-4 space-y-6 bg-slate-900/60 backdrop-blur-lg border-l border-slate-700">
+                <!-- Clima -->
+                <div class="bg-slate-800 p-4 rounded-xl text-center shadow">
+                    <div class="text-4xl">☀️</div>
+                    <div class="text-xl font-semibold">24°C</div>
+                    <div class="text-sm text-slate-400">Sunny</div>
+                </div>
 
-        <!-- Clima -->
+                <!-- Stats
+                     Tablet: grid de 2 columnas para aprovechar el espacio extra
+                -->
+                <div class="bg-slate-800 p-4 rounded-xl shadow">
+                    <h2 class="font-semibold mb-3 text-slate-300">City Stats</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-2 text-sm">
+                        <div class="flex justify-between md:flex-col md:bg-slate-700/50 md:rounded-lg md:p-2 lg:flex-row lg:bg-transparent lg:p-0">
+                            <span class="text-slate-400">Happiness</span>
+                            <span class="font-semibold">85%</span>
+                        </div>
+                        <div class="flex justify-between md:flex-col md:bg-slate-700/50 md:rounded-lg md:p-2 lg:flex-row lg:bg-transparent lg:p-0">
+                            <span class="text-slate-400">Employment</span>
+                            <span class="font-semibold">92%</span>
+                        </div>
+                        <div class="flex justify-between md:flex-col md:bg-slate-700/50 md:rounded-lg md:p-2 lg:flex-row lg:bg-transparent lg:p-0 md:col-span-2 lg:col-span-1">
+                            <span class="text-slate-400">Total Buildings</span>
+                            <span id="buildingCountDesktop" class="font-semibold">5</span>
+                        </div>
+                    </div>
+                </div>
 
-        <div class="bg-slate-800 p-4 rounded-xl text-center shadow">
+                <!-- Noticias -->
+                <div class="bg-slate-800 p-4 rounded-xl shadow">
+                    <h2 class="font-semibold mb-3 text-slate-300">News</h2>
+                    <p id="noticias-estado" class="mb-3 text-xs text-slate-400">Cargando noticias...</p>
+                    <div id="noticias-lista" class="text-sm text-slate-300"></div>
+                </div>
 
-        <div class="text-4xl">☀️</div>
-
-        <div class="text-xl font-semibold">24°C</div>
-
-        <div class="text-sm text-slate-400">Sunny</div>
-
-        </div>
-
-        <!-- Stats -->
-
-        <div class="bg-slate-800 p-4 rounded-xl shadow">
-
-        <h2 class="font-semibold mb-3 text-slate-300">City Stats</h2>
-
-        <div class="space-y-2 text-sm">
-
-        <div class="flex justify-between">
-        <span>Happiness</span>
-        <span>85%</span>
-        </div>
-
-        <div class="flex justify-between">
-        <span>Employment</span>
-        <span>92%</span>
-        </div>
-
-        <div class="flex justify-between">
-        <span>Total Buildings</span>
-        <span id="buildingCountDesktop">5</span>
-        </div>
-
-        </div>
-
-        </div>
-
-        <!-- Noticias -->
-
-        <div class="bg-slate-800 p-4 rounded-xl shadow">
-
-        <h2 class="font-semibold mb-3 text-slate-300">News</h2>
-
-            <p id="noticias-estado" class="mb-3 text-xs text-slate-400">Cargando noticias...</p>
-
-            <div id="noticias-lista" class="space-y-2 text-sm text-slate-300">
-
-        <p>Factory completed</p>
-        <p>Population reached 150</p>
-        <p>Energy production increased</p>
-
-        </div>
-
-        </div>
-
-        </aside>
+            </aside>
 
         </div>
 
