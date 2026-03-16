@@ -8,7 +8,7 @@ class PlantaAgua extends PlantaUtilidad {
     /**
      * @param {number} costo - Costo de construcción de la planta de agua
      */
-    constructor(costo) {
+    constructor(costo=8000) {
         super(costo);
     }
 
@@ -17,26 +17,27 @@ class PlantaAgua extends PlantaUtilidad {
      * @returns {number} La cantidad de agua producida por turno
      */
     produccionXTurno() {
-        // Implementación específica para planta de agua
-        return 100; // Valor por defecto, puede ser modificado según lógica del juego
+        return 0; // Valor por defecto, puede ser modificado según lógica del juego
+    }
+
+    produccionAgua(){//Produccion por turno
+        return 150;
     }
 
     /**
      * Implementación del método consumoAgua
      * @returns {number} La cantidad de agua consumida
      */
-    consumoAgua() {
-        // Las plantas de agua producen más de lo que consumen
-        return 5; // Valor por defecto
+    consumoAgua() {//Consumo por turno
+        return 0; // Valor por defecto
     }
 
     /**
      * Implementación del método consumoElectricidad
      * @returns {number} La cantidad de electricidad consumida
      */
-    consumoElectricidad() {
-        // Las plantas de agua necesitan electricidad para bombear
-        return 30; // Valor por defecto
+    consumoElectricidad() {//Consumo por turno
+        return 20; // Valor por defecto
     }
 }
 

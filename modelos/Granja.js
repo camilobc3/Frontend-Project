@@ -9,7 +9,7 @@ class Granja extends EdificioIndustrial {
      * @param {number} costo - Costo de construcción de la granja
      * @param {number} numeroEmpleos - Número de empleos que genera
      */
-    constructor(costo, numeroEmpleos) {
+    constructor(costo=3000, numeroEmpleos=8) {
         super(costo, numeroEmpleos);
     }
 
@@ -19,23 +19,27 @@ class Granja extends EdificioIndustrial {
      */
     produccionXTurno() {
         // Implementación específica para granja
-        return 120; // Valor por defecto
+        return 0;
+    }
+
+    produccionAlimento(){ //Produccion por turno
+        return 50;
     }
 
     /**
      * Implementación del método consumoAgua
      * @returns {number} La cantidad de agua consumida
      */
-    consumoAgua() {
-        return 80; // Las granjas consumen mucha agua para irrigación
+    consumoAgua() {//Consumo por turno
+        return 10;
     }
 
     /**
      * Implementación del método consumoElectricidad
      * @returns {number} La cantidad de electricidad consumida
      */
-    consumoElectricidad() {
-        return 30; // Valor por defecto
+    consumoElectricidad() { //Consumo por turno
+        return 0;
     }
 }
 

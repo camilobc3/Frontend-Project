@@ -9,7 +9,7 @@ class CentroComercial extends EdificioComercial {
      * @param {number} costo - Costo de construcción del centro comercial
      * @param {number} numeroEmpleos - Número de empleos que genera
      */
-    constructor(costo, numeroEmpleos) {
+    constructor(costo=8000, numeroEmpleos=20) {
         super(costo, numeroEmpleos);
     }
 
@@ -19,7 +19,7 @@ class CentroComercial extends EdificioComercial {
      */
     produccionXTurno() {
         // Implementación específica para centro comercial
-        return 200; // Valor por defecto - más alto que tienda
+        return 2000;
     }
 
     /**
@@ -27,7 +27,7 @@ class CentroComercial extends EdificioComercial {
      * @returns {number} La cantidad de agua consumida
      */
     consumoAgua() {
-        return 50; // Los centros comerciales consumen más agua
+        return 0;
     }
 
     /**
@@ -35,7 +35,7 @@ class CentroComercial extends EdificioComercial {
      * @returns {number} La cantidad de electricidad consumida
      */
     consumoElectricidad() {
-        return 90; // Los centros comerciales requieren mucha electricidad
+        return 25;
     }
 }
 

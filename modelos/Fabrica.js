@@ -9,7 +9,7 @@ class Fabrica extends EdificioIndustrial {
      * @param {number} costo - Costo de construcción de la fábrica
      * @param {number} numeroEmpleos - Número de empleos que genera
      */
-    constructor(costo, numeroEmpleos) {
+    constructor(costo=5000, numeroEmpleos=15) {
         super(costo, numeroEmpleos);
     }
 
@@ -19,23 +19,23 @@ class Fabrica extends EdificioIndustrial {
      */
     produccionXTurno() {
         // Implementación específica para fábrica
-        return 150; // Valor por defecto
+        return 800;
     }
 
     /**
      * Implementación del método consumoAgua
      * @returns {number} La cantidad de agua consumida
      */
-    consumoAgua() {
-        return 40; // Valor por defecto
+    consumoAgua() { //Consumo por turno
+        return 15;
     }
 
     /**
      * Implementación del método consumoElectricidad
      * @returns {number} La cantidad de electricidad consumida
      */
-    consumoElectricidad() {
-        return 100; // Las fábricas consumen mucha electricidad
+    consumoElectricidad() { //Consumo por turno
+        return 20;
     }
 }
 

@@ -16,6 +16,12 @@ class TurnoService {
     }
 
     ejecutarTurno(ciudad){
+        if(ciudad.dinero <= 0){
+            console.log("La ciudad ha quebrado. Fin del juego");
+            this.detenerTurnos();
+            return;
+        }
+
         ciudad.turno++;
         ciudad.dinero += ciudad.ingresosXTurno;
         ciudad.agua += ciudad.aguaXTurno;

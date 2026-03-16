@@ -10,7 +10,7 @@ class Ciudad {
      * @param {Mapa} miMapa - El mapa de la ciudad
      * @param {string} region - La región geográfica de la ciudad
      */
-    constructor(id, nombre, turno, miMapa = null, region) { //REVISAR SI EL MAPA SE ASIGNA EN EL CONSTRUCTOR O SE HACE DESPUES CON UN SETTER
+    constructor(id, nombre, turno=0, miMapa = null, region) { //REVISAR SI EL MAPA SE ASIGNA EN EL CONSTRUCTOR O SE HACE DESPUES CON UN SETTER
         this.id = id;
         this.nombre = nombre;
         this.turno = turno;
@@ -20,11 +20,11 @@ class Ciudad {
         this.region = region;          // La región geográfica de la ciudad
 
         this.dinero = 50000; // Dinero inicial de la ciudad
-        this.agua = 30;
-        this.electricidad = 30;
-        this.alimento = 30;
+        this.agua = 0;
+        this.electricidad = 0;
+        this.alimento = 0;
 
-        this.ingresosXTurno = 100;
+        this.ingresosXTurno = 0;
         this.electricidadXTurno = 0;
         this.aguaXTurno = 0;
         this.alimentoXTurno = 0;

@@ -10,7 +10,7 @@ class Hospital extends EdificioServicio {
      * @param {number} radio - Radio de cobertura del servicio
      * @param {number} beneficio - Beneficio que proporciona a la salud
      */
-    constructor(costo, radio, beneficio) {
+    constructor(costo=6000, radio=7, beneficio=10) {
         super(costo, radio, beneficio);
     }
 
@@ -20,23 +20,23 @@ class Hospital extends EdificioServicio {
      */
     produccionXTurno() {
         // Implementación específica para hospital
-        return 90; // Valor por defecto
+        return 0;
     }
 
     /**
      * Implementación del método consumoAgua
      * @returns {number} La cantidad de agua consumida
      */
-    consumoAgua() {
-        return 60; // Los hospitales consumen mucha agua
+    consumoAgua() { //Consumo agua por turno
+        return 10;
     }
 
     /**
      * Implementación del método consumoElectricidad
      * @returns {number} La cantidad de electricidad consumida
      */
-    consumoElectricidad() {
-        return 80; // Los hospitales requieren mucha electricidad
+    consumoElectricidad() { //Consumo electricidad por turno
+        return 20;
     }
 }
 

@@ -9,7 +9,7 @@ class Apartamento extends EdificioResidencial {
      * @param {number} costo - Costo de construcción del edificio de apartamentos
      * @param {number} capacidadVivienda - Número de habitantes que puede albergar
      */
-    constructor(costo, capacidadVivienda) {
+    constructor(costo=3000, capacidadVivienda=12) {
         super(costo, capacidadVivienda);
     }
 
@@ -19,23 +19,23 @@ class Apartamento extends EdificioResidencial {
      */
     produccionXTurno() {
         // Implementación específica para apartamento
-        return 80; // Valor por defecto - más alto que casa por tener más unidades
+        return 0;
     }
 
     /**
      * Implementación del método consumoAgua
      * @returns {number} La cantidad de agua consumida
      */
-    consumoAgua() {
-        return 70; // Los apartamentos consumen más agua por tener más habitantes
+    consumoAgua() {//Consumo agua por turno
+        return 10;
     }
 
     /**
      * Implementación del método consumoElectricidad
      * @returns {number} La cantidad de electricidad consumida
      */
-    consumoElectricidad() {
-        return 60; // Los apartamentos consumen más electricidad
+    consumoElectricidad() {//consumo electricidad por turno
+        return 15;
     }
 }
 

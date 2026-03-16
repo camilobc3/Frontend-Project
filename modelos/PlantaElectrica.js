@@ -8,7 +8,7 @@ class PlantaElectrica extends PlantaUtilidad {
     /**
      * @param {number} costo - Costo de construcción de la planta eléctrica
      */
-    constructor(costo) {
+    constructor(costo=10000) {
         super(costo);
     }
 
@@ -18,25 +18,27 @@ class PlantaElectrica extends PlantaUtilidad {
      */
     produccionXTurno() {
         // Implementación específica para planta eléctrica
-        return 100; // Valor por defecto, puede ser modificado según lógica del juego
+        return 0; // Valor por defecto, puede ser modificado según lógica del juego
+    }
+
+    produccionElectricidad(){//Produccion por turno
+        return 200;
     }
 
     /**
      * Implementación del método consumoAgua
      * @returns {number} La cantidad de agua consumida
      */
-    consumoAgua() {
-        // Las plantas eléctricas consumen agua para enfriamiento
-        return 50; // Valor por defecto
+    consumoAgua() {//Consumo por turno
+        return 0; // Valor por defecto
     }
 
     /**
      * Implementación del método consumoElectricidad
      * @returns {number} La cantidad de electricidad consumida
      */
-    consumoElectricidad() {
-        // Las plantas eléctricas producen más de lo que consumen
-        return 10; // Valor por defecto
+    consumoElectricidad() { //Consumo por turno
+        return 0; // Valor por defecto
     }
 }
 

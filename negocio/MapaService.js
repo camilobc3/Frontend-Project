@@ -6,6 +6,11 @@ import {
     PlantaElectrica, PlantaAgua, Parque
 } from "/modelos/index.js";
 //import StorageMapa from "/acceso_datos/StorageMapa.js";
+
+import{
+    CiudadService
+}from "./index.js";
+
 class MapaService {
     mapa = Mapa.matriz; // Matriz del mapa
     tipoEdificio(tipo){
@@ -57,6 +62,7 @@ class MapaService {
     }
 
     construirEdificio(ciudad, mapa, fila, columna, tipo){
+        let ciudadService = new CiudadService();
         let edificio = this.tipoEdificio(tipo);
 
         if(edificio === null){
@@ -69,7 +75,18 @@ class MapaService {
             return validacion;
         }
 
-        ciudad.dinero -= edificio.costo;
+        if(edificio instanceof Camino || edificio instanceof Parque){
+            ciudad.dinero -= edificio.costo;
+
+        }
+        else{
+            ciudad.dinero -= edificio.costo;
+            ciudad.electricidad -= edificio.consumoElectricidad;
+            ciudad.agua -= edificio.consumoAgua;
+        }
+        
+        ciudadService.actualizarRecursoXTurno(ciudad, edificio);
+
         mapa[fila][columna] = edificio;
         ciudad.misEdificios.push(edificio);
 

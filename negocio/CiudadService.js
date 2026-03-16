@@ -322,8 +322,8 @@ class CiudadService {
                 ciudad.ingresosXTurno += edificio.produccionXTurno();
                 ciudad.electricidadXTurno -= edificio.consumoElectricidad();
                 ciudad.aguaXTurno -= edificio.consumoAgua();
-            } else { // Granja
-                ciudad.alimentoXTurno += edificio.produccionXTurno();
+            } else if (edificio instanceof Granja){ // Granja
+                ciudad.alimentoXTurno += edificio.produccionAlimento();
                 ciudad.aguaXTurno -= edificio.consumoAgua();
             }
         } else if (edificio instanceof EdificioServicio) {
@@ -333,9 +333,9 @@ class CiudadService {
             }
         } else if (edificio instanceof PlantaUtilidad) {
             if (edificio instanceof PlantaElectrica) {
-                ciudad.electricidadXTurno += edificio.produccionXTurno();
-            } else { // PlantaAgua
-                ciudad.aguaXTurno += edificio.produccionXTurno();
+                ciudad.electricidadXTurno += edificio.produccionElectricidad();
+            } else if (edificio instanceof PlantaAgua){ // PlantaAgua
+                ciudad.aguaXTurno += edificio.produccionAgua();
                 ciudad.electricidadXTurno -= edificio.consumoElectricidad();
             }
         }

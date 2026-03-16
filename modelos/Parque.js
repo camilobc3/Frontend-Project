@@ -9,7 +9,7 @@ class Parque extends Edificio {
      * @param {number} costo - Costo de construcción del parque
      * @param {number} beneficio - Beneficio que proporciona el parque
      */
-    constructor(costo, beneficio) {
+    constructor(costo=1500, beneficio=5) {
         super(costo);
         this.beneficio = beneficio;
     }

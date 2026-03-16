@@ -26,16 +26,16 @@ class Casa extends EdificioResidencial {
      * Implementación del método consumoAgua
      * @returns {number} La cantidad de agua consumida
      */
-    consumoAgua() {
-        return 25; // Valor por defecto
+    consumoAgua() { //Consumo agua por turno
+        return 3;
     }
 
     /**
      * Implementación del método consumoElectricidad
      * @returns {number} La cantidad de electricidad consumida
      */
-    consumoElectricidad() {
-        return 20; // Valor por defecto
+    consumoElectricidad() { //consumo electricidad por turno
+        return 5;
     }
 }
 

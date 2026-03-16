@@ -10,7 +10,7 @@ class EstacionPolicia extends EdificioServicio {
      * @param {number} radio - Radio de cobertura del servicio
      * @param {number} beneficio - Beneficio que proporciona a la seguridad
      */
-    constructor(costo, radio, beneficio) {
+    constructor(costo=4000, radio=5, beneficio=10) {
         super(costo, radio, beneficio);
     }
 
@@ -20,7 +20,7 @@ class EstacionPolicia extends EdificioServicio {
      */
     produccionXTurno() {
         // Implementación específica para estación de policía
-        return 80; // Valor por defecto
+        return 0; // Valor por defecto
     }
 
     /**
@@ -28,7 +28,7 @@ class EstacionPolicia extends EdificioServicio {
      * @returns {number} La cantidad de agua consumida
      */
     consumoAgua() {
-        return 20; // Valor por defecto
+        return 0; // Valor por defecto
     }
 
     /**
@@ -36,7 +36,7 @@ class EstacionPolicia extends EdificioServicio {
      * @returns {number} La cantidad de electricidad consumida
      */
     consumoElectricidad() {
-        return 40; // Valor por defecto
+        return 15; // Valor por defecto
     }
 }
 

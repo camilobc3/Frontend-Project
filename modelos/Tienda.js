@@ -9,7 +9,7 @@ class Tienda extends EdificioComercial {
      * @param {number} costo - Costo de construcción de la tienda
      * @param {number} numeroEmpleos - Número de empleos que genera
      */
-    constructor(costo, numeroEmpleos) {
+    constructor(costo=2000, numeroEmpleos=6) {
         super(costo, numeroEmpleos);
     }
 
@@ -19,23 +19,23 @@ class Tienda extends EdificioComercial {
      */
     produccionXTurno() {
         // Implementación específica para tienda
-        return 60; // Valor por defecto
+        return 500;
     }
 
     /**
      * Implementación del método consumoAgua
      * @returns {number} La cantidad de agua consumida
      */
-    consumoAgua() {
-        return 15; // Valor por defecto
+    consumoAgua() { //Consumo por turno
+        return 0;
     }
 
     /**
      * Implementación del método consumoElectricidad
      * @returns {number} La cantidad de electricidad consumida
      */
-    consumoElectricidad() {
-        return 25; // Valor por defecto
+    consumoElectricidad() {//Consumo por turno
+        return 8;
     }
 }
 
