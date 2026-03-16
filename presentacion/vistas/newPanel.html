@@ -101,8 +101,13 @@
                         <button id="btnZoomIn" class="bg-slate-700 hover:bg-indigo-600 rounded-lg px-3 py-1">+</button>
                         <button id="btnZoomOut" class="bg-slate-700 hover:bg-indigo-600 rounded-lg px-3 py-1">-</button>
                     </div>
-                    <div id="gameMap"
-                         class="w-full h-[360px] md:h-[560px] lg:h-[700px] mx-auto bg-slate-800 border border-slate-600 rounded-xl shadow-2xl">
+
+                    <!-- ✅ Contenedor visual con Tailwind -->
+                    <div class="w-full h-[360px] md:h-[560px] lg:h-[700px] mx-auto bg-slate-800 border border-slate-600 rounded-xl shadow-2xl overflow-auto p-2">
+                        
+                        <!-- ✅ gameMap limpio sin clases de Tailwind — el controller aplica el grid aquí -->
+                        <div id="gameMap"></div>
+
                     </div>
                 </div>
 
@@ -181,11 +186,7 @@
 
         </div>
 
-        <script src="../../config.js"></script>
-        <script src="../../modelos/Noticia.js"></script>
-        <script src="../../acceso_datos/NoticiasRepository.js"></script>
-        <script src="../../negocio/NoticiaService.js"></script>
-        <script src="../../controllers/NoticiaController.js"></script>
+        <script type="module" src="../../controllers/NoticiaController.js"></script>
 
     </body>
 </html>

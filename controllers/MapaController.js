@@ -54,14 +54,19 @@ function renderizarMapa() {
         return;
     }
 
-    // Renderiza la misma matriz en cada contenedor
     contenedores.forEach(contenedorMapa => {
         contenedorMapa.innerHTML = "";
+
+        // ✅ Aplicar grid al contenedor
+        contenedorMapa.style.display = "grid";
+        contenedorMapa.style.gridTemplateColumns = `repeat(${mapaActual[0].length}, 26px)`;
+        contenedorMapa.style.gap = "1px";
+        contenedorMapa.style.width = "max-content";
 
         for (let fila = 0; fila < mapaActual.length; fila++) {
             for (let columna = 0; columna < mapaActual[fila].length; columna++) {
                 const celda = document.createElement("div");
-                celda.className = "map-cell";
+                celda.className = "h-[26px] w-[26px] rounded border border-slate-700 bg-slate-800 text-[10px] text-slate-200 grid place-items-center";
                 celda.dataset.fila = fila;
                 celda.dataset.columna = columna;
 

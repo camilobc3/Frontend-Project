@@ -1,6 +1,6 @@
 // acceso_datos/noticiasRepository.js
 
-class NoticiasRepository {
+export default class NoticiasRepository {
 
     constructor(apiKey, baseUrl = "https://newsapi.org/v2/top-headlines") {
         this.apiKey  = apiKey;

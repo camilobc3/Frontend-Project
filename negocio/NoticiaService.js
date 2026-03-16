@@ -1,6 +1,8 @@
 // negocio/NoticiaService.js
 
-class NoticiaService {
+import Noticia from "../modelos/Noticia.js";
+
+export default class NoticiaService {
 
     constructor(noticiasRepository) {
         this.repo = noticiasRepository;

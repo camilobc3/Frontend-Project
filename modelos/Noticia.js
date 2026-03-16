@@ -1,6 +1,6 @@
 // modelos/Noticia.js
 
-class Noticia {
+export default class Noticia {
     constructor(titulo, descripcion, urlImagen, urlNoticia, fechaPublicacion, fuente) {
         this.titulo          = titulo          || "Sin título";
         this.descripcion     = descripcion     || "Sin descripción";

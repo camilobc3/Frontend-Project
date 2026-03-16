@@ -1,9 +1,10 @@
-import Ciudadano from "../modelos/Ciudadano.js";
+import StorageCiudad from "../acceso_datos/StorageCiudad.js";
+
 // ✅ Se eliminó: import CiudadService from "./CiudadService.js" — causaba el ciclo
 
 class CiudadanoService {
 
-    // ✅ Se eliminó el constructor con new CiudadService() — causaba el ciclo
+    // ✅ Se eliminó el constructor con new CiudadService) — causaba el ciclo
 
     // ─── READ ALL ────────────────────────────────────────────────────────────
     cargarCiudadanos() {

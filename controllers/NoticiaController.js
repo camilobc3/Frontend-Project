@@ -1,3 +1,7 @@
+import { NEWS_API_KEY } from "../config.js";
+import NoticiasRepository from "../acceso_datos/noticiasRepository.js";
+import NoticiaService from "../negocio/NoticiaService.js";
+
 document.addEventListener("DOMContentLoaded", function () {
     var codigoPais = "us";
     var intervaloMs = 30 * 60 * 1000;

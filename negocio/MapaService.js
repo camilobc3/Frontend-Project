@@ -125,6 +125,13 @@ class MapaService {
         return mapa[fila][columna] === null;
     }
 
+    esCamino(celda) {
+        if (celda instanceof Camino) return true;
+        if (!celda || typeof celda !== "object") return false;
+        const tipo = (celda.__tipo || celda.tipo || celda.constructor?.name || "").toString().toLowerCase();
+        return tipo === "camino";
+    }
+
     hayViaAdyacente(mapa, fila, columna) {
         const direcciones = [
             [-1, 0], // arriba
@@ -140,7 +147,7 @@ class MapaService {
             if (nuevaFila >= 0 && nuevaFila < mapa.length && 
                 nuevaColumna >= 0 && nuevaColumna < mapa[0].length) {
                 
-                if (mapa[nuevaFila][nuevaColumna] instanceof Camino) {
+                if (this.esCamino(mapa[nuevaFila][nuevaColumna])) {
                     return true;
                 }
             }
