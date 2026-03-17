@@ -2,6 +2,21 @@
 import MapaService from "/negocio/MapaService.js";
 import CiudadService from "/negocio/CiudadService.js";
 
+// Importar todos los controllers para registrar sus funciones
+import "./CasaController.js";
+import "./ApartamentoController.js";
+import "./FabricaController.js";
+import "./TiendaController.js";
+import "./GranjaController.js";
+import "./HospitalController.js";
+import "./CentroComercialController.js";
+import "./CaminoController.js";
+import "./EstacionBomberoController.js";
+import "./EstacionPoliciaController.js";
+import "./ParqueController.js";
+import "./PlantaAguaController.js";
+import "./PlantaElectricaController.js";
+
 document.addEventListener("DOMContentLoaded", function () {
     console.log("DOM cargado - MapaController");
 
@@ -12,6 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Variables globales
     let ciudadActual = null;
     let mapaActual = null;
+    window.modoConstruccion = null; // Variable para indicar si estamos en modo construcción
 
     // Función para cargar la ciudad
     function cargarCiudad(ciudadId) {
@@ -27,12 +43,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Función para construir un edificio
     function construirEdificio(fila, columna, tipo) {
+        console.log(`Construyendo ${tipo} en fila ${fila}, columna ${columna}`);
         const resultado = mapaService.construirEdificio(ciudadActual, mapaActual, fila, columna, tipo);
         
         if (resultado.ok) {
             console.log(resultado.mensaje);
             renderizarMapa();
-            actualizarUI(ciudadActual);
+            //actualizarUI(ciudadActual);
         } else {
             console.error(resultado.mensaje);
             alert(resultado.mensaje);
@@ -40,91 +57,92 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Función para renderizar el mapa en el DOM
-// MapaController.js — reemplaza la función renderizarMapa
-function renderizarMapa() {
-    // Renderiza en los TRES contenedores a la vez
-    const contenedores = [
-        document.getElementById("gameMap"),
-        document.getElementById("gameMapTablet"),
-        document.getElementById("gameMapMobile")
-    ].filter(c => c !== null); // elimina los que no existan
+    function renderizarMapa() {
+        // Renderiza en los TRES contenedores a la vez
+        const contenedores = [
+            document.getElementById("gameMap"),
+            document.getElementById("gameMapTablet"),
+            document.getElementById("gameMapMobile")
+        ].filter(c => c !== null); // elimina los que no existan
 
-    if (contenedores.length === 0) {
-        console.error("No se encontró ningún contenedor del mapa");
-        return;
-    }
-
-    contenedores.forEach(contenedorMapa => {
-        contenedorMapa.innerHTML = "";
-
-        // ✅ Aplicar grid al contenedor
-        contenedorMapa.style.display = "grid";
-        contenedorMapa.style.gridTemplateColumns = `repeat(${mapaActual[0].length}, 26px)`;
-        contenedorMapa.style.gap = "1px";
-        contenedorMapa.style.width = "max-content";
-
-        for (let fila = 0; fila < mapaActual.length; fila++) {
-            for (let columna = 0; columna < mapaActual[fila].length; columna++) {
-                const celda = document.createElement("div");
-                celda.className = "h-[26px] w-[26px] rounded border border-slate-700 bg-slate-800 text-[10px] text-slate-200 grid place-items-center";
-                celda.dataset.fila = fila;
-                celda.dataset.columna = columna;
-
-                const contenido = mapaActual[fila][columna];
-                if (contenido === null) {
-                    celda.textContent = "•";
-                } else if (contenido instanceof Object) {
-                    celda.textContent = contenido.constructor.name.charAt(0);
-                    celda.classList.add(contenido.constructor.name.toLowerCase());
-                }
-
-                celda.addEventListener("click", () => mostrarOpciones(fila, columna));
-                contenedorMapa.appendChild(celda);
-            }
+        if (contenedores.length === 0) {
+            console.error("No se encontró ningún contenedor del mapa");
+            return;
         }
-    });
-}
-    // Función para mostrar opciones de construcción
-    function mostrarOpciones(fila, columna) {
-        const opciones = [
-            {tipo: 'R1', nombre: 'Casa'},
-            {tipo: 'R2', nombre: 'Apartamento'},
-            {tipo: 'C1', nombre: 'Tienda'},
-            {tipo: 'C2', nombre: 'Centro Comercial'},
-            {tipo: 'I1', nombre: 'Fábrica'},
-            {tipo: 'I2', nombre: 'Granja'},
-            {tipo: 'S1', nombre: 'Hospital'},
-            {tipo: 'S2', nombre: 'Estación Bomberos'},
-            {tipo: 'S3', nombre: 'Estación Policía'},
-            {tipo: 'P1', nombre: 'Parque'},
-            {tipo: 'U1', nombre: 'Planta Eléctrica'},
-            {tipo: 'U2', nombre: 'Planta Agua'},
-            {tipo: 'R', nombre: 'Camino'}
-        ];
-/* 
-        const menu = document.createElement("div");
-        menu.className = "menu-construccion";
 
-        opciones.forEach(op => {
-            const btn = document.createElement("button");
-            btn.textContent = op.nombre;
-            btn.addEventListener("click", () => {
-                construirEdificio(fila, columna, op.tipo);
-                menu.remove();
-            });
-            menu.appendChild(btn);
+        contenedores.forEach(contenedorMapa => {
+            contenedorMapa.innerHTML = "";
+
+            // ✅ Aplicar grid al contenedor
+            contenedorMapa.style.display = "grid";
+            contenedorMapa.style.gridTemplateColumns = `repeat(${mapaActual[0].length}, 26px)`;
+            contenedorMapa.style.gap = "1px";
+            contenedorMapa.style.width = "max-content";
+
+            for (let fila = 0; fila < mapaActual.length; fila++) {
+                for (let columna = 0; columna < mapaActual[fila].length; columna++) {
+                    const celda = document.createElement("div");
+                    celda.className = "h-[26px] w-[26px] rounded border border-slate-700 bg-slate-800 text-[10px] text-slate-200 grid place-items-center";
+                    celda.dataset.fila = fila;
+                    celda.dataset.columna = columna;
+
+                    const contenido = mapaActual[fila][columna];
+                    if (contenido === null) {
+                        celda.textContent = "•";
+                    } else {
+                        celda.textContent = obtenerIconoEdificio(contenido.tipo); // ✅
+                        //celda.classList.add(contenido.tipo.toLowerCase());
+                        celda.title = contenido.tipo;; // tooltip al hacer hover
+                    }
+
+                    // Manejar clicks en las celdas
+                    celda.addEventListener("click", () => {
+                        if (window.modoConstruccion) {
+                            // Si estamos en modo construcción, construir el edificio
+                            console.log(`Celda clickeada en modo construcción: ${window.modoConstruccion}`);
+                            construirEdificio(fila, columna, window.modoConstruccion);
+                            // Desactivar el modo construcción después de construir
+                            window.modoConstruccion = null;
+                        } else {
+                            // Si no, mostrar opciones
+                            mostrarOpciones(fila, columna);
+                        }
+                    });
+                    contenedorMapa.appendChild(celda);
+                }
+            }
         });
-
-        document.body.appendChild(menu); */
     }
+
+    function obtenerIconoEdificio(contenido) {
+        switch (contenido) {
+            case "R":  return "🛣️";
+            case "R1": return "🏠";
+            case "R2": return "🏢";
+            case "C1": return "🏪";
+            case "C2": return "🏬";
+            case "I1": return "🏭";
+            case "I2": return "🌾";
+            case "S1": return "🏥";
+            case "S2": return "🚒";
+            case "S3": return "🚔";
+            case "P1": return "🌳";
+            case "U1": return "⚡";
+            case "U2": return "💧";
+            default:   return "❓";
+        }
+}
 
     // Función para actualizar UI (dinero, recursos, etc)
-    function actualizarUI(ciudad) {
+/*     function actualizarUI(ciudad) {
         document.getElementById("dinero").textContent = ciudad.dinero;
         document.getElementById("electricidad").textContent = ciudad.electricidad;
         document.getElementById("agua").textContent = ciudad.agua;
         document.getElementById("poblacion").textContent = ciudad.misCiudadanos.length;
-    }
+    } */
+
+    // Exponer construirEdificio en window para que sea accesible desde otros controllers
+    window.construirEdificio = construirEdificio;
 
     // Inicializar con ciudad seleccionada desde query param
     const params = new URLSearchParams(window.location.search);

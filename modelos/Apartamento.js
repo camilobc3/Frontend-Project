@@ -11,6 +11,7 @@ class Apartamento extends EdificioResidencial {
      */
     constructor(costo=3000, capacidadVivienda=12) {
         super(costo, capacidadVivienda);
+        this.tipo = "R2";
     }
 
     /**

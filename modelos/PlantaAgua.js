@@ -10,6 +10,7 @@ class PlantaAgua extends PlantaUtilidad {
      */
     constructor(costo=8000) {
         super(costo);
+        this.tipo = "U2";
     }
 
     /**

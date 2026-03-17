@@ -11,6 +11,7 @@ class Tienda extends EdificioComercial {
      */
     constructor(costo=2000, numeroEmpleos=6) {
         super(costo, numeroEmpleos);
+        this.tipo = "C1";
     }
 
     /**

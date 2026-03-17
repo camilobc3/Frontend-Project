@@ -11,6 +11,7 @@ class Parque extends Edificio {
      */
     constructor(costo=1500, beneficio=5) {
         super(costo);
+        this.tipo = "P1";
         this.beneficio = beneficio;
     }
 }

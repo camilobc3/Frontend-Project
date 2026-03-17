@@ -11,6 +11,7 @@ class Granja extends EdificioIndustrial {
      */
     constructor(costo=3000, numeroEmpleos=8) {
         super(costo, numeroEmpleos);
+        this.tipo = "I2";
     }
 
     /**

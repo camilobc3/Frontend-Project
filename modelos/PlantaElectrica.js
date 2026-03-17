@@ -10,6 +10,7 @@ class PlantaElectrica extends PlantaUtilidad {
      */
     constructor(costo=10000) {
         super(costo);
+        this.tipo = "U1";
     }
 
     /**
