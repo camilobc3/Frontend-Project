@@ -126,6 +126,9 @@ function renderizarMapa() {
         document.getElementById("poblacion").textContent = ciudad.misCiudadanos.length;
     }
 
-    // Inicializar
-    cargarCiudad(1); // Cargar ciudad con ID 1
+    // Inicializar con ciudad seleccionada desde query param
+    const params = new URLSearchParams(window.location.search);
+    const cityIdParam = Number(params.get("cityId"));
+    const cityId = Number.isNaN(cityIdParam) ? 1 : cityIdParam;
+    cargarCiudad(cityId);
 });
