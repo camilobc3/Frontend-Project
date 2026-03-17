@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crear Cuenta</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <script type="module" src="../ui/CrearCuenta.js" defer></script>
+
+</head>
+
+<body class="bg-slate-900 flex items-center justify-center min-h-screen">
+
+  <div class="bg-slate-800 p-8 rounded-2xl shadow-xl w-96">
+
+    <div class="text-center mb-6">
+      <h1 class="text-3xl font-bold text-white">CREAR CUENTA</h1>
+      <p class="text-slate-400">Crea tu cuenta para comenzar</p>
+    </div>
+
+    <form id="crear-formulario" class="space-y-4">
+
+      <div>
+        <label class="block text-slate-300 text-sm mb-1">Nombre de alcalde</label>
+        <input id="usuario" type="text" placeholder="Nombre de alcalde" class="w-full px-4 py-2 rounded-lg bg-slate-700 text-white border border-slate-600 focus:outline-none focus:border-blue-500">
+      </div>
+
+      <div>
+        <label class="block text-slate-300 text-sm mb-1">Contraseña</label>
+        <input id="contrasena" type="password" placeholder="Contraseña" class="w-full px-4 py-2 rounded-lg bg-slate-700 text-white border border-slate-600 focus:outline-none focus:border-blue-500">
+      </div>
+
+      <div>
+        <label class="block text-slate-300 text-sm mb-1">Confirmar contraseña</label>
+        <input id="confirmar-contrasena" type="password" placeholder="Confirmar contraseña" class="w-full px-4 py-2 rounded-lg bg-slate-700 text-white border border-slate-600 focus:outline-none focus:border-blue-500">
+      </div>
+
+      <button id="crear-cuenta" class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded-lg transition">Crear cuenta</button>
+
+
+    </form>
+
+  </div>
+
+</body>
+</html>

@@ -3,23 +3,19 @@ const ciudadService = new CiudadService();
 import { obtenerRegiones } from "../api/RegionesApi.js";
 import Mapa from "../modelos/Mapa.js";
 
-    function cargarRegiones() {
-        const regionSelect = document.getElementById("region");
-        if (!regionSelect) return;
+function cargarRegiones() {
+    const regionSelect = document.getElementById("region");
+    if (!regionSelect) return;
 
-        obtenerRegiones()
-            .then(data => {
-                data.forEach(r => {
-                    const option = document.createElement("option");
-                    option.value = r.name;
-                    option.textContent = r.name;
-                    regionSelect.appendChild(option);
-                });
-            })
-            .catch(error => {
-                console.error("No se pudieron cargar regiones:", error);
+    obtenerRegiones().then(data => {data.forEach(r => {
+                const option = document.createElement("option");
+                option.value = r.name;
+                option.textContent = r.name;
+                regionSelect.appendChild(option);
             });
-    }
+        }).catch(error => {
+            console.error("No se pudieron cargar regiones:", error);});
+}
 
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -128,7 +124,8 @@ document.addEventListener("DOMContentLoaded", function () {
             const mapaInicial = new Mapa(tamanio);
             const creada = ciudadService.crearCiudad(id, nombreCiudad, turno, mapaInicial, region);
             if (creada) {
-                window.location.href = "./newPanel.html?cityId=" + id;
+               // window.location.href = "./newPanel.html?cityId=" + id;
+               window.location.href = "./menuCiudades.html";
             }
         });
     }
@@ -153,11 +150,5 @@ document.addEventListener("DOMContentLoaded", function () {
     if (btnCloseMobileMenu) btnCloseMobileMenu.addEventListener("click", cerrarMenu);
     if (sidebarOverlay)     sidebarOverlay.addEventListener("click", cerrarMenu);
 
-    // ✅ Botón nueva ciudad
-    const btnNuevaCiudad = document.getElementById("btnNuevaCiudad");
-    if (btnNuevaCiudad) {
-        btnNuevaCiudad.addEventListener("click", function () {
-            window.location.href = "./nuevaCiudad.html";
-        });
-    }
+    
 });

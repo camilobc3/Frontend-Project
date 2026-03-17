@@ -6,12 +6,12 @@ class Alcalde {
     /**
      * @param {number} id - Identificador único del alcalde
      * @param {string} nombre - Nombre del alcalde
-     * @param {string} contraseña - Contraseña del alcalde
+     * @param {string} contrasena - Contraseña del alcalde
      */
-    constructor(id, nombre, contraseña) {
+    constructor(id, nombre, contrasena) {
         this.id = id;
         this.nombre = nombre;
-        this.contraseña = contraseña;
+        this.contrasena = contrasena;
         this.misCiudades = []; // Relación 1-n con Ciudad
     }
 }

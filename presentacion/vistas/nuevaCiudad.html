@@ -1,60 +1,58 @@
 <!DOCTYPE html>
 <html lang="es">
     <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulario</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Formulario</title>
+        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+        <script type="module" src="../../api/RegionesApi.js" defer></script>    
+        <script type="module" src="../../controllers/CiudadController.js" defer></script>
     </head>
 
-    <body class="bg-gradient-to-r from-blue-100 to-indigo-200 min-h-screen flex items-center">
+    <body class="bg-slate-900 min-h-screen flex items-center">
 
-    <div class="container mx-auto px-4">
+        <div class="container mx-auto px-4">
 
-        <div class="max-w-md mx-auto bg-white rounded-2xl shadow-xl p-8">
+            <div class="max-w-md mx-auto bg-slate-800 rounded-2xl shadow-xl p-8 ">
 
-            <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Crear ciudad</h2>
-                
-            <form id="createCityForm" class="space-y-5">
-
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Nickname</label>
-                    <input id="nickname" type="text" placeholder="Tu nickname"class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400">
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Nombre de la ciudad</label>
-                        
+                <h2 class="text-2xl font-bold text-center text-white mb-6">CREAR CIUDAD</h2>
                     
-                    <input id="cityName" type="text" placeholder="Nombre de la ciudad" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400">
-                </div>
+                <form id="createCityForm" class="space-y-5">
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Tamaño del mapa</label>
-                
-                    <select id="mapSize" name="mapSize"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400">
-                        <option value="">Selecciona un tamaño</option>
-                        <option value="15x15">15 x 15</option>
-                        <option value="30x30">30 x 30</option>
-                    </select>
-                </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-300 mb-1">Nickname</label>
+                        <input id="nickname" type="text" placeholder="Nickname"class="w-full px-4 py-2 rounded-lg bg-slate-700 text-white border border-slate-600 focus:outline-none focus:border-blue-500">
+                    </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Region geografica</label>
-                    <select id="region" name="region" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400">
-                        <option value="">Regiones</option>
-                    </select>
-                </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-300 mb-1">Nombre de la ciudad</label>
+                        <input id="cityName" type="text" placeholder="Nombre de la ciudad" class="w-full px-4 py-2 rounded-lg bg-slate-700 text-white border border-slate-600 focus:outline-none focus:border-blue-500">
+                    </div>
 
-                <button type="submit" class="w-full bg-indigo-500 text-white py-2 rounded-lg font-semibold hover:bg-indigo-600 transition">Continuar</button>
-                
-            </form>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-300 mb-1">Tamaño del mapa</label>
+                        <select id="mapSize" name="mapSize"
+                            class="w-full px-4 py-2 rounded-lg bg-slate-700 border text-slate-300 border-slate-600 focus:outline-none focus:border-blue-500">
+                            <option value="">Selecciona un tamaño</option>
+                            <option value="15x15">15 x 15</option>
+                            <option value="30x30">30 x 30</option>
+                        </select>
+                    </div>
 
-        </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-300 mb-1">Region geografica</label>
+                        <select id="region" name="region" class="w-full px-4 py-2 rounded-lg bg-slate-700 text-slate-300 border border-slate-600 focus:outline-none focus:border-blue-500">
+                            <option value=""">Seleciona una region</option>
+                        </select>
+                    </div>
 
-    </div>   
-     <script type="module" src="../../api/RegionesApi.js"></script>    
-     <script type="module" src="../../controllers/CiudadController.js"></script>
+                    <button id="Crear-ciudad" type="submit" class="w-full bg-green-600 text-white py-2 rounded-lg font-semibold hover:bg-green-700 transition">Crear ciudad</button>
+                    
+                </form>
+
+            </div>
+
+        </div>   
+     
     </body>
 </html>
