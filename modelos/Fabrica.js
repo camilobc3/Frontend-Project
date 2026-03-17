@@ -11,6 +11,7 @@ class Fabrica extends EdificioIndustrial {
      */
     constructor(costo=5000, numeroEmpleos=15) {
         super(costo, numeroEmpleos);
+        this.tipo = "I1";
     }
 
     /**

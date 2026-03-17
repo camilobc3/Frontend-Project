@@ -12,6 +12,7 @@ class EstacionPolicia extends EdificioServicio {
      */
     constructor(costo=4000, radio=5, beneficio=10) {
         super(costo, radio, beneficio);
+        this.tipo = "S3";
     }
 
     /**

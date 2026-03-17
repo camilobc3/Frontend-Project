@@ -11,6 +11,7 @@ class Casa extends EdificioResidencial {
      */
     constructor(costo=1000, capacidadVivienda=4) {
         super(costo, capacidadVivienda);
+        this.tipo = "R1";
     }
 
     /**

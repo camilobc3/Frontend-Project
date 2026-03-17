@@ -11,6 +11,7 @@ class CentroComercial extends EdificioComercial {
      */
     constructor(costo=8000, numeroEmpleos=20) {
         super(costo, numeroEmpleos);
+        this.tipo = "C2";
     }
 
     /**

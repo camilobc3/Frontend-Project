@@ -11,6 +11,7 @@ class Camino extends Edificio {
      */
     constructor(costo=100, beneficio=0) {
         super(costo);
+        this.tipo = "R";
         this.beneficio = beneficio;
     }
 }

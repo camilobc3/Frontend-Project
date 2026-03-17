@@ -57,11 +57,19 @@
                 <div class="bg-slate-800 p-4 rounded-xl shadow">
                     <h2 class="font-semibold mb-3 text-slate-300">Build</h2>
                     <div class="grid grid-cols-2 gap-2">
-                        <button class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3">🏠 House</button>
-                        <button class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3">🏭 Factory</button>
-                        <button class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3">🏪 Store</button>
-                        <button class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3">🌾 Farm</button>
-                        <button class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3 col-span-2">🏢 Apartment</button>
+                        <button id="btn-casa-desktop" class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3">🏠 House</button>
+                        <button id="btn-apartamento-desktop" class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3">🏢 Apart.</button>
+                        <button id="btn-fabrica-desktop" class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3">🏭 Factory</button>
+                        <button id="btn-tienda-desktop" class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3">🏪 Store</button>
+                        <button id="btn-granja-desktop" class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3">🌾 Farm</button>
+                        <button id="btn-hospital-desktop" class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3">🏥 Hosp.</button>
+                        <button id="btn-centrocomercial-desktop" class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3">🛍️ Mall</button>
+                        <button id="btn-camino-desktop" class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3">🛣️ Road</button>
+                        <button id="btn-estacionbombero-desktop" class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3">🚒 F.Dept</button>
+                        <button id="btn-estacionpolicia-desktop" class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3">🚔 P.Dept</button>
+                        <button id="btn-parque-desktop" class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3">🌳 Park</button>
+                        <button id="btn-plantaagua-desktop" class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3">💧 Water</button>
+                        <button id="btn-plantaelectrica-desktop" class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3">⚡ Power</button>
                     </div>
                 </div>
 
@@ -118,21 +126,37 @@
                 -->
                 <div class="w-full lg:hidden bg-slate-800 p-4 rounded-xl shadow">
                     <h2 class="font-semibold mb-3 text-slate-300 text-sm">Build</h2>
-                    <!-- Móvil: solo emojis -->
+                    <!-- Móvil: solo emojis (3 filas) -->
                     <div class="grid grid-cols-5 gap-2 md:hidden">
-                        <button class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-2 text-xl">🏠</button>
-                        <button class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-2 text-xl">🏭</button>
-                        <button class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-2 text-xl">🏪</button>
-                        <button class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-2 text-xl">🌾</button>
-                        <button class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-2 text-xl">🏢</button>
+                        <button id="btn-casa" class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-2 text-xl">🏠</button>
+                        <button id="btn-apartamento" class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-2 text-xl">🏢</button>
+                        <button id="btn-fabrica" class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-2 text-xl">🏭</button>
+                        <button id="btn-tienda" class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-2 text-xl">🏪</button>
+                        <button id="btn-granja" class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-2 text-xl">🌾</button>
+                        <button id="btn-hospital" class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-2 text-xl">🏥</button>
+                        <button id="btn-centrocomercial" class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-2 text-xl">🛍️</button>
+                        <button id="btn-camino" class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-2 text-xl">🛣️</button>
+                        <button id="btn-estacionbombero" class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-2 text-xl">🚒</button>
+                        <button id="btn-estacionpolicia" class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-2 text-xl">🚔</button>
+                        <button id="btn-parque" class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-2 text-xl">🌳</button>
+                        <button id="btn-plantaagua" class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-2 text-xl">💧</button>
+                        <button id="btn-plantaelectrica" class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-2 text-xl">⚡</button>
                     </div>
-                    <!-- Tablet: emoji + texto -->
+                    <!-- Tablet: emoji + texto (3 filas) -->
                     <div class="hidden md:grid grid-cols-5 gap-2">
-                        <button class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3 text-sm">🏠 House</button>
-                        <button class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3 text-sm">🏭 Factory</button>
-                        <button class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3 text-sm">🏪 Store</button>
-                        <button class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3 text-sm">🌾 Farm</button>
-                        <button class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3 text-sm">🏢 Apartment</button>
+                        <button id="btn-casa-tablet" class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3 text-sm">🏠 House</button>
+                        <button id="btn-apartamento-tablet" class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3 text-sm">🏢 Apart.</button>
+                        <button id="btn-fabrica-tablet" class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3 text-sm">🏭 Factory</button>
+                        <button id="btn-tienda-tablet" class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3 text-sm">🏪 Store</button>
+                        <button id="btn-granja-tablet" class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3 text-sm">🌾 Farm</button>
+                        <button id="btn-hospital-tablet" class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3 text-sm">🏥 Hosp.</button>
+                        <button id="btn-centrocomercial-tablet" class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3 text-sm">🛍️ Mall</button>
+                        <button id="btn-camino-tablet" class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3 text-sm">🛣️ Road</button>
+                        <button id="btn-estacionbombero-tablet" class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3 text-sm">🚒 F.Dept</button>
+                        <button id="btn-estacionpolicia-tablet" class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3 text-sm">🚔 P.Dept</button>
+                        <button id="btn-parque-tablet" class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3 text-sm">🌳 Park</button>
+                        <button id="btn-plantaagua-tablet" class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3 text-sm">💧 Water</button>
+                        <button id="btn-plantaelectrica-tablet" class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3 text-sm">⚡ Power</button>
                     </div>
                 </div>
 

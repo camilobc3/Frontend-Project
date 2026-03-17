@@ -12,6 +12,7 @@ class Hospital extends EdificioServicio {
      */
     constructor(costo=6000, radio=7, beneficio=10) {
         super(costo, radio, beneficio);
+        this.tipo = "S1";
     }
 
     /**
