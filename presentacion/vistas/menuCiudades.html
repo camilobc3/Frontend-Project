@@ -1,150 +1,123 @@
 <!DOCTYPE html>
-<html lang="es" data-bs-theme="dark">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=5.0">
     <title>Seleccionar Ciudad - City Builder</title>
     
-    <!-- Bootstrap 5.3 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <script type="module" src="../../controllers/CiudadController.js" defer></script>
     <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
-    
-    <!-- Menu Ciudades Styles -->
-    <link rel="stylesheet" href="../estilos/menuCiudades.css">
 </head>
-<body>
+<body class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white font-[Exo_2] min-h-screen">
     <!-- ======================= NAVBAR SUPERIOR ======================= -->
-    <nav class="navbar navbar-expand-lg navbar-dark navbar-top">
-        <div class="container-fluid">
-            <!-- Botón Hamburguesa -->
-            <button class="navbar-toggler me-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMobile">
-                <i class="bi bi-list"></i>
+    <nav class="bg-slate-900/80 backdrop-blur-lg border-b border-slate-700">
+        <div class="flex items-center justify-between px-4 py-4">
+            <!-- Botón Hamburguesa (solo móvil) -->
+            <button id="btnMobileMenu" class="md:hidden text-xl hover:text-indigo-400 transition">
+                ☰
             </button>
             
             <!-- Título -->
-            <span class="navbar-brand mb-0 h1">
-                <i class="bi bi-building"></i> City Builder
+            <span class="text-2xl font-bold flex items-center gap-2">
+                🏢 City Builder
             </span>
+            
+            <div class="w-8"></div>
         </div>
     </nav>
 
     <!-- ======================= CONTENEDOR PRINCIPAL ======================= -->
-    <div class="main-container">
+    <div class="flex min-h-screen">
         
         <!-- ======================= SIDEBAR IZQUIERDO (DESKTOP) ======================= -->
-        <aside class="sidebar sidebar-desktop" id="sidebar">
+        <aside class="hidden md:flex md:w-64 flex-col p-6 space-y-6 bg-slate-900/60 backdrop-blur-lg border-r border-slate-700">
             <!-- Avatar Circular -->
-            <div class="avatar-container">
-                <div class="avatar" id="avatarUsuario">
-                    <i class="bi bi-person-circle"></i>
-                </div>
+            <div class="w-24 h-24 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-4xl mx-auto">
+                👤
             </div>
             
             <!-- Nombre de Usuario -->
-            <div class="user-info">
-                <h4 class="username" id="nombreUsuario">Jugador 1</h4>
+            <div>
+                <h4 class="text-xl font-bold text-center" id="nombreUsuario">Jugador 1</h4>
             </div>
             
             <!-- Información adicional del usuario -->
-            <div class="user-stats">
-                <div class="stat-item">
-                    <span class="stat-label">Ciudades:</span>
-                    <span class="stat-value" id="ciudadCount">3</span>
+            <div class="bg-slate-800/50 p-4 rounded-lg space-y-2">
+                <div class="flex justify-between">
+                    <span class="text-slate-400">Ciudades:</span>
+                    <span class="font-bold text-indigo-400" id="ciudadCount">3</span>
                 </div>
-                <div class="stat-item">
-                    <span class="stat-label">Nivel:</span>
-                    <span class="stat-value" id="userLevel">5</span>
+                <div class="flex justify-between">
+                    <span class="text-slate-400">Nivel:</span>
+                    <span class="font-bold text-indigo-400" id="userLevel">5</span>
                 </div>
             </div>
         </aside>
 
         <!-- ======================= SIDEBAR OFFCANVAS (MOBILE) ======================= -->
-        <div class="offcanvas offcanvas-start offcanvas-sidebar" tabindex="-1" id="sidebarMobile">
-            <div class="offcanvas-header">
-                <h5 class="offcanvas-title">Perfil</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
-            </div>
-            <div class="offcanvas-body">
-                <div class="avatar-container">
-                    <div class="avatar" id="avatarUsuarioMobile">
-                        <i class="bi bi-person-circle"></i>
+        <div id="sidebarMobile" class="fixed inset-0 z-40 transform -translate-x-full transition-transform duration-300 md:hidden">
+            <!-- Overlay -->
+            <div id="sidebarOverlay" class="absolute inset-0 bg-black/50"></div>
+            
+            <!-- Panel -->
+            <div class="absolute left-0 top-0 w-64 h-full bg-slate-900/95 backdrop-blur-lg border-r border-slate-700 overflow-y-auto">
+                <div class="p-6 space-y-6">
+                    <div class="flex items-center justify-between">
+                        <h5 class="text-lg font-bold">Perfil</h5>
+                        <button id="btnCloseMobileMenu" class="text-2xl hover:text-indigo-400">✕</button>
                     </div>
-                </div>
-                <div class="user-info">
-                    <h4 class="username" id="nombreUsuarioMobile">Jugador 1</h4>
-                </div>
-                <div class="user-stats">
-                    <div class="stat-item">
-                        <span class="stat-label">Ciudades:</span>
-                        <span class="stat-value" id="ciudadCountMobile">3</span>
+                    
+                    <div class="w-20 h-20 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-3xl mx-auto">
+                        👤
                     </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Nivel:</span>
-                        <span class="stat-value" id="userLevelMobile">5</span>
+                    
+                    <div>
+                        <h4 class="text-lg font-bold text-center" id="nombreUsuarioMobile">Jugador 1</h4>
+                    </div>
+                    
+                    <div class="bg-slate-800/50 p-4 rounded-lg space-y-2">
+                        <div class="flex justify-between">
+                            <span class="text-slate-400">Ciudades:</span>
+                            <span class="font-bold text-indigo-400" id="ciudadCountMobile">3</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-400">Nivel:</span>
+                            <span class="font-bold text-indigo-400" id="userLevelMobile">5</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- ======================= ÁREA PRINCIPAL CON GRILLA ======================= -->
-        <main class="main-content">
+        <main class="flex-1 p-6 md:p-8">
             <!-- Encabezado de la sección -->
-            <div class="content-header">
-                <h2>Selecciona una ciudad</h2>
-                <p class="text-muted">O crea una nueva para comenzar</p>
+            <div class="mb-8">
+                <h2 class="text-4xl font-bold mb-2">Selecciona una ciudad</h2>
+                <p class="text-slate-400">O crea una nueva para comenzar</p>
             </div>
 
             <!-- Grilla de Ciudades -->
-            <div class="ciudades-grid-container">
-                <div class="grid-wrapper" id="gridCiudades">
-                    
-                    <!-- Tarjeta de Ciudad 1 -->
-                    <div class="ciudad-card">
-                        <div class="ciudad-card-image">
-                            <img src="https://via.placeholder.com/250x250/4a6fa5/ffffff?text=Ciudad+1" alt="Ciudad 1">
-                        </div>
-                        <div class="ciudad-card-name">Gran Metropolis</div>
-                    </div>
-
-                    <!-- Tarjeta de Ciudad 2 -->
-                    <div class="ciudad-card">
-                        <div class="ciudad-card-image">
-                            <img src="https://via.placeholder.com/250x250/2d5016/ffffff?text=Ciudad+2" alt="Ciudad 2">
-                        </div>
-                        <div class="ciudad-card-name">Villa Verde</div>
-                    </div>
-
-                    <!-- Tarjeta de Ciudad 3 -->
-                    <div class="ciudad-card">
-                        <div class="ciudad-card-image">
-                            <img src="https://via.placeholder.com/250x250/8b5a3c/ffffff?text=Ciudad+3" alt="Ciudad 3">
-                        </div>
-                        <div class="ciudad-card-name">Puerto Dorado</div>
-                    </div>
+            <div class="w-full">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="gridCiudades">
 
                     <!-- Tarjeta Nueva Ciudad (+) -->
-                    <div class="ciudad-card" id="btnNuevaCiudad">
-                        <div class="ciudad-card-image ciudad-card-crear">
-                            <div class="crear-icon">
-                                <i class="bi bi-plus"></i>
-                            </div>
+                    <div id="btnNuevaCiudad" class="group cursor-pointer rounded-xl overflow-hidden bg-slate-800/50 border-2 border-dashed border-slate-600 hover:border-indigo-500 hover:bg-slate-800 transition-all duration-300 flex items-center justify-center min-h-[224px]">
+                        <div class="text-center">
+                            <div class="text-5xl mb-2">+</div>
+                            <div class="text-center font-semibold text-lg">Nueva Ciudad</div>
                         </div>
-                        <div class="ciudad-card-name">Nueva Ciudad</div>
                     </div>
 
                 </div>
             </div>
         </main>
     </div>
-
-    <!-- Bootstrap 5.3 JS Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
