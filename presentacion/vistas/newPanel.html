@@ -9,6 +9,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="../estilos/noticia.css">
         <script type="module" src="../../controllers/MapaController.js"></script>
+        <script type="module" src="../ui/panel.js"></script>
 
     </head>
 
@@ -182,20 +183,44 @@
                      Tablet: grid de 2 columnas para aprovechar el espacio extra
                 -->
                 <div class="bg-slate-800 p-4 rounded-xl shadow">
-                    <h2 class="font-semibold mb-3 text-slate-300">City Stats</h2>
+                    <h2 class="font-semibold mb-3 text-slate-300">Estadisticas</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-2 text-sm">
+
                         <div class="flex justify-between md:flex-col md:bg-slate-700/50 md:rounded-lg md:p-2 lg:flex-row lg:bg-transparent lg:p-0">
-                            <span class="text-slate-400">Happiness</span>
-                            <span class="font-semibold">85%</span>
+                            <span class="text-slate-400">Poblacion</span>
+                            <span class="font-semibold text-green-600" id="por-poblacion">0</span>
                         </div>
+
                         <div class="flex justify-between md:flex-col md:bg-slate-700/50 md:rounded-lg md:p-2 lg:flex-row lg:bg-transparent lg:p-0">
-                            <span class="text-slate-400">Employment</span>
-                            <span class="font-semibold">92%</span>
+                            <span class="text-slate-400">Felicidad</span>
+                            <span class="font-semibold text-green-600" id="por-felicidad">0</span>
                         </div>
-                        <div class="flex justify-between md:flex-col md:bg-slate-700/50 md:rounded-lg md:p-2 lg:flex-row lg:bg-transparent lg:p-0 md:col-span-2 lg:col-span-1">
-                            <span class="text-slate-400">Total Buildings</span>
-                            <span id="buildingCountDesktop" class="font-semibold">5</span>
+
+                        <div class="flex justify-between md:flex-col md:bg-slate-700/50 md:rounded-lg md:p-2 lg:flex-row lg:bg-transparent lg:p-0">
+                            <span class="text-slate-400">Edificios</span>
+                            <span class="font-semibold text-green-600" id="por-edificios">0</span>
                         </div>
+
+                        <div class="flex justify-between md:flex-col md:bg-slate-700/50 md:rounded-lg md:p-2 lg:flex-row lg:bg-transparent lg:p-0">
+                            <span class="text-slate-400">Recursos</span>
+                            <span class="font-semibold text-green-600" id="por-recursos">0</span>
+                        </div>
+
+                        <div class="flex justify-between md:flex-col md:bg-slate-700/50 md:rounded-lg md:p-2 lg:flex-row lg:bg-transparent lg:p-0">
+                            <span class="text-slate-400">Bonificaciones</span>
+                            <span class="font-semibold text-green-600" id="por-bonificaciones">0</span>
+                        </div>
+
+                        <div class="flex justify-between md:flex-col md:bg-slate-700/50 md:rounded-lg md:p-2 lg:flex-row lg:bg-transparent lg:p-0">
+                            <span class="text-slate-400">Penalizaciones</span>
+                            <span class="font-semibold text-red-600" id="por-penalizaciones">0</span>
+                        </div>
+
+                        <div class="flex justify-between md:flex-col md:bg-slate-700/50 md:rounded-lg md:p-2 lg:flex-row lg:bg-transparent lg:p-0">
+                            <span class="text-slate-400">Puntuacion total</span>
+                            <span class="font-semibold" id="puntuacion-total">0</span>
+                        </div>
+                        
                     </div>
                 </div>
 

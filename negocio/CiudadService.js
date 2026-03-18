@@ -19,6 +19,7 @@ import {
 } from "../modelos/index.js";
 
 
+
 import {
     noticiasRepository,
     StorageAlcalde,
@@ -277,36 +278,104 @@ class CiudadService {
         this.actualizarCiudadCompleta(ciudad); // ✅ usar this.
     }
 
-    // ─── PUNTUACIÓN ──────────────────────────────────────────────────────────
+    calcularPuntuacion(ciudad) {
 
-    // ✅ ciudadanoService se recibe como parámetro
-    calcularPuntuacion(ciudad, ciudadanoService) {
-        const felicidad = this.promedioFelicidadCiudad(ciudad, ciudadanoService);
-        const empleados = this.numeroCiudadanosEmpleados(ciudad, ciudadanoService);
-        const desempleados = this.numeroCiudadanosDesempleados(ciudad, ciudadanoService);
+        // Variables que aportan constantemente a la puntuacion [IMPORTANTE]
 
-        let puntuacion =
-            ciudad.misCiudadanos.length * 10 +
-            ciudad.dinero / 100 +
-            ciudad.misEdificios.length * 50 +
-            ciudad.electricidad * 2 +
-            ciudad.agua * 2 +
-            felicidad;
+        let poblacion = (ciudad.misCiudadanos.length * 10);
+        let dinero = (ciudad.dinero/100);
+        let edificios = (ciudad.misEdificios.length * 50);
+        let electricidad = (ciudad.electricidad * 2);
+        let agua = (ciudad.agua * 2);
 
-        // Bonus
-        if (empleados === ciudad.misCiudadanos.length) puntuacion += 500;
-        if (felicidad > 80) puntuacion += 300;
-        if (ciudad.electricidad > 0 && ciudad.agua > 0) puntuacion += 200;
-        if (ciudad.misCiudadanos.length > 1000) puntuacion += 1000;
+        let recursos = electricidad + agua;
 
-        // Penalizaciones
-        if (ciudad.dinero < 0) puntuacion -= 500;
-        if (ciudad.electricidad < 0) puntuacion -= 300;
-        if (ciudad.agua < 0) puntuacion -= 300;
-        if (felicidad < 40) puntuacion -= 400;
-        puntuacion -= desempleados * 10;
+        let promedioFelicidad = 0;
+        
+        if (ciudad.misCiudadanos.length > 0) { 
+            for (let ciudadano of ciudad.misCiudadanos) {
+                promedioFelicidad += ciudadano.felicidad;
+            }
+        }
 
-        return puntuacion;
+        let felicidad = ((promedioFelicidad / ciudad.misCiudadanos.length) * 5);
+
+        let puntuacionFinal = poblacion + dinero + edificios + electricidad + agua + felicidad ;
+
+        // Bonus para la puntuacion
+
+        // Ciudadanos empleados
+
+        let ciudadanosEmpleados = 0;
+
+        let bonus = 0;
+
+        if (ciudad.misCiudadanos.length > 0) {
+            for (let ciudadano of ciudad.misCiudadanos) {
+                if (verificarContratoComercial(ciudadano)) {
+                    ciudadanosEmpleados += 1;
+                } 
+            }
+
+            if (ciudadanosEmpleados === ciudad.misCiudadanos.length) {
+                bonus += 500;
+            }
+        }
+
+        if (felicidad > 80) {
+            bonus += 300;
+        }
+
+        if (ciudad.electricidad > 0 && ciudad.agua > 0) {
+            bonus += 200;
+        }
+
+        if (ciudad.misCiudadanos.length > 1000) {
+            bonus += 1000
+        }
+
+        // Penalizaciones para la puntuacion
+
+        let penalizaciones = 0;
+
+        if (ciudad.dinero < 0) {
+            penalizaciones -= 500
+        }
+
+        if (ciudad.electricidad < 0) {
+            penalizaciones -= 300
+        }
+
+        if (ciudad.agua < 0) {
+            penalizaciones -= 300
+        }
+
+        if (felicidad < 40) {
+            penalizaciones -= 400
+        }
+
+        puntuacionFinal += bonus + penalizaciones;
+
+        // Restar por ciudadano desempleado
+
+        if (ciudad.misCiudadanos.length > 0) {
+            for (let ciudadano of ciudad.misCiudadanos) {
+                if (!verificarContratoComercial(ciudadano)) {
+                    puntuacionFinal -= 10
+                } 
+            }
+        }
+
+        return {
+            poblacion,
+            edificios,
+            recursos,
+            felicidad,
+            bonus,
+            penalizaciones,
+            puntuacionFinal
+        };
+
     }
 
     // ─── RECURSOS POR TURNO ──────────────────────────────────────────────────
