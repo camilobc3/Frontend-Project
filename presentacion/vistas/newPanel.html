@@ -16,7 +16,7 @@
 
     <body class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white font-[Exo_2] min-h-screen">
 
-        <div class="grid grid-cols-1 md:grid-cols-12 lg:grid-cols-12 min-h-screen">
+        <div class="grid grid-cols-1 md:grid-cols-10 lg:grid-cols-12 min-h-screen">
 
             <!-- ═══════════════════════════════════════════════════════
                  SIDEBAR IZQUIERDA
@@ -84,7 +84,7 @@
                  • Tablet (md):   8 cols
                  • Desktop (lg):  8 cols
             ════════════════════════════════════════════════════════ -->
-            <main class="col-span-1 md:col-span-8 lg:col-span-8 flex flex-col items-center justify-start md:justify-center gap-4 p-4">
+            <main class="col-span-1 md:col-span-6 lg:col-span-8 flex flex-col items-center justify-start md:justify-center gap-4 p-4 md:p-5 lg:p-4">
 
                 <!-- Header: visible en móvil y tablet, oculto en desktop -->
                 <div class="w-full flex items-center justify-between lg:hidden">
@@ -113,7 +113,7 @@
                     </div>
 
                     <!-- ✅ Contenedor visual con Tailwind -->
-                    <div class="w-full h-[360px] md:h-[560px] lg:h-[700px] mx-auto bg-slate-800 border border-slate-600 rounded-xl shadow-2xl overflow-auto p-2">
+                    <div class="w-full h-[360px] md:h-[540px] lg:h-[700px] mx-auto bg-slate-800 border border-slate-600 rounded-xl shadow-2xl overflow-auto p-2">
                         
                         <!-- ✅ gameMap limpio sin clases de Tailwind — el controller aplica el grid aquí -->
                         <div id="gameMap"></div>
@@ -145,7 +145,7 @@
                         <button id="btn-plantaelectrica" class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-2 text-xl">⚡</button>
                     </div>
                     <!-- Tablet: emoji + texto (3 filas) -->
-                    <div class="hidden md:grid grid-cols-5 gap-2">
+                    <div class="hidden md:grid grid-cols-4 lg:grid-cols-5 gap-2">
                         <button id="btn-casa-tablet" class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3 text-sm">🏠 House</button>
                         <button id="btn-apartamento-tablet" class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3 text-sm">🏢 Apart.</button>
                         <button id="btn-fabrica-tablet" class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3 text-sm">🏭 Factory</button>
@@ -171,7 +171,7 @@
                  • Tablet (md):   4 cols
                  • Desktop (lg):  2 cols
             ════════════════════════════════════════════════════════ -->
-            <aside class="col-span-1 md:col-span-4 lg:col-span-2 p-4 space-y-4 bg-slate-900/60 backdrop-blur-lg md:border-l border-slate-700 overflow-y-auto">
+            <aside class="col-span-1 md:col-span-4 lg:col-span-2 p-4 md:p-5 lg:p-4 space-y-4 bg-slate-900/60 backdrop-blur-lg md:border-l border-slate-700 overflow-y-auto">
 
                 <!-- Clima -->
                 <div class="bg-slate-800 p-4 rounded-xl text-center shadow">

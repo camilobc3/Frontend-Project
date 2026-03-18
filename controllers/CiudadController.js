@@ -104,8 +104,10 @@ document.addEventListener("DOMContentLoaded", function () {
     function actualizarContadores() {
         const total = ciudadService.cargarCiudades().length;
         const desktop = document.getElementById("ciudadCount");
+        const tablet = document.getElementById("ciudadCountTablet");
         const mobile = document.getElementById("ciudadCountMobile");
         if (desktop) desktop.textContent = String(total);
+        if (tablet) tablet.textContent = String(total);
         if (mobile) mobile.textContent = String(total);
     }
 
@@ -180,10 +182,15 @@ document.addEventListener("DOMContentLoaded", function () {
     if (sidebarOverlay)     sidebarOverlay.addEventListener("click", cerrarMenu);
 
     const btnCargarMapa = document.getElementById("btnCargarMapa");
+    const btnCargarMapaTablet = document.getElementById("btnCargarMapaTablet");
     const btnCargarMapaMobile = document.getElementById("btnCargarMapaMobile");
 
     if (btnCargarMapa) {
         btnCargarMapa.addEventListener("click", cargarMapaDesdeArchivo);
+    }
+
+    if (btnCargarMapaTablet) {
+        btnCargarMapaTablet.addEventListener("click", cargarMapaDesdeArchivo);
     }
 
     if (btnCargarMapaMobile) {

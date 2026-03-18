@@ -28,10 +28,10 @@
     </nav>
 
     <!-- ======================= CONTENEDOR PRINCIPAL ======================= -->
-    <div class="flex min-h-screen">
+    <div class="min-h-screen lg:grid lg:grid-cols-[260px_1fr]">
         
         <!-- ======================= SIDEBAR IZQUIERDO (DESKTOP) ======================= -->
-        <aside class="hidden md:flex md:w-64 flex-col p-6 space-y-6 bg-slate-900/60 backdrop-blur-lg border-r border-slate-700">
+        <aside class="hidden lg:flex lg:w-full flex-col p-6 space-y-6 bg-slate-900/60 backdrop-blur-lg border-r border-slate-700">
             <!-- Avatar Circular -->
             <div class="w-24 h-24 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-4xl mx-auto">
                 👤
@@ -99,7 +99,25 @@
         </div>
 
         <!-- ======================= ÁREA PRINCIPAL CON GRILLA ======================= -->
-        <main class="flex-1 p-6 md:p-8">
+        <main class="p-5 md:p-8 lg:p-8">
+            <section class="hidden md:block lg:hidden mb-6">
+                <div class="rounded-xl border border-slate-700 bg-slate-900/50 p-4">
+                    <div class="grid grid-cols-3 gap-3">
+                        <div class="rounded-lg bg-slate-800/70 p-3 text-center">
+                            <p class="text-xs uppercase tracking-wide text-slate-400">Jugador</p>
+                            <p id="nombreUsuarioTablet" class="mt-1 font-semibold">Jugador 1</p>
+                        </div>
+                        <div class="rounded-lg bg-slate-800/70 p-3 text-center">
+                            <p class="text-xs uppercase tracking-wide text-slate-400">Ciudades</p>
+                            <p id="ciudadCountTablet" class="mt-1 font-semibold text-indigo-400">3</p>
+                        </div>
+                        <button id="btnCargarMapaTablet" class="rounded-lg bg-indigo-600 hover:bg-indigo-500 transition p-3 font-semibold">
+                            Cargar mapa
+                        </button>
+                    </div>
+                </div>
+            </section>
+
             <!-- Encabezado de la sección -->
             <div class="mb-8">
                 <h2 class="text-4xl font-bold mb-2">Selecciona una ciudad</h2>
@@ -108,7 +126,7 @@
 
             <!-- Grilla de Ciudades -->
             <div class="w-full">
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="gridCiudades">
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" id="gridCiudades">
 
                     <!-- Tarjeta Nueva Ciudad (+) -->
                     <div id="btnNuevaCiudad" class="group cursor-pointer rounded-xl overflow-hidden bg-slate-800/50 border-2 border-dashed border-slate-600 hover:border-indigo-500 hover:bg-slate-800 transition-all duration-300 flex items-center justify-center min-h-[224px]">
