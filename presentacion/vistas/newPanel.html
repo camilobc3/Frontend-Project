@@ -10,6 +10,7 @@
         <link rel="stylesheet" href="../estilos/noticia.css">
         <script type="module" src="../../controllers/MapaController.js"></script>
         <script type="module" src="../ui/panel.js"></script>
+        <script type="module" src="../../controllers/CiudadController.js"></script>
 
     </head>
 
@@ -174,9 +175,11 @@
 
                 <!-- Clima -->
                 <div class="bg-slate-800 p-4 rounded-xl text-center shadow">
-                    <div class="text-4xl">☀️</div>
-                    <div class="text-xl font-semibold">24°C</div>
-                    <div class="text-sm text-slate-400">Sunny</div>
+                    <img id="iconoClima" class="mx-auto w-16 h-16" />
+                    <div id="temp" class="text-xl font-semibold">--</div>
+                    <div id="condicion" class="text-sm text-slate-400">Condición: --</div>
+                    <div id="humedad" class="text-sm text-slate-400">Humedad: --</div>
+                    <div id="viento" class="text-sm text-slate-400">Viento: --</div>
                 </div>
 
                 <!-- Stats

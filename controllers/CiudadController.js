@@ -2,6 +2,7 @@
 const ciudadService = new CiudadService();
 import { obtenerRegiones } from "../api/RegionesApi.js";
 import Mapa from "../modelos/Mapa.js";
+import { iniciarClimaAutomatico } from "./ClimaController.js";
 
 function cargarRegiones() {
     const regionSelect = document.getElementById("region");
@@ -100,6 +101,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     cargarRegiones();
     renderizarCiudadesMenu();
+
+    iniciarClimaAutomatico();
 
     
 
