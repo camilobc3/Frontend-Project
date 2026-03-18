@@ -81,8 +81,8 @@ class MapaService {
         }
         else{
             ciudad.dinero -= edificio.costo;
-            ciudad.electricidad -= edificio.consumoElectricidad;
-            ciudad.agua -= edificio.consumoAgua;
+            ciudad.electricidad -= edificio.consumoElectricidad();
+            ciudad.agua -= edificio.consumoAgua();
         }
         
         ciudadService.actualizarRecursoXTurno(ciudad, edificio);
