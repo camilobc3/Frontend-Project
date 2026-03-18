@@ -5,7 +5,7 @@ import {
     EstacionPolicia, EstacionBombero, Hospital,
     PlantaElectrica, PlantaAgua, Parque
 } from "/modelos/index.js";
-//import StorageMapa from "/acceso_datos/StorageMapa.js";
+import MapaRepository from "/acceso_datos/MapaRepository.js";
 
 import{
     CiudadService
@@ -213,6 +213,15 @@ class MapaService {
         }
 
         return mapa[codigo];
+    }
+    
+    async cargarMapaDesdeArchivo() {
+        return await MapaRepository.cargarDesdeArchivo();
+    }
+
+    asignarMapaACiudad(ciudad, matriz) {
+        ciudad.miMapa.matriz = matriz;
+        return ciudad;
     }
 }
 

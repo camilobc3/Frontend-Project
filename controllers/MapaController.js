@@ -1,6 +1,13 @@
 ﻿// MapaController.js
 import MapaService from "/negocio/MapaService.js";
 import CiudadService from "/negocio/CiudadService.js";
+import CasaService from "/negocio/CasaService.js";
+import ApartamentoService from "/negocio/ApartamentoService.js";
+import FabricaService from "/negocio/FabricaService.js";
+import GranjaService from "/negocio/GranjaService.js";
+import TiendaService from "/negocio/TiendaService.js";
+import CentroComercialService from "/negocio/CentroComercialService.js";
+import CiudadanoService from "/negocio/CiudadanoService.js";
 
 // Importar todos los controllers para registrar sus funciones
 import "./CasaController.js";
@@ -23,6 +30,13 @@ document.addEventListener("DOMContentLoaded", function () {
     // Instanciar el servicio
     const mapaService = new MapaService();
     const ciudadService = new CiudadService();
+    const casaService = new CasaService();
+    const apartamentoService = new ApartamentoService();
+    const fabricaService = new FabricaService();
+    const granjaService = new GranjaService();
+    const tiendaService = new TiendaService();
+    const centroComercialService = new CentroComercialService();
+    const ciudadanoService = new CiudadanoService();
 
     // Variables globales
     let ciudadActual = null;
@@ -171,17 +185,58 @@ document.addEventListener("DOMContentLoaded", function () {
         // Llenar el modal con información del edificio
         const nombre = obtenerNombreEdificio(contenido.tipo);
         const icono = obtenerIconoEdificio(contenido.tipo);
+        const contratos = Array.isArray(contenido.misContratos) ? contenido.misContratos : [];
+        const capacidad = Number.isFinite(contenido.capacidadVivienda)
+            ? contenido.capacidadVivienda
+            : (Number.isFinite(contenido.numeroEmpleos) ? contenido.numeroEmpleos : null);
+        const ocupacionActual = contratos.length;
+
+        let bloquesInfo = [
+            `<p><strong>Posición:</strong> Fila ${fila + 1}, Columna ${columna + 1}</p>`,
+            `<p><strong>Tipo:</strong> ${contenido.tipo}</p>`,
+            contenido.costo ? `<p><strong>Costo:</strong> ${contenido.costo}</p>` : "",
+            contenido.dineroGenerado ? `<p><strong>Dinero generado:</strong> ${contenido.dineroGenerado}</p>` : "",
+            capacidad !== null ? `<p><strong>Capacidad:</strong> ${capacidad}</p>` : "",
+            capacidad !== null ? `<p><strong>Ocupación actual:</strong> ${ocupacionActual}/${capacidad}</p>` : ""
+        ];
+
+        if (contenido.tipo === "R1") {
+            const ciudadanos = casaService.ciudadanosEnCasa(contenido);
+            const felicidadPromedio = ciudadanos.length > 0
+                ? casaService.felicidadPromedioCasa(contenido, ciudadanoService)
+                : 0;
+
+            bloquesInfo.push(`<p><strong>Ciudadanos viviendo:</strong> ${ciudadanos.length}</p>`);
+            bloquesInfo.push(`<p><strong>Felicidad promedio:</strong> ${felicidadPromedio}</p>`);
+        } else if (contenido.tipo === "R2") {
+            const ciudadanos = apartamentoService.ciudadanosEnApartamento(contenido);
+            const felicidadPromedio = ciudadanos.length > 0
+                ? apartamentoService.felicidadPromedioApartamento(contenido, ciudadanoService)
+                : 0;
+
+            bloquesInfo.push(`<p><strong>Ciudadanos viviendo:</strong> ${ciudadanos.length}</p>`);
+            bloquesInfo.push(`<p><strong>Felicidad promedio:</strong> ${felicidadPromedio}</p>`);
+        } else if (contenido.tipo === "C1") {
+            const empleados = tiendaService.empleadosEnTienda(contenido);
+            bloquesInfo.push(`<p><strong>Empleados actuales:</strong> ${empleados.length}</p>`);
+        } else if (contenido.tipo === "C2") {
+            const empleados = centroComercialService.empleadosEnCentroComercial(contenido);
+            bloquesInfo.push(`<p><strong>Empleados actuales:</strong> ${empleados.length}</p>`);
+        } else if (contenido.tipo === "I1") {
+            const empleados = fabricaService.empleadosEnFabrica(contenido);
+            bloquesInfo.push(`<p><strong>Empleados actuales:</strong> ${empleados.length}</p>`);
+        } else if (contenido.tipo === "I2") {
+            const empleados = granjaService.empleadosEnGranja(contenido);
+            bloquesInfo.push(`<p><strong>Empleados actuales:</strong> ${empleados.length}</p>`);
+        }
+
+        bloquesInfo = bloquesInfo.filter(Boolean);
         
         modalTitulo.textContent = `${icono} ${nombre}`;
         
         modalContenido.innerHTML = `
             <div class="bg-slate-700/50 rounded-lg p-3 space-y-2">
-                <p><strong>Posición:</strong> Fila ${fila + 1}, Columna ${columna + 1}</p>
-                <p><strong>Tipo:</strong> ${contenido.tipo}</p>
-                ${contenido.costo ? `<p><strong>Costo:</strong> ${contenido.costo}</p>` : ''}
-                ${contenido.dineroGenerado ? `<p><strong>Dinero generado:</strong> ${contenido.dineroGenerado}</p>` : ''}
-                ${contenido.capacidadVivienda ? `<p><strong>Capacidad:** ${contenido.capacidadVivienda}</strong></p>` : ''}
-                ${contenido.numeroEmpleos ? `<p><strong>Empleos:</strong> ${contenido.numeroEmpleos}</p>` : ''}
+                ${bloquesInfo.join("")}
             </div>
         `;
 
@@ -216,16 +271,32 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         };
     }
+    
+    const btnCargarMapa = document.getElementById("btnCargarMapa");
+    if (btnCargarMapa) {
+        btnCargarMapa.addEventListener("click", async () => {
+            try {
+                const nombre = document.getElementById("cityName").value.trim();
+                if (!nombre) {
+                    alert("Ingresa un nombre para la ciudad antes de cargar el mapa");
+                    return;
+                }
 
-    // Función para actualizar UI (dinero, recursos, etc)
-/*     function actualizarUI(ciudad) {
-        document.getElementById("dinero").textContent = ciudad.dinero;
-        document.getElementById("electricidad").textContent = ciudad.electricidad;
-        document.getElementById("agua").textContent = ciudad.agua;
-        document.getElementById("poblacion").textContent = ciudad.misCiudadanos.length;
-    } */
+                const matriz = await mapaService.cargarMapaDesdeArchivo();
+                const id = Date.now();
 
-    // Exponer construirEdificio en window para que sea accesible desde otros controllers
+                ciudadService.crearCiudad(id, nombre, 1, matriz.length);
+                const ciudad = ciudadService.cargarCiudad(id);
+                ciudadService.asignarMapa(ciudad, matriz);
+
+                window.location.href = `./newPanel.html?cityId=${id}`;
+            } catch (error) {
+                alert("❌ " + error.message);
+            }
+        });
+    }
+    
+
     window.construirEdificio = construirEdificio;
 
     // Inicializar con ciudad seleccionada desde query param

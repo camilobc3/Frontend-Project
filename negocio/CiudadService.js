@@ -411,6 +411,11 @@ class CiudadService {
         this.actualizarCiudadCompleta(ciudad); // ✅ usar this.
     }
 
+    asignarMapa(ciudad, matriz) {
+        ciudad.miMapa.matriz = matriz;
+        this.actualizarCiudadCompleta(ciudad);
+        return ciudad;
+    }
     
 }
 

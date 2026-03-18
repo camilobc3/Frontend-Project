@@ -1,5 +1,7 @@
 ﻿import CiudadService from "../negocio/CiudadService.js";
 const ciudadService = new CiudadService();
+import MapaService from "../negocio/MapaService.js";
+const mapaService = new MapaService();
 import { obtenerRegiones } from "../api/RegionesApi.js";
 import Mapa from "../modelos/Mapa.js";
 import { iniciarClimaAutomatico } from "./ClimaController.js";
@@ -21,6 +23,30 @@ function cargarRegiones() {
 
 document.addEventListener("DOMContentLoaded", function () {
     console.log("DOM cargado - CiudadController");
+
+    async function cargarMapaDesdeArchivo() {
+        try {
+            const nombre = prompt("Ingresa el nombre para la ciudad cargada:", "Ciudad cargada");
+            if (nombre === null) return;
+
+            const nombreLimpio = nombre.trim();
+            if (!nombreLimpio) {
+                alert("Debes ingresar un nombre para la ciudad.");
+                return;
+            }
+
+            const matriz = await mapaService.cargarMapaDesdeArchivo();
+            const id = Date.now();
+
+            ciudadService.crearCiudad(id, nombreLimpio, 1, new Mapa(matriz.length));
+            const ciudad = ciudadService.cargarCiudad(id);
+            ciudadService.asignarMapa(ciudad, matriz);
+
+            window.location.href = "./newPanel.html?cityId=" + id;
+        } catch (error) {
+            alert("Error al cargar el mapa: " + error.message);
+        }
+    }
 
 
 
@@ -152,6 +178,20 @@ document.addEventListener("DOMContentLoaded", function () {
     if (btnMobileMenu)      btnMobileMenu.addEventListener("click", abrirMenu);
     if (btnCloseMobileMenu) btnCloseMobileMenu.addEventListener("click", cerrarMenu);
     if (sidebarOverlay)     sidebarOverlay.addEventListener("click", cerrarMenu);
+
+    const btnCargarMapa = document.getElementById("btnCargarMapa");
+    const btnCargarMapaMobile = document.getElementById("btnCargarMapaMobile");
+
+    if (btnCargarMapa) {
+        btnCargarMapa.addEventListener("click", cargarMapaDesdeArchivo);
+    }
+
+    if (btnCargarMapaMobile) {
+        btnCargarMapaMobile.addEventListener("click", () => {
+            cerrarMenu();
+            cargarMapaDesdeArchivo();
+        });
+    }
 
     
 });
