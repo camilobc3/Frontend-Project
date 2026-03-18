@@ -47,6 +47,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const resultado = mapaService.construirEdificio(ciudadActual, mapaActual, fila, columna, tipo);
         
         if (resultado.ok) {
+            ciudadService.actualizarCiudadCompleta(ciudadActual);
             console.log(resultado.mensaje);
             renderizarMapa();
             //actualizarUI(ciudadActual);
@@ -131,7 +132,90 @@ document.addEventListener("DOMContentLoaded", function () {
             case "U2": return "💧";
             default:   return "❓";
         }
-}
+    }
+
+    function obtenerNombreEdificio(tipo) {
+        const nombres = {
+            "R": "Camino",
+            "R1": "Casa",
+            "R2": "Apartamento",
+            "C1": "Tienda",
+            "C2": "Centro Comercial",
+            "I1": "Fábrica",
+            "I2": "Granja",
+            "S1": "Hospital",
+            "S2": "Estación de Bomberos",
+            "S3": "Estación de Policía",
+            "P1": "Parque",
+            "U1": "Planta Eléctrica",
+            "U2": "Planta de Agua"
+        };
+        return nombres[tipo] || tipo;
+    }
+
+    // Función para mostrar opciones de un edificio
+    function mostrarOpciones(fila, columna) {
+        const contenido = mapaActual[fila][columna];
+        
+        if (contenido === null) {
+            alert("Esta celda está vacía");
+            return;
+        }
+
+        const modal = document.getElementById("modalOpciones");
+        const modalTitulo = document.getElementById("modalTitulo");
+        const modalContenido = document.getElementById("modalContenido");
+        const btnDemoledor = document.getElementById("btnDemoledor");
+        const btnCerrar = document.getElementById("btnCerrarModal");
+
+        // Llenar el modal con información del edificio
+        const nombre = obtenerNombreEdificio(contenido.tipo);
+        const icono = obtenerIconoEdificio(contenido.tipo);
+        
+        modalTitulo.textContent = `${icono} ${nombre}`;
+        
+        modalContenido.innerHTML = `
+            <div class="bg-slate-700/50 rounded-lg p-3 space-y-2">
+                <p><strong>Posición:</strong> Fila ${fila + 1}, Columna ${columna + 1}</p>
+                <p><strong>Tipo:</strong> ${contenido.tipo}</p>
+                ${contenido.costo ? `<p><strong>Costo:</strong> ${contenido.costo}</p>` : ''}
+                ${contenido.dineroGenerado ? `<p><strong>Dinero generado:</strong> ${contenido.dineroGenerado}</p>` : ''}
+                ${contenido.capacidadVivienda ? `<p><strong>Capacidad:** ${contenido.capacidadVivienda}</strong></p>` : ''}
+                ${contenido.numeroEmpleos ? `<p><strong>Empleos:</strong> ${contenido.numeroEmpleos}</p>` : ''}
+            </div>
+        `;
+
+        // Manejar clic en demoler
+        btnDemoledor.onclick = () => {
+            if (confirm(`¿Deseas demoler este ${nombre}?`)) {
+                // Actualizar la matriz en memoria
+                mapaActual[fila][columna] = null;
+                ciudadActual.miMapa.matriz[fila][columna] = null;
+                
+                // Guardar los cambios en el JSON
+                ciudadService.actualizarCiudadCompleta(ciudadActual);
+
+                renderizarMapa();
+                modal.classList.add("hidden");
+                console.log(`${nombre} demolido en fila ${fila}, columna ${columna}`);
+            }
+        };
+
+        // Manejar clic en cerrar
+        btnCerrar.onclick = () => {
+            modal.classList.add("hidden");
+        };
+
+        // Mostrar modal
+        modal.classList.remove("hidden");
+
+        // Cerrar modal al hacer clic fuera
+        modal.onclick = (e) => {
+            if (e.target === modal) {
+                modal.classList.add("hidden");
+            }
+        };
+    }
 
     // Función para actualizar UI (dinero, recursos, etc)
 /*     function actualizarUI(ciudad) {

@@ -240,5 +240,25 @@
 
         <script type="module" src="../../controllers/NoticiaController.js"></script>
 
+        <!-- Modal para opciones de edificios -->
+        <div id="modalOpciones" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div class="bg-slate-800 rounded-xl p-6 shadow-2xl max-w-sm w-full mx-4 border border-slate-700">
+                <h2 class="text-xl font-bold mb-4" id="modalTitulo">Opciones del Edificio</h2>
+                
+                <div id="modalContenido" class="space-y-3 mb-6 max-h-64 overflow-y-auto">
+                    <!-- El contenido se cargará dinámicamente -->
+                </div>
+                
+                <div class="flex gap-2 justify-end">
+                    <button id="btnDemoledor" class="bg-red-600 hover:bg-red-700 transition rounded-lg px-4 py-2 font-semibold">
+                        🗑️ Demoler
+                    </button>
+                    <button id="btnCerrarModal" class="bg-slate-700 hover:bg-slate-600 transition rounded-lg px-4 py-2 font-semibold">
+                        Cerrar
+                    </button>
+                </div>
+            </div>
+        </div>
+
     </body>
 </html>
