@@ -11,7 +11,10 @@ class Edificio {
             throw new Error("No se puede instanciar la clase abstracta Edificio");
         }
         this.costo = costo;
+        this.activo = true;
+        
         this.misContratos = []; // Relación n-n con Ciudadano a través de Contrato
+    
     }
 
     /**

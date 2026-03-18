@@ -14,6 +14,27 @@ class Camino extends Edificio {
         this.tipo = "R";
         this.beneficio = beneficio;
     }
+
+    produccionXTurno() {
+    //Implementación específica para Camino
+       return 0;
+    }
+
+   
+    //Implementación del método consumoAgua
+    //@returns {number} La cantidad de agua consumida
+    
+    consumoAgua() { //Consumo por turno
+        return 0;
+    }
+
+    
+    //Implementación del método consumoElectricidad
+    //@returns {number} La cantidad de electricidad consumida
+        
+    consumoElectricidad() {//Consumo por turno
+        return 0;
+    }
 }
 
 export default Camino;

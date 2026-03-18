@@ -85,7 +85,7 @@ class MapaService {
             ciudad.agua -= edificio.consumoAgua();
         }
         
-        ciudadService.actualizarRecursoXTurno(ciudad, edificio);
+        //ciudadService.actualizarRecursoXTurno(ciudad, edificio);
 
         mapa[fila][columna] = edificio;
         ciudad.misEdificios.push(edificio);
