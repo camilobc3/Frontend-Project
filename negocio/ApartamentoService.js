@@ -62,6 +62,32 @@ class ApartamentoService{
             return true;
         }
     }
+
+    // Calcula cuántos empleos/viviendas disponibles quedan en el apartamento
+    numeroContratosDisponibles(apartamento){
+        return apartamento.capacidadVivienda - apartamento.misContratos.length;
+    }
+
+    // Obtiene los ciudadanos actualmente viviendo en el apartamento
+    ciudadanosEnApartamento(apartamento) {
+        if (!apartamento || !apartamento.misContratos || !Array.isArray(apartamento.misContratos)) {
+            return [];
+        }
+        return apartamento.misContratos.map(c => c.miCiudadano).filter(c => c !== null && c !== undefined);
+    }
+
+    // Calcula la felicidad promedio de los ciudadanos en el apartamento
+    felicidadPromedioApartamento(apartamento, ciudadanoService) {
+        const ciudadanos = this.ciudadanosEnApartamento(apartamento);
+        if (ciudadanos.length === 0) {
+            return 0;
+        }
+        let total = 0;
+        for (let ciudadano of ciudadanos) {
+            total += ciudadanoService.calcularFelicidad(ciudadano);
+        }
+        return Math.round((total / ciudadanos.length) * 10) / 10;
+    }
 };
 
 export default ApartamentoService;

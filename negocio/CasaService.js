@@ -63,6 +63,31 @@ class CasaService {
         }
     }
 
+    numeroContratosDisponibles(casa){
+        return casa.capacidadVivienda - casa.misContratos.length;
+    }
+
+    // Obtiene los ciudadanos actualmente viviendo en la casa
+    ciudadanosEnCasa(casa) {
+        if (!casa || !casa.misContratos || !Array.isArray(casa.misContratos)) {
+            return [];
+        }
+        return casa.misContratos.map(c => c.miCiudadano).filter(c => c !== null && c !== undefined);
+    }
+
+    // Calcula la felicidad promedio de los ciudadanos en la casa
+    felicidadPromedioCasa(casa, ciudadanoService) {
+        const ciudadanos = this.ciudadanosEnCasa(casa);
+        if (ciudadanos.length === 0) {
+            return 0;
+        }
+        let total = 0;
+        for (let ciudadano of ciudadanos) {
+            total += ciudadanoService.calcularFelicidad(ciudadano);
+        }
+        return Math.round((total / ciudadanos.length) * 10) / 10;
+    }
+
 };
 
 export default CasaService;

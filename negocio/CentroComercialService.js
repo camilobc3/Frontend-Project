@@ -62,6 +62,19 @@ class CentroComercialService {
             return true;
         }
     }
+
+    // Calcula cuántos empleos disponibles quedan en el centro comercial
+    numeroContratosDisponibles(centroComercial) {
+        return centroComercial.numeroEmpleos - centroComercial.misContratos.length;
+    }
+
+    // Obtiene los empleados actuales en el centro comercial
+    empleadosEnCentroComercial(centroComercial) {
+        if (!centroComercial || !centroComercial.misContratos || !Array.isArray(centroComercial.misContratos)) {
+            return [];
+        }
+        return centroComercial.misContratos.map(c => c.miCiudadano).filter(c => c !== null && c !== undefined);
+    }
 };
 
 export default CentroComercialService;

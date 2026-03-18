@@ -62,6 +62,19 @@ class GranjaService{
             return true;
         }
     }
+
+    // Calcula cuántos empleos disponibles quedan en la granja
+    numeroContratosDisponibles(granja) {
+        return granja.numeroEmpleos - granja.misContratos.length;
+    }
+
+    // Obtiene los empleados actuales en la granja
+    empleadosEnGranja(granja) {
+        if (!granja || !granja.misContratos || !Array.isArray(granja.misContratos)) {
+            return [];
+        }
+        return granja.misContratos.map(c => c.miCiudadano).filter(c => c !== null && c !== undefined);
+    }
 };
 
 export default GranjaService;

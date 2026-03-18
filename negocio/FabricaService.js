@@ -62,6 +62,19 @@ class FabricaService {
             return true;
         }
     }
+
+    // Calcula cuántos empleos disponibles quedan en la fábrica
+    numeroContratosDisponibles(fabrica) {
+        return fabrica.numeroEmpleos - fabrica.misContratos.length;
+    }
+
+    // Obtiene los empleados actuales en la fábrica
+    empleadosEnFabrica(fabrica) {
+        if (!fabrica || !fabrica.misContratos || !Array.isArray(fabrica.misContratos)) {
+            return [];
+        }
+        return fabrica.misContratos.map(c => c.miCiudadano).filter(c => c !== null && c !== undefined);
+    }
 };
 
 export default FabricaService;

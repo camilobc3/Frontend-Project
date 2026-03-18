@@ -62,6 +62,19 @@ class TiendaService {
             return true;
         }
     }
+
+    // Calcula cuántos empleos disponibles quedan en la tienda
+    numeroContratosDisponibles(tienda) {
+        return tienda.numeroEmpleos - tienda.misContratos.length;
+    }
+
+    // Obtiene los empleados actuales en la tienda
+    empleadosEnTienda(tienda) {
+        if (!tienda || !tienda.misContratos || !Array.isArray(tienda.misContratos)) {
+            return [];
+        }
+        return tienda.misContratos.map(c => c.miCiudadano).filter(c => c !== null && c !== undefined);
+    }
 };
 
 export default TiendaService;
