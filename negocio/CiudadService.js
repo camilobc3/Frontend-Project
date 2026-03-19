@@ -33,6 +33,19 @@ import { MapaService } from "./index.js";
 
 class CiudadService {
 
+    asignacionId() {
+        const lista = StorageCiudad.getListaCiudades();
+        
+        let i = 0;
+
+        while (true) {
+            i++;
+            if (!lista.some(ciudad => ciudad.id === i)) {
+                return i;
+            }
+        }
+    }
+
     // ─── READ ALL ────────────────────────────────────────────────────────────
     cargarCiudades() {
         const lista = StorageCiudad.load();

@@ -27,6 +27,13 @@ const StorageCiudad = {
         });
     },
 
+    getListaCiudades() {
+        return this.load().map(ciudad => ({
+            id: ciudad.id,
+            nombre: ciudad.nombre
+        }));
+    },
+
     save(lista) {
         localStorage.setItem(this.key, JSON.stringify(lista));
     },

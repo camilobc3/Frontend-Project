@@ -9,12 +9,13 @@ const Penalizaciones = document.getElementById("por-penalizaciones");
 const puntuacionTotal = document.getElementById("puntuacion-total");
 
 export function actualizarEstadisticas(ciudad) {
-    const resultado = CiudadService.calcularPuntuacion(ciudad);
-    Poblacion.textContent = `+${resultado.poblacion}`;
-    Felicidad.textContent = `+${resultado.felicidad}`;
-    Edificios.textContent = `+${resultado.edificios}`;
-    Recursos.textContent = `+${resultado.recursos}`;
-    Bonificaciones.textContent = `+${resultado.bonificaciones}`;
-    Penalizaciones.textContent = `-${resultado.penalizaciones}`;
-    puntuacionTotal.textContent = puntuacion;
+    const ciudadService = new CiudadService();
+    const resultado = ciudadService.calcularPuntuacion(ciudad);
+    Poblacion.textContent = `+${resultado.poblacion || 0}`;
+    Felicidad.textContent = `+${resultado.felicidad || 0}`;
+    Edificios.textContent = `+${resultado.edificios || 0}`;
+    Recursos.textContent = `+${resultado.recursos || 0}`;
+    Bonificaciones.textContent = `+${resultado.bonificaciones || 0}`;
+    Penalizaciones.textContent = `-${Math.abs(resultado.penalizaciones || 0)}`;
+    puntuacionTotal.textContent = String(resultado.puntuacionFinal || resultado.total || 0);
 }

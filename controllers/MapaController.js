@@ -2,6 +2,7 @@
 import MapaService from "/negocio/MapaService.js";
 import CiudadService from "/negocio/CiudadService.js";
 import { actualizarPanelRecursos } from "../presentacion/ui/RecursosUI.js";
+import { actualizarEstadisticas } from "../presentacion/ui/panel.js";
 import CasaService from "/negocio/CasaService.js";
 import ApartamentoService from "/negocio/ApartamentoService.js";
 import FabricaService from "/negocio/FabricaService.js";
@@ -42,10 +43,25 @@ document.addEventListener("DOMContentLoaded", function () {
     // Variables globales
     let ciudadActual = null;
     let mapaActual = null;
+    let refreshInterval = null;
     window.modoConstruccion = null; // Variable para indicar si estamos en modo construcción
 
     function obtenerAlcaldeActual() {
         return localStorage.getItem("currentMayor") || "Alcalde Anónimo";
+    }
+
+    function iniciarActualizacionConstante() {
+        if (refreshInterval) return;
+        refreshInterval = setInterval(() => {
+            if (!ciudadActual) return;
+            actualizarRecursosDeCiudad();
+        }, 1000);
+    }
+
+    function detenerActualizacionConstante() {
+        if (!refreshInterval) return;
+        clearInterval(refreshInterval);
+        refreshInterval = null;
     }
 
     function leerRanking() {
@@ -149,6 +165,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function actualizarRecursosDeCiudad() {
         if (!ciudadActual) return;
         actualizarPanelRecursos(ciudadActual);
+        actualizarEstadisticas(ciudadActual);
         registrarPuntaje();
     }
 
@@ -163,6 +180,7 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log("Mapa cargado:", mapaActual);
         renderizarMapa();
         actualizarRecursosDeCiudad();
+        iniciarActualizacionConstante();
     }
 
     // Función para construir un edificio

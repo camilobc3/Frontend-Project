@@ -143,7 +143,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const nombreCiudad = document.getElementById("cityName").value;
             const mapSize      = document.getElementById("mapSize").value;
             const region       = document.getElementById("region").value;
-            const id    = Date.now();
+            const id    = ciudadService.asignacionId();
             const turno = 1;
 
             const tamanio = parseInt((mapSize || "").split("x")[0], 10);
@@ -154,6 +154,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const mapaInicial = new Mapa(tamanio);
             const creada = ciudadService.crearCiudad(id, nombreCiudad, turno, mapaInicial, region);
+            // actualizarCiudad
+
             if (creada) {
                // window.location.href = "./newPanel.html?cityId=" + id;
                window.location.href = "./menuCiudades.html";
