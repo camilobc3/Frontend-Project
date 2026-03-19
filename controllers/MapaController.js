@@ -1,6 +1,7 @@
 ﻿// MapaController.js
 import MapaService from "/negocio/MapaService.js";
 import CiudadService from "/negocio/CiudadService.js";
+import { actualizarPanelRecursos } from "../presentacion/ui/RecursosUI.js";
 import CasaService from "/negocio/CasaService.js";
 import ApartamentoService from "/negocio/ApartamentoService.js";
 import FabricaService from "/negocio/FabricaService.js";
@@ -43,6 +44,114 @@ document.addEventListener("DOMContentLoaded", function () {
     let mapaActual = null;
     window.modoConstruccion = null; // Variable para indicar si estamos en modo construcción
 
+    function obtenerAlcaldeActual() {
+        return localStorage.getItem("currentMayor") || "Alcalde Anónimo";
+    }
+
+    function leerRanking() {
+        const raw = localStorage.getItem("ranking_v1");
+        if (!raw) return [];
+        try {
+            const parsed = JSON.parse(raw);
+            return Array.isArray(parsed.ranking) ? parsed.ranking : [];
+        } catch {
+            return [];
+        }
+    }
+
+    function guardarRanking(rankingItems) {
+        localStorage.setItem("ranking_v1", JSON.stringify({ ranking: rankingItems }));
+    }
+
+    function registrarPuntaje() {
+        if (!ciudadActual) return;
+        const mayor = obtenerAlcaldeActual();
+        const scoreData = ciudadService.calcularPuntuacion(ciudadActual);
+        const score = scoreData?.puntuacionFinal || 0;
+        const poblacion = ciudadActual.misCiudadanos?.length || 0;
+        const felicidad = Math.round((ciudadActual.misCiudadanos?.reduce((acc, c) => acc + (c.felicidad || 0), 0) || 0) / (ciudadActual.misCiudadanos?.length || 1));
+        const entry = {
+            cityName: ciudadActual.nombre || "Ciudad",
+            mayor,
+            score,
+            population: poblacion,
+            happiness: felicidad,
+            turns: ciudadActual.turno || 0,
+            date: new Date().toISOString(),
+            id: ciudadActual.id
+        };
+
+        const rankingItems = leerRanking();
+        const existingIndex = rankingItems.findIndex(r => r.id === entry.id && r.mayor === entry.mayor);
+        if (existingIndex !== -1) {
+            rankingItems[existingIndex] = entry;
+        } else {
+            rankingItems.push(entry);
+        }
+
+        rankingItems.sort((a, b) => b.score - a.score);
+        guardarRanking(rankingItems);
+    }
+
+    function renderRankingModal() {
+        const rankingItems = leerRanking();
+        const tabla = document.getElementById("rankingTabla");
+        const tuCiudad = document.getElementById("rankingTuCiudad");
+        const mayor = obtenerAlcaldeActual();
+        const ciudadActualName = ciudadActual?.nombre || "";
+
+        if (!tabla || !tuCiudad) return;
+        tabla.innerHTML = "";
+
+        const top10 = rankingItems.slice(0, 10);
+        let marcado = false;
+        let posicionPersonal = -1;
+
+        top10.forEach((item, index) => {
+            const tr = document.createElement("tr");
+            tr.className = "border-t border-slate-700";
+            if (item.id === ciudadActual?.id && item.mayor === mayor) {
+                tr.classList.add("bg-emerald-600/20");
+                marcado = true;
+                posicionPersonal = index + 1;
+            }
+
+            tr.innerHTML = `
+                <td class="p-2 font-semibold text-slate-100">${index + 1}</td>
+                <td class="p-2">${item.cityName}</td>
+                <td class="p-2">${item.mayor}</td>
+                <td class="p-2">${item.score}</td>
+                <td class="p-2">${item.population}</td>
+                <td class="p-2">${item.happiness}%</td>
+                <td class="p-2">${item.turns}</td>
+                <td class="p-2">${new Date(item.date).toLocaleDateString()}</td>
+            `;
+            tabla.appendChild(tr);
+        });
+
+        if (!marcado) {
+            const fullRank = rankingItems;
+            const matchIndex = fullRank.findIndex(item => item.id === ciudadActual?.id && item.mayor === mayor);
+            if (matchIndex !== -1) {
+                posicionPersonal = matchIndex + 1;
+            }
+        }
+
+        if (posicionPersonal > 0) {
+            tuCiudad.textContent = `Tu ciudad: #${posicionPersonal}`;
+        } else {
+            tuCiudad.textContent = "Tu ciudad no está en el ranking";
+        }
+
+        document.getElementById("rankingModal").classList.remove("hidden");
+    }
+
+    function actualizarRecursosDeCiudad() {
+        if (!ciudadActual) return;
+        actualizarPanelRecursos(ciudadActual);
+        registrarPuntaje();
+    }
+
     // Función para cargar la ciudad
     function cargarCiudad(ciudadId) {
         ciudadActual = ciudadService.cargarCiudad(ciudadId);
@@ -50,9 +159,10 @@ document.addEventListener("DOMContentLoaded", function () {
             console.error("Ciudad no encontrada");
             return;
         }
-        mapaActual = ciudadActual.miMapa.matriz; // ✅ sin const, usando ciudadActual
+        mapaActual = ciudadActual.miMapa?.matriz || [];
         console.log("Mapa cargado:", mapaActual);
         renderizarMapa();
+        actualizarRecursosDeCiudad();
     }
 
     // Función para construir un edificio
@@ -64,7 +174,7 @@ document.addEventListener("DOMContentLoaded", function () {
             ciudadService.actualizarCiudadCompleta(ciudadActual);
             console.log(resultado.mensaje);
             renderizarMapa();
-            //actualizarUI(ciudadActual);
+            actualizarRecursosDeCiudad();
         } else {
             console.error(resultado.mensaje);
             alert(resultado.mensaje);
@@ -298,6 +408,46 @@ document.addEventListener("DOMContentLoaded", function () {
     
 
     window.construirEdificio = construirEdificio;
+
+    const btnVerRanking = document.getElementById("btn-ver-ranking");
+    if (btnVerRanking) {
+        btnVerRanking.addEventListener("click", function () {
+            renderRankingModal();
+        });
+    }
+
+    const btnCerrarRanking = document.getElementById("btnCerrarRanking");
+    if (btnCerrarRanking) {
+        btnCerrarRanking.addEventListener("click", function () {
+            document.getElementById("rankingModal").classList.add("hidden");
+        });
+    }
+
+    const btnExportarRanking = document.getElementById("btnExportarRanking");
+    if (btnExportarRanking) {
+        btnExportarRanking.addEventListener("click", function () {
+            const rankingItems = leerRanking();
+            const blob = new Blob([JSON.stringify({ ranking: rankingItems }, null, 2)], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "ranking_ciudades.json";
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+        });
+    }
+
+    const btnReiniciarRanking = document.getElementById("btnReiniciarRanking");
+    if (btnReiniciarRanking) {
+        btnReiniciarRanking.addEventListener("click", function () {
+            if (confirm("¿Deseas reiniciar el ranking? Esto eliminará todas las entradas.")) {
+                guardarRanking([]);
+                renderRankingModal();
+            }
+        });
+    }
 
     // Inicializar con ciudad seleccionada desde query param
     const params = new URLSearchParams(window.location.search);

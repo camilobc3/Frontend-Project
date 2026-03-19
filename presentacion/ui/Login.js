@@ -22,6 +22,7 @@ ingresar.addEventListener("click", function(e){
     a.nombre === usuario && a.contrasena === contrasena);
 
     if(alcalde){
+        localStorage.setItem("currentMayor", alcalde.nombre);
         alert("Bienvenido alcalde " + alcalde.nombre);
         window.location.href = "menuCiudades.html";
     } else {
