@@ -1,8 +1,8 @@
 ﻿import StorageCiudad from "../acceso_datos/StorageCiudad.js";
 import TurnoService from "../negocio/TurnoService.js";
-import { actualizarPanelRecursos } from "../presentacion/ui/RecursosUI.js";
 
 const turnoService = new TurnoService();
+let pausado = false;
 
 function cargarCiudad() {
     const params = new URLSearchParams(window.location.search);
@@ -24,6 +24,28 @@ function cargarCiudad() {
     return ciudad;
 }
 
+function pausarJuego() {
+    turnoService.detenerTurnos();
+    pausado = true;
+    console.log("⏸️ Juego pausado.");
+}
+
+function reanudarJuego() {
+    const ciudad = cargarCiudad();
+    if (!ciudad) return;
+    turnoService.iniciarTurnos(ciudad);
+    pausado = false;
+    console.log("▶️ Juego reanudado.");
+}
+
+function togglePausa() {
+    if (pausado) {
+        reanudarJuego();
+    } else {
+        pausarJuego();
+    }
+}
+
 function iniciarJuego() {
     const ciudad = cargarCiudad();
 
@@ -35,10 +57,26 @@ function iniciarJuego() {
     console.log("🎮 Juego iniciado con:", ciudad.nombre);
     turnoService.iniciarTurnos(ciudad);
 
-    setInterval(() => {
-        const ciudadFresca = cargarCiudad();
-        if (ciudadFresca) actualizarPanelRecursos(ciudadFresca);
-    }, 2000);
+    const btnPause = document.getElementById("btnPause");
+    if (btnPause) {
+        btnPause.addEventListener("click", (e) => {
+            e.stopPropagation();
+            togglePausa();
+        });
+    }
+
+    document.addEventListener("click", () => {
+        if (pausado) reanudarJuego();
+    });
+
+    // ⏸️ Pausar cuando se sale de la pestaña
+    document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+        pausarJuego();
+        } else {
+        reanudarJuego();
+        }
+});
 }
 
 document.addEventListener("DOMContentLoaded", function () {

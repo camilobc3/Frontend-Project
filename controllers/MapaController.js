@@ -10,6 +10,7 @@ import GranjaService from "/negocio/GranjaService.js";
 import TiendaService from "/negocio/TiendaService.js";
 import CentroComercialService from "/negocio/CentroComercialService.js";
 import CiudadanoService from "/negocio/CiudadanoService.js";
+import StorageCiudad from "../acceso_datos/StorageCiudad.js";
 
 // Importar todos los controllers para registrar sus funciones
 import "./CasaController.js";
@@ -50,9 +51,23 @@ document.addEventListener("DOMContentLoaded", function () {
         return localStorage.getItem("currentMayor") || "Alcalde Anónimo";
     }
 
+    // function iniciarActualizacionConstante() {
+    //     if (refreshInterval) return;
+    //     refreshInterval = setInterval(() => {
+    //         if (!ciudadActual) return;
+    //         actualizarRecursosDeCiudad();
+    //     }, 1000);
+    // }
+
     function iniciarActualizacionConstante() {
         if (refreshInterval) return;
         refreshInterval = setInterval(() => {
+            // Recargar ciudad fresca del localStorage
+            const lista = StorageCiudad.load();
+            const params = new URLSearchParams(window.location.search);
+            const cityId = Number(params.get("cityId"));
+            ciudadActual = lista.find(c => c.id === cityId) || ciudadActual;
+    
             if (!ciudadActual) return;
             actualizarRecursosDeCiudad();
         }, 1000);

@@ -28,15 +28,16 @@ class TurnoService {
     }
 
     iniciarTurnos(ciudad){
-        if (!this.intervalo){
-            this.intervalo = setInterval(() => {
-                // Recargar ciudad fresca antes de cada turno
-                const lista = StorageCiudad.load();
-                const ciudadFresca = lista.find(c => String(c.id) === String(ciudad.id));
-                if (!ciudadFresca) return;
-                this.ejecutarTurno(ciudadFresca);
-            }, 10000);
+        if (this.intervalo) {
+            clearInterval(this.intervalo);
+            this.intervalo = null;
         }
+        this.intervalo = setInterval(() => {
+            const lista = StorageCiudad.load();
+            const ciudadFresca = lista.find(c => String(c.id) === String(ciudad.id));
+            if (!ciudadFresca) return;
+            this.ejecutarTurno(ciudadFresca);
+        }, 10000);
     }
 
     // ejecutarTurno(ciudad){
