@@ -8,10 +8,12 @@
         <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
         <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="../estilos/noticia.css">
+        <link rel="stylesheet" href="../estilos/ruta.css">
         <script type="module" src="../../controllers/MapaController.js"></script>
         <script type="module" src="../ui/panel.js"></script>
         <script type="module" src="../../controllers/CiudadController.js"></script>
         <script type="module" src="../../controllers/TurnoController.js"></script>
+        <script type="module" src="../../controllers/RutaController.js"></script>
 
     </head>
 
@@ -142,6 +144,14 @@
                         ⏸️ Pausar
                     </button>
                 </div>
+
+                <!-- Botones de ruta -->
+                <div class="pause-container">
+                    <button id="btnCalcularRuta" class="pause-btn">🗺️ Calcular Ruta</button>
+                    <button id="btnCancelarRuta" class="pause-btn">❌ Cancelar Ruta</button>
+                    <p id="rutaMensaje" class="ruta-mensaje"></p>
+                </div>
+
 
                 <!-- Barra de construcción
                      • Móvil:  iconos en fila de 5

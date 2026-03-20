@@ -732,4 +732,15 @@ body {
         align-self: flex-end;
         border-radius: var(--radius) var(--radius) 0 0;
     }
+
+}
+
+.oculto {
+    display: none;
+}
+
+[data-ruta="true"] {
+    background-color: #f59e0b !important;
+    color: black !important;
+    border-color: #f59e0b !important;
 }
