@@ -2,6 +2,7 @@
 import MapaService from "/negocio/MapaService.js";
 import CiudadService from "/negocio/CiudadService.js";
 import { actualizarPanelRecursos } from "../presentacion/ui/RecursosUI.js";
+import { actualizarEstadisticas } from "../presentacion/ui/panel.js";
 import CasaService from "/negocio/CasaService.js";
 import ApartamentoService from "/negocio/ApartamentoService.js";
 import FabricaService from "/negocio/FabricaService.js";
@@ -9,6 +10,7 @@ import GranjaService from "/negocio/GranjaService.js";
 import TiendaService from "/negocio/TiendaService.js";
 import CentroComercialService from "/negocio/CentroComercialService.js";
 import CiudadanoService from "/negocio/CiudadanoService.js";
+import StorageCiudad from "../acceso_datos/StorageCiudad.js";
 
 // Importar todos los controllers para registrar sus funciones
 import "./CasaController.js";
@@ -24,6 +26,7 @@ import "./EstacionPoliciaController.js";
 import "./ParqueController.js";
 import "./PlantaAguaController.js";
 import "./PlantaElectricaController.js";
+import { manejarClickCelda } from "./RutaController.js";
 
 document.addEventListener("DOMContentLoaded", function () {
     console.log("DOM cargado - MapaController");
@@ -42,10 +45,39 @@ document.addEventListener("DOMContentLoaded", function () {
     // Variables globales
     let ciudadActual = null;
     let mapaActual = null;
+    let refreshInterval = null;
     window.modoConstruccion = null; // Variable para indicar si estamos en modo construcción
 
     function obtenerAlcaldeActual() {
         return localStorage.getItem("currentMayor") || "Alcalde Anónimo";
+    }
+
+    function iniciarActualizacionConstante() {
+        if (refreshInterval) return;
+        refreshInterval = setInterval(() => {
+            if (!ciudadActual) return;
+            actualizarRecursosDeCiudad();
+        }, 1000);
+    }
+
+    // function iniciarActualizacionConstante() {
+    //     if (refreshInterval) return;
+    //     refreshInterval = setInterval(() => {
+    //         // Recargar ciudad fresca del localStorage
+    //         const lista = StorageCiudad.load();
+    //         const params = new URLSearchParams(window.location.search);
+    //         const cityId = Number(params.get("cityId"));
+    //         ciudadActual = lista.find(c => c.id === cityId) || ciudadActual;
+    
+    //         if (!ciudadActual) return;
+    //         actualizarRecursosDeCiudad();
+    //     }, 1000);
+    // }
+
+    function detenerActualizacionConstante() {
+        if (!refreshInterval) return;
+        clearInterval(refreshInterval);
+        refreshInterval = null;
     }
 
     function leerRanking() {
@@ -146,9 +178,24 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("rankingModal").classList.remove("hidden");
     }
 
+    // function actualizarRecursosDeCiudad() {
+    //     if (!ciudadActual) return;
+    //     actualizarPanelRecursos(ciudadActual);
+    //     actualizarEstadisticas(ciudadActual);
+    //     registrarPuntaje();
+    // }
+
     function actualizarRecursosDeCiudad() {
         if (!ciudadActual) return;
-        actualizarPanelRecursos(ciudadActual);
+        
+        // Leer ciudad fresca solo para mostrar recursos
+        const lista = StorageCiudad.load();
+        const params = new URLSearchParams(window.location.search);
+        const cityId = Number(params.get("cityId"));
+        const ciudadFresca = lista.find(c => c.id === cityId) || ciudadActual;
+        
+        actualizarPanelRecursos(ciudadFresca);
+        actualizarEstadisticas(ciudadFresca);
         registrarPuntaje();
     }
 
@@ -160,9 +207,11 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
         mapaActual = ciudadActual.miMapa?.matriz || [];
+        window.mapaActual = mapaActual; // Se añadio esto para exponer globalmente el mapa actual
         console.log("Mapa cargado:", mapaActual);
         renderizarMapa();
         actualizarRecursosDeCiudad();
+        iniciarActualizacionConstante();
     }
 
     // Función para construir un edificio
@@ -172,6 +221,7 @@ document.addEventListener("DOMContentLoaded", function () {
         
         if (resultado.ok) {
             ciudadService.actualizarCiudadCompleta(ciudadActual);
+            window.mapaActual = mapaActual; // Se añadio esto para exponer globalmente el mapa actual
             console.log(resultado.mensaje);
             renderizarMapa();
             actualizarRecursosDeCiudad();
@@ -228,6 +278,8 @@ document.addEventListener("DOMContentLoaded", function () {
                             construirEdificio(fila, columna, window.modoConstruccion);
                             // Desactivar el modo construcción después de construir
                             window.modoConstruccion = null;
+                        }else if(manejarClickCelda(fila,columna)){
+
                         } else {
                             // Si no, mostrar opciones
                             mostrarOpciones(fila, columna);

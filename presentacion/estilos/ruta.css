@@ -1,0 +1,44 @@
+[data-ruta="true"] {
+    background-color: #f59e0b !important;
+    color: black !important;
+    border-color: #f59e0b !important;
+}
+
+.oculto {
+    display: none !important;
+}
+
+.ruta-mensaje {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    text-align: center;
+    min-height: 1.2rem;
+}
+
+.pause-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+    max-width: 300px;
+}
+
+.pause-btn {
+    width: 100%;
+    padding: 0.6rem 1.25rem;
+    background: #334155;
+    border: 1px solid #38bdf8;
+    color: #f1f5f9;
+    border-radius: 7px;
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    min-height: 44px;
+    transition: all 0.2s ease;
+}
+
+.pause-btn:hover {
+    background: #38bdf8;
+    color: #0f172a;
+}

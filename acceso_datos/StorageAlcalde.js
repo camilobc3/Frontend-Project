@@ -1,6 +1,9 @@
+import Alcalde from "../modelos/Alcalde.js";
+
 const StorageAlcalde = {
 
     key: "alcaldes",
+
 
     /**
      * Guarda un nuevo alcalde
@@ -15,6 +18,7 @@ const StorageAlcalde = {
     /**
      * Retorna todos los alcaldes
      */
+
     findAll() {
 
         let datos = localStorage.getItem(this.key);
@@ -22,6 +26,14 @@ const StorageAlcalde = {
             return [];
         }
         return JSON.parse(datos);
+    },
+
+    getListaAlcaldes() {
+        let datos = localStorage.getItem(this.key);
+        if (datos === null) return [];
+
+        // ✅ Pasa los campos separados en lugar del objeto completo
+        return JSON.parse(datos).map(a => new Alcalde(a.id, a.nombre, a.contrasena));
     },
 
     /**
@@ -58,5 +70,6 @@ const StorageAlcalde = {
     }
 
 };
+
 
 export default StorageAlcalde;

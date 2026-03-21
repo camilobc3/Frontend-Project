@@ -1,4 +1,7 @@
 import StorageAlcalde from "../../acceso_datos/StorageAlcalde.js";
+import AlcaldeService from "../../negocio/AlcaldeService.js";
+
+const alcaldeService = new AlcaldeService();
 
 const formulario = document.getElementById("crear-formulario");
 
@@ -30,7 +33,7 @@ formulario.addEventListener("submit", function(e){
     }
 
     const nuevoAlcalde = {
-        id: Date.now(),
+        id: alcaldeService.asignacionId(),
         nombre: usuario,
         contrasena: contrasena
     };

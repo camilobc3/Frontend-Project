@@ -8,9 +8,12 @@
         <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
         <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="../estilos/noticia.css">
+        <link rel="stylesheet" href="../estilos/ruta.css">
         <script type="module" src="../../controllers/MapaController.js"></script>
         <script type="module" src="../ui/panel.js"></script>
         <script type="module" src="../../controllers/CiudadController.js"></script>
+        <script type="module" src="../../controllers/TurnoController.js"></script>
+        <script type="module" src="../../controllers/RutaController.js"></script>
 
     </head>
 
@@ -84,6 +87,11 @@
                     </div>
                 </div>
 
+                <div class="bg-slate-800 p-4 rounded-xl shadow">
+                    <span class="font-semibold">Turno:</span>
+                    <span class="text-slate-400 " id="turno">0</span>
+                </div>
+
             </aside>
 
 
@@ -130,6 +138,21 @@
                     </div>
                 </div>
 
+                <!-- Botón de pausa -->
+                <div class="pause-container">
+                    <button id="btnPause" class="pause-btn">
+                        ⏸️ Pausar
+                    </button>
+                </div>
+
+                <!-- Botones de ruta -->
+                <div class="pause-container">
+                    <button id="btnCalcularRuta" class="pause-btn">🗺️ Calcular Ruta</button>
+                    <button id="btnCancelarRuta" class="pause-btn">❌ Cancelar Ruta</button>
+                    <p id="rutaMensaje" class="ruta-mensaje"></p>
+                </div>
+
+
                 <!-- Barra de construcción
                      • Móvil:  iconos en fila de 5
                      • Tablet: iconos + etiqueta en fila de 5
@@ -169,6 +192,10 @@
                         <button id="btn-plantaagua-tablet" class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3 text-sm">💧 Water</button>
                         <button id="btn-plantaelectrica-tablet" class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3 text-sm">⚡ Power</button>
                     </div>
+                </div>
+                <div class="w-full lg:hidden bg-slate-800 p-4 rounded-xl shadow">
+                    <span class="font-semibold">Turno:</span>
+                    <span class="text-slate-400 " id="turno-tablet">0</span>
                 </div>
 
             </main>

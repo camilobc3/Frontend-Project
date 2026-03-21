@@ -36,3 +36,7 @@ export function rehidratarMatriz(matriz) {
         fila.map(celda => celda ? rehidratarEdificio(celda) : null)
     );
 }
+
+export function rehidratarEdificios(edificios) {
+    return edificios.map(e => rehidratarEdificio(e));
+}

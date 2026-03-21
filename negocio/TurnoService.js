@@ -1,4 +1,5 @@
 import CiudadService from "./CiudadService.js";
+import StorageCiudad from "../acceso_datos/StorageCiudad.js";
 
 import{
     Ciudad,
@@ -27,11 +28,16 @@ class TurnoService {
     }
 
     iniciarTurnos(ciudad){
-        if (!this.intervalo){
-            this.intervalo = setInterval(() => {
-                this.ejecutarTurno(ciudad);
-            }, 10000); // Ejecuta cada 15 segundos
+        if (this.intervalo) {
+            clearInterval(this.intervalo);
+            this.intervalo = null;
         }
+        this.intervalo = setInterval(() => {
+            const lista = StorageCiudad.load();
+            const ciudadFresca = lista.find(c => String(c.id) === String(ciudad.id));
+            if (!ciudadFresca) return;
+            this.ejecutarTurno(ciudadFresca);
+        }, 10000);
     }
 
     // ejecutarTurno(ciudad){
@@ -82,7 +88,7 @@ class TurnoService {
         const alertas = this.verificarRecursos(ciudad);
         alertas.forEach(alerta => console.log(alerta));
 
-        this.crearCiudadanosXturno();
+        //this.crearCiudadanosXturno();
 
         this.ciudadService.actualizarCiudadCompleta(ciudad);
 
@@ -154,11 +160,11 @@ class TurnoService {
             // Reset
             let activo = true;
             
-            if(ciudad.electricidad <= 0 && edificio.consumoElectricidad() > 0){
+            if(ciudad.electricidad <= 0 && (edificio.consumoElectricidad?.() || 0) > 0){
                 activo = false;
             }
 
-            if(ciudad.agua <= 0 && edificio.consumoAgua()>0){
+            if(ciudad.agua <= 0 && (edificio.consumoAgua?.() || 0) > 0){
                 activo = false;
             }
 

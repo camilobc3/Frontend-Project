@@ -1,8 +1,22 @@
 import Alcalde from "../modelos/Alcalde.js";
+import StorageAlcalde from "../acceso_datos/StorageAlcalde.js";
 
 class AlcaldeService {
 
     //cargarAlcaldes();
+
+    asignacionId() {
+            const lista = StorageAlcalde.getListaAlcaldes();
+            
+            let i = 0;
+    
+            while (true) {
+                i++;
+                if (!lista.some(alcalde => Number(alcalde.id) === i)) {
+                    return i;
+                }
+        }
+    }
 
     // ─── READ ALL ────────────────────────────────────────────────────────────
     cargarAlcaldes() {
@@ -20,16 +34,10 @@ class AlcaldeService {
     }
 
     // ─── CREATE ──────────────────────────────────────────────────────────────
-    crearAlcalde(id, nombre, contraseña) {
-        const lista = StorageAlcalde.load();
-        const existe = lista.some(a => a.id === id);
-        if (existe) {
-            console.warn(`Ya existe un alcalde con id ${id}`);
-            return false;
-        }
+    crearAlcalde(nombre, contraseña) {
+        const id = this.asignacionId(); // ✅ ID generado automáticamente
         const nuevoAlcalde = new Alcalde(id, nombre, contraseña);
-        lista.push(nuevoAlcalde);
-        StorageAlcalde.save(lista);
+        StorageAlcalde.save(nuevoAlcalde); // ✅ Guarda un alcalde, no una lista
         console.log("Alcalde creado:", nuevoAlcalde);
         return true;
     }
@@ -60,12 +68,11 @@ class AlcaldeService {
         console.log(`Alcalde con id ${id} eliminado`);
         return true;
     }
+
+    actualizarCiudades(id, ciudad) {
+
+    }
     
-    //Feo el que lo lea
-    //Culpa de PEtro
 };
 
 export default AlcaldeService;
-//Este es el service de alcalde
-// oeoeoeooe
-//SaliGOD
