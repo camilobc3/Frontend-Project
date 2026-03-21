@@ -305,6 +305,7 @@ document.addEventListener("DOMContentLoaded", function () {
             `<p><strong>Posición:</strong> Fila ${fila + 1}, Columna ${columna + 1}</p>`,
             `<p><strong>Tipo:</strong> ${contenido.tipo}</p>`,
             contenido.costo ? `<p><strong>Costo:</strong> ${contenido.costo}</p>` : "",
+            contenido.costo ? `<p><strong>Reembolso por demolición (50%):</strong> ${Math.floor(contenido.costo * 0.5)}</p>` : "",
             contenido.dineroGenerado ? `<p><strong>Dinero generado:</strong> ${contenido.dineroGenerado}</p>` : "",
             capacidad !== null ? `<p><strong>Capacidad:</strong> ${capacidad}</p>` : "",
             capacidad !== null ? `<p><strong>Ocupación actual:</strong> ${ocupacionActual}/${capacidad}</p>` : ""
@@ -353,15 +354,21 @@ document.addEventListener("DOMContentLoaded", function () {
         // Manejar clic en demoler
         btnDemoledor.onclick = () => {
             if (confirm(`¿Deseas demoler este ${nombre}?`)) {
-                // Actualizar la matriz en memoria
-                mapaActual[fila][columna] = null;
-                ciudadActual.miMapa.matriz[fila][columna] = null;
-                
-                // Guardar los cambios en el JSON
+                const resultado = mapaService.demolerEdificio(ciudadActual, mapaActual, fila, columna);
+
+                if (!resultado.ok) {
+                    alert(resultado.mensaje);
+                    return;
+                }
+
+                ciudadActual.miMapa.matriz = mapaActual;
                 ciudadService.actualizarCiudadCompleta(ciudadActual);
 
                 renderizarMapa();
+                actualizarRecursosDeCiudad();
                 modal.classList.add("hidden");
+
+                alert(`Demolición completada. Recuperaste $${Number(resultado.dineroRecuperado || 0).toLocaleString("es-CO")}`);
                 console.log(`${nombre} demolido en fila ${fila}, columna ${columna}`);
             }
         };

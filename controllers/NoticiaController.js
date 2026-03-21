@@ -3,19 +3,33 @@ import NoticiasRepository from "../acceso_datos/noticiasRepository.js";
 import NoticiaService from "../negocio/NoticiaService.js";
 
 document.addEventListener("DOMContentLoaded", function () {
-    var codigoPais = "us";
-    var intervaloMs = 30 * 60 * 1000;
 
+    /* Se inicializa el código del país para las noticias
+    y el intervalo de tiempo para actualizar las noticias */
+    var codigoPais = "us";
+    var intervaloCambio = 30 * 60 * 1000;
+
+    /* Se guardan los elementos html en las variables
+    para poder utilizarlas en las funciones necesarias */
     var panelContenedor = document.getElementById("noticias-lista");
     var panelEstado = document.getElementById("noticias-estado");
 
+    /* Se inicializa el repositorio mandando como parametro el API key
+    para poder obtener la promesa */
     var repo = new NoticiasRepository(NEWS_API_KEY);
+
+    /* Se obtiene la promesa en la variable repo y se inicializa el service que
+    devuelve los objetos de noticia ya armados segun la promesa del repo */
     var service = new NoticiaService(repo);
+
 
     function mostrarEstado(mensaje) {
         if (panelEstado) panelEstado.textContent = mensaje;
     }
 
+
+    /* Formatea la fecha que viene en ISO AAAA-MM-DDTHH:mm:ss para mostrar
+    el dia el mes y el año, si se detcta un error se retorna vacía */
     function formatearFecha(iso) {
         try {
             return new Date(iso).toLocaleDateString("es-CO", {
@@ -27,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function () {
             return "";
         }
     }
-
+    /* Agrega una animación mientas carga la noticia */
     function mostrarSkeletons() {
         if (!panelContenedor) return;
         panelContenedor.innerHTML = "";
@@ -37,7 +51,8 @@ document.addEventListener("DOMContentLoaded", function () {
             panelContenedor.appendChild(sk);
         }
     }
-
+    /* Función que crea un relleno haciendo un div y dentro del
+    coloca propiedades para generar el campo de las noticias en el HTML */
     function makePlaceholder() {
         var ph = document.createElement("div");
         ph.className = "nc-thumb-placeholder";
@@ -46,6 +61,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function renderizarNoticias(noticias) {
+        /* Primero verifica que el contenedor exista. 
+        Luego lo limpia — esto borra los skeletons que 
+        estaban antes. Si el array de noticias viene vacío 
+        o null, muestra un mensaje y sale. Los dos return tempranos 
+        evitan que el resto de la función corra sin datos válidos. */
         if (!panelContenedor) return;
         panelContenedor.innerHTML = "";
 
@@ -56,6 +76,7 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
+        /* Foreach que recorrre cada noticia */
         var VISIBLE_DEFAULT = 3;
 
         noticias.forEach(function (n, idx) {
@@ -63,6 +84,11 @@ document.addEventListener("DOMContentLoaded", function () {
             card.className = "nc-card" + (idx >= VISIBLE_DEFAULT ? " nc-hidden-extra" : "");
             if (idx >= VISIBLE_DEFAULT) card.style.display = "none";
 
+            /* Si la noticia tiene imagen crea un <img>. El loading = "lazy" 
+            le dice al navegador que no cargue la imagen hasta que el usuario 
+            la vaya a ver — ahorra ancho de banda. El onerror es un plan B: si 
+            la imagen existe pero falla al cargar, la reemplaza con el placeholder. }
+            Si no hay imagen desde el inicio, va directo al placeholder. */
             if (n.urlImagen) {
                 var img = document.createElement("img");
                 img.src = n.urlImagen;
@@ -75,6 +101,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 card.appendChild(makePlaceholder());
             }
 
+            /* Crea los elementos de texto de la tarjeta. target = "_blank" 
+            abre el enlace en pestaña nueva. rel = "noopener noreferrer" es 
+            una medida de seguridad — sin esto, la página que se abre en la 
+            nueva pestaña podría acceder y manipular tu página original mediante 
+            window.opener. */
             var body = document.createElement("div");
             body.className = "nc-body";
 
@@ -100,9 +131,10 @@ document.addEventListener("DOMContentLoaded", function () {
             link.className = "nc-link";
             link.textContent = "Leer →";
 
+            /* Se agregan lo que va ir por dentro de cada
+            etiqueta html */
             footer.appendChild(fecha);
             footer.appendChild(link);
-
             body.appendChild(source);
             body.appendChild(titulo);
             body.appendChild(footer);
@@ -147,5 +179,5 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     cargarNoticias();
-    setInterval(cargarNoticias, intervaloMs);
+    setInterval(cargarNoticias, intervaloCambio );
 });

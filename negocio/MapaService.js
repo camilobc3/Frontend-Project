@@ -93,6 +93,67 @@ class MapaService {
         return {ok: true, mensaje: `Edificio ${edificio.constructor.name} construido exitosamente`};
     }
 
+    demolerEdificio(ciudad, mapa, fila, columna) {
+        if (!Array.isArray(mapa) || !Array.isArray(mapa[fila])) {
+            return { ok: false, mensaje: "Posicion invalida en el mapa" };
+        }
+
+        const edificio = mapa[fila][columna];
+
+        if (!edificio) {
+            return { ok: false, mensaje: "No hay edificio para demoler en esta celda" };
+        }
+
+        const dineroRecuperado = Math.floor((Number(edificio.costo) || 0) * 0.5);
+
+        this.eliminarContratosAsociados(ciudad, edificio);
+
+        mapa[fila][columna] = null;
+        ciudad.misEdificios = this.reconstruirListaEdificiosDesdeMapa(mapa);
+        ciudad.dinero += dineroRecuperado;
+
+        return {
+            ok: true,
+            mensaje: `Edificio demolido. Se recuperaron ${dineroRecuperado}`,
+            dineroRecuperado
+        };
+    }
+
+    eliminarContratosAsociados(ciudad, edificio) {
+        if (!Array.isArray(ciudad?.misCiudadanos)) return;
+
+        const contratosEdificio = Array.isArray(edificio?.misContratos)
+            ? edificio.misContratos
+            : [];
+
+        if (contratosEdificio.length === 0) return;
+
+        const idsContratos = new Set(
+            contratosEdificio
+                .map(contrato => contrato?.id)
+                .filter(id => id !== undefined && id !== null)
+        );
+
+        ciudad.misCiudadanos.forEach(ciudadano => {
+            if (!Array.isArray(ciudadano?.misContratos)) return;
+            ciudadano.misContratos = ciudadano.misContratos.filter(contrato => !idsContratos.has(contrato?.id));
+        });
+
+        edificio.misContratos = [];
+    }
+
+    reconstruirListaEdificiosDesdeMapa(mapa) {
+        const edificios = [];
+        mapa.forEach(fila => {
+            fila.forEach(celda => {
+                if (celda !== null) {
+                    edificios.push(celda);
+                }
+            });
+        });
+        return edificios;
+    }
+
     puedeConstruir(mapa, edificio, fila, columna, ciudad){
         if(!this.celdaVacia(mapa, fila, columna)){
             return {ok: false, mensaje: "Error, la celda está ocupada"}
