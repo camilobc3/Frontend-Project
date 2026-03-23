@@ -84,4 +84,28 @@ export function actualizarPanelRecursos(ciudad) {
     if (poblacionLine) poblacionLine.setAttribute("title", `Población actual: ${ciudad.misCiudadanos?.length || 0}`);
     const felicidadLine = document.getElementById("felicidad-line");
     if (felicidadLine) felicidadLine.setAttribute("title", `Felicidad promedio de los ciudadanos: ${promedioFelicidad(ciudad)}%`);
+
+    // Actualizar recursos móviles
+    const dineroMobile = document.getElementById("dinero-mobile");
+    if (dineroMobile) dineroMobile.textContent = formatMoney(ciudad.dinero ?? 0);
+    const poblacionMobile = document.getElementById("poblacion-mobile");
+    if (poblacionMobile) poblacionMobile.textContent = String(ciudad.misCiudadanos?.length || 0);
+    const energiaMobile = document.getElementById("energia-mobile");
+    if (energiaMobile) energiaMobile.textContent = String(netoEnergia);
+    const aguaMobile = document.getElementById("agua-mobile");
+    if (aguaMobile) aguaMobile.textContent = String(netoAgua);
+    const felicidadMobile = document.getElementById("felicidad-mobile");
+    if (felicidadMobile) felicidadMobile.textContent = `${promedioFelicidad(ciudad)}%`;
+
+    // Actualizar recursos tablet
+    const dineroTablet = document.getElementById("dinero-tablet");
+    if (dineroTablet) dineroTablet.textContent = formatMoney(ciudad.dinero ?? 0);
+    const poblacionTablet = document.getElementById("poblacion-tablet");
+    if (poblacionTablet) poblacionTablet.textContent = String(ciudad.misCiudadanos?.length || 0);
+    const energiaTablet = document.getElementById("energia-tablet");
+    if (energiaTablet) energiaTablet.textContent = String(netoEnergia);
+    const aguaTablet = document.getElementById("agua-tablet");
+    if (aguaTablet) aguaTablet.textContent = String(netoAgua);
+    const felicidadTablet = document.getElementById("felicidad-tablet");
+    if (felicidadTablet) felicidadTablet.textContent = `${promedioFelicidad(ciudad)}%`;
 }
