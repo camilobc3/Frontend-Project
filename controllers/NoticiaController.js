@@ -1,5 +1,5 @@
 import { NEWS_API_KEY } from "../config.js";
-import NoticiasRepository from "../acceso_datos/noticiasRepository.js";
+import NoticiasRepository from "../api/NoticiasRepository.js";
 import NoticiaService from "../negocio/NoticiaService.js";
 
 document.addEventListener("DOMContentLoaded", function () {
