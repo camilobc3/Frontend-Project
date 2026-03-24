@@ -48,6 +48,12 @@ document.addEventListener("DOMContentLoaded", function () {
     let refreshInterval = null;
     window.modoConstruccion = null; // Variable para indicar si estamos en modo construcción
 
+    //Variables globales para el zoom
+    let zoomActual = 1;
+    const ZOOM_MIN = 0.6;
+    const ZOOM_MAX = 2;
+    const ZOOM_STEP = 0.1;
+
     function obtenerAlcaldeActual() {
         return localStorage.getItem("currentMayor") || "Alcalde Anónimo";
     }
@@ -337,6 +343,10 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    function zoom(){
+
+    }
+
     // Función para renderizar el mapa en el DOM
     function renderizarMapa() {
         // Renderiza en los TRES contenedores a la vez
@@ -395,6 +405,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             }
         });
+        aplicarZoom();
     }
 
     function obtenerIconoEdificio(contenido) {
@@ -463,6 +474,7 @@ document.addEventListener("DOMContentLoaded", function () {
             `<p><strong>Posición:</strong> Fila ${fila + 1}, Columna ${columna + 1}</p>`,
             `<p><strong>Tipo:</strong> ${contenido.tipo}</p>`,
             contenido.costo ? `<p><strong>Costo:</strong> ${contenido.costo}</p>` : "",
+            contenido.costo ? `<p><strong>Reembolso por demolición (50%):</strong> ${Math.floor(contenido.costo * 0.5)}</p>` : "",
             contenido.dineroGenerado ? `<p><strong>Dinero generado:</strong> ${contenido.dineroGenerado}</p>` : "",
             capacidad !== null ? `<p><strong>Capacidad:</strong> ${capacidad}</p>` : "",
             capacidad !== null ? `<p><strong>Ocupación actual:</strong> ${ocupacionActual}/${capacidad}</p>` : ""
@@ -541,6 +553,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 ciudadActual.miMapa.matriz[fila][columna] = null;
                 ciudadService.actualizarCiudadCompleta(ciudadActual);
                 renderizarMapa();
+                actualizarRecursosDeCiudad();
                 modal.classList.add("hidden");
             }
         };
@@ -560,6 +573,32 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         };
     }
+
+    //Función para manejar el zoom del mapa
+    function aplicarZoom() {
+        const mapa = document.getElementById("gameMap");
+        if (!mapa) return;
+        mapa.style.transform = "scale(" + zoomActual + ")";
+        mapa.style.transformOrigin = "top left";
+        mapa.style.transition = "transform 0.15s ease";
+    }
+
+    const btnZoomIn = document.getElementById("btnZoomIn");
+    if (btnZoomIn) {
+            btnZoomIn.addEventListener("click", function () {
+            zoomActual = Math.min(ZOOM_MAX, +(zoomActual + ZOOM_STEP).toFixed(2));
+            aplicarZoom();
+        });
+    }
+
+    const btnZoomOut = document.getElementById("btnZoomOut");
+    if (btnZoomOut) {
+            btnZoomOut.addEventListener("click", function () {
+            zoomActual = Math.max(ZOOM_MIN, +(zoomActual - ZOOM_STEP).toFixed(2));
+            aplicarZoom();
+        });
+    }
+
     
     const btnCargarMapa = document.getElementById("btnCargarMapa");
     if (btnCargarMapa) {
@@ -625,6 +664,8 @@ document.addEventListener("DOMContentLoaded", function () {
             exportarCiudad();
         });
     }
+
+
 
     // Inicializar con ciudad seleccionada desde query param
     const params = new URLSearchParams(window.location.search);

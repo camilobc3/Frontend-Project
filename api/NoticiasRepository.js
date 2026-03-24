@@ -22,12 +22,16 @@ export default class NoticiasRepository {
                 }
                 return res.json();
             })
+
+            //Recibe el objeto js que viene del json  de la API
+            //pero verifica que no hayna errores internos ej: apikey ivalida, etc.
+            //si todo esta bien, devuelve el array de noticias.
             .then(function (data) {
                 // NewsAPI devuelve { status, totalResults, articles: [...] }
                 if (data.status !== "ok") {
                     throw new Error("NewsAPI respondió con error: " + data.message);
                 }
-                return data.articles; // ← array crudo de artículos
+                return data.articles; // array de noticias 
             });
     }
 }
