@@ -38,3 +38,8 @@ export function iniciarClimaAutomatico() {
         }, INTERVALO_CLIMA);
     }
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+    console.log("DOM cargado - TurnoController");
+    iniciarClimaAutomatico()
+});
