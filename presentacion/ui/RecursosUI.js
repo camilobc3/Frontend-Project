@@ -74,7 +74,7 @@ export function actualizarPanelRecursos(ciudad) {
         return `${nombre} Consumo: ${consumoVal}\nReserva: ${produccionVal}\nBalance: ${produccionVal - consumoVal}`;
     };
 
-    const energiaLine = document.getElementById("energia-line");
+    const electricidadLine = document.getElementById("eletricidad-line");
     if (energiaLine) energiaLine.setAttribute("title", buildTooltip(consumo.electricidad, produccion.electricidad, "Electricidad:"));
     const aguaLine = document.getElementById("agua-line");
     if (aguaLine) aguaLine.setAttribute("title", buildTooltip(consumo.agua, produccion.agua, "Agua:"));
