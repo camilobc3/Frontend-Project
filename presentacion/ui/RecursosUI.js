@@ -59,8 +59,8 @@ export function actualizarPanelRecursos(ciudad) {
 
     if (poblacionElem) poblacionElem.textContent = String(ciudad.misCiudadanos?.length || 0);
     if (felicidadElem) felicidadElem.textContent = `${promedioFelicidad(ciudad)}%`;
-    if (electricidadElem) electricidadElem.textContent = `${produccion.electricidad} / ${consumo.electricidad}`;
-    if (aguaElem) aguaElem.textContent = `${produccion.agua} / ${consumo.agua}`;
+    if (electricidadElem) electricidadElem.textContent = `${consumo.electricidad} / ${produccion.electricidad}`;
+    if (aguaElem) aguaElem.textContent = `${consumo.agua} / ${produccion.agua}`;
     if (alimentoElem) alimentoElem.textContent = String(ciudad.alimento || 0);
     if (turnoElem) turnoElem.textContent = String(ciudad.turno || 0);
 
@@ -70,14 +70,14 @@ export function actualizarPanelRecursos(ciudad) {
         );
     }
 
-    const buildTooltip = (produccionVal, consumoVal, nombre) => {
-        return `${nombre} Producción: ${produccionVal}\nConsumo: ${consumoVal}\nBalance: ${produccionVal - consumoVal}`;
+    const buildTooltip = (consumoVal, produccionVal, nombre) => {
+        return `${nombre} Consumo: ${consumoVal}\nReserva: ${produccionVal}\nBalance: ${produccionVal - consumoVal}`;
     };
 
     const energiaLine = document.getElementById("energia-line");
-    if (energiaLine) energiaLine.setAttribute("title", buildTooltip(produccion.electricidad, consumo.electricidad, "Electricidad:"));
+    if (energiaLine) energiaLine.setAttribute("title", buildTooltip(consumo.electricidad, produccion.electricidad, "Electricidad:"));
     const aguaLine = document.getElementById("agua-line");
-    if (aguaLine) aguaLine.setAttribute("title", buildTooltip(produccion.agua, consumo.agua, "Agua:"));
+    if (aguaLine) aguaLine.setAttribute("title", buildTooltip(consumo.agua, produccion.agua, "Agua:"));
     const alimentoLine = document.getElementById("alimento-line");
     if (alimentoLine) alimentoLine.setAttribute("title", `Producción: ${produccion.alimento}\nConsumo: 0\nBalance: ${produccion.alimento}`);
     const poblacionLine = document.getElementById("poblacion-line");
