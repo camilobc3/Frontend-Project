@@ -92,6 +92,11 @@
                     <span class="text-slate-400 " id="turno">0</span>
                 </div>
 
+                <!-- Botón de exportar ciudad -->
+                <div class="bg-slate-800 p-4 rounded-xl shadow">
+                    <button id="btn-exportar-ciudad" class="w-full rounded-lg bg-blue-600 hover:bg-blue-500 px-3 py-2 text-xs font-semibold">📤 Exportar Ciudad</button>
+                </div>
+
             </aside>
 
 
@@ -104,21 +109,29 @@
             <main class="col-span-1 md:col-span-6 lg:col-span-8 flex flex-col items-center justify-start md:justify-center gap-4 p-4 md:p-5 lg:p-4">
 
                 <!-- Header: visible en móvil y tablet, oculto en desktop -->
-                <div class="w-full flex items-center justify-between lg:hidden">
-                    <h1 class="text-lg font-bold">City Builder</h1>
-                    <!-- Móvil: solo 3 recursos clave -->
-                    <div class="flex md:hidden gap-3 text-xs text-slate-300">
-                        <span>💵 <span id="dinero-mobile">5000</span></span>
-                        <span>👥 <span id="poblacion-mobile">150</span></span>
-                        <span>⚡ <span id="energia-mobile">75</span></span>
-                    </div>
-                    <!-- Tablet: los 5 recursos en fila -->
-                    <div class="hidden md:flex gap-4 text-xs text-slate-300">
-                        <span>💵 <span id="dinero-tablet">5000</span></span>
-                        <span>👥 <span id="poblacion-tablet">150</span></span>
-                        <span>⚡ <span id="energia-tablet">75</span></span>
-                        <span>💧 <span id="agua-tablet">75</span></span>
-                        <span>😄 <span id="felicidad-tablet">75</span></span>
+                <div class="w-full lg:hidden">
+                    <div class="flex items-center justify-between">
+                        <h1 class="text-lg font-bold">City Builder</h1>
+                        <!-- Móvil: recursos + botón -->
+                        <div class="flex items-center gap-2 md:gap-3 text-xs text-slate-300">
+                            <div class="flex md:hidden flex-wrap gap-2 justify-end">
+                                <span>💵 <span id="dinero-mobile">5000</span></span>
+                                <span>👥 <span id="poblacion-mobile">150</span></span>
+                                <span>⚡ <span id="energia-mobile">75</span></span>
+                                <span>💧 <span id="agua-mobile">75</span></span>
+                                <span>😄 <span id="felicidad-mobile">75</span></span>
+                            </div>
+                            <!-- Tablet: los 5 recursos -->
+                            <div class="hidden md:flex gap-4">
+                                <span>💵 <span id="dinero-tablet">5000</span></span>
+                                <span>👥 <span id="poblacion-tablet">150</span></span>
+                                <span>⚡ <span id="energia-tablet">75</span></span>
+                                <span>💧 <span id="agua-tablet">75</span></span>
+                                <span>😄 <span id="felicidad-tablet">75</span></span>
+                            </div>
+                            <!-- Botón de ranking -->
+                            <button id="btn-ver-ranking-mobile" class="rounded-lg bg-emerald-600 hover:bg-emerald-500 px-2 py-1 md:px-3 md:py-2 text-xs font-semibold ml-2">🏆 Ranking</button>
+                        </div>
                     </div>
                 </div>
 
@@ -283,18 +296,18 @@
                     </div>
                     <button id="btnCerrarRanking" class="bg-rose-600 hover:bg-rose-500 rounded-md px-3 py-1 text-xs">Cerrar</button>
                 </div>
-                <div class="mt-4 overflow-auto">
-                    <table class="w-full text-left text-xs md:text-sm border border-slate-700 rounded-lg overflow-hidden">
+                <div class="mt-4 overflow-x-auto">
+                    <table class="w-full text-left text-xs md:text-sm border border-slate-700 rounded-lg overflow-hidden min-w-[600px]">
                         <thead class="bg-slate-700 text-slate-200 text-[10px] md:text-xs uppercase">
                             <tr>
-                                <th class="p-2">#</th>
-                                <th class="p-2">Ciudad</th>
-                                <th class="p-2">Alcalde</th>
-                                <th class="p-2">Puntaje</th>
-                                <th class="p-2">Población</th>
-                                <th class="p-2">Felicidad</th>
-                                <th class="p-2">Turnos</th>
-                                <th class="p-2">Fecha</th>
+                                <th class="p-1 md:p-2">#</th>
+                                <th class="p-1 md:p-2">Ciudad</th>
+                                <th class="p-1 md:p-2">Alcalde</th>
+                                <th class="p-1 md:p-2">Puntaje</th>
+                                <th class="p-1 md:p-2">Población</th>
+                                <th class="p-1 md:p-2">Felicidad</th>
+                                <th class="p-1 md:p-2">Turnos</th>
+                                <th class="p-1 md:p-2">Fecha</th>
                             </tr>
                         </thead>
                         <tbody id="rankingTabla" class="bg-slate-800 text-slate-100"></tbody>
@@ -302,7 +315,6 @@
                 </div>
                 <div class="mt-3 flex flex-wrap gap-2 text-xs">
                     <span id="rankingTuCiudad" class="text-slate-300"></span>
-                    <button id="btnExportarRanking" class="rounded-md bg-blue-600 px-3 py-1 hover:bg-blue-500">Exportar JSON</button>
                     <button id="btnReiniciarRanking" class="rounded-md bg-red-600 px-3 py-1 hover:bg-red-500">Reiniciar ranking</button>
                 </div>
             </div>

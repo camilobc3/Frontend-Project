@@ -149,14 +149,14 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             tr.innerHTML = `
-                <td class="p-2 font-semibold text-slate-100">${index + 1}</td>
-                <td class="p-2">${item.cityName}</td>
-                <td class="p-2">${item.mayor}</td>
-                <td class="p-2">${item.score}</td>
-                <td class="p-2">${item.population}</td>
-                <td class="p-2">${item.happiness}%</td>
-                <td class="p-2">${item.turns}</td>
-                <td class="p-2">${new Date(item.date).toLocaleDateString()}</td>
+                <td class="p-1 md:p-2 font-semibold text-slate-100">${index + 1}</td>
+                <td class="p-1 md:p-2">${item.cityName}</td>
+                <td class="p-1 md:p-2">${item.mayor}</td>
+                <td class="p-1 md:p-2">${item.score}</td>
+                <td class="p-1 md:p-2">${item.population}</td>
+                <td class="p-1 md:p-2">${item.happiness}%</td>
+                <td class="p-1 md:p-2">${item.turns}</td>
+                <td class="p-1 md:p-2">${new Date(item.date).toLocaleDateString()}</td>
             `;
             tabla.appendChild(tr);
         });
@@ -176,6 +176,84 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         document.getElementById("rankingModal").classList.remove("hidden");
+    }
+
+    function exportarCiudad() {
+        if (!ciudadActual) {
+            alert("No hay ciudad cargada para exportar.");
+            return;
+        }
+
+        const ciudadService = new CiudadService();
+        const resultado = ciudadService.calcularPuntuacion(ciudadActual);
+        const promedioFelicidad = ciudadActual.misCiudadanos?.length > 0 
+            ? Math.round(ciudadActual.misCiudadanos.reduce((sum, c) => sum + (c.felicidad || 0), 0) / ciudadActual.misCiudadanos.length) 
+            : 0;
+
+        // Extraer buildings y roads del mapa
+        const buildings = [];
+        const roads = [];
+        const map = ciudadActual.mapa || [];
+        const height = map.length;
+        const width = height > 0 ? map[0].length : 0;
+
+        for (let y = 0; y < height; y++) {
+            for (let x = 0; x < width; x++) {
+                const cell = map[y][x];
+                if (cell && cell.edificio) {
+                    if (cell.edificio.tipo === 'camino') {
+                        roads.push({
+                            x: x,
+                            y: y,
+                            type: cell.edificio.tipo,
+                            level: cell.edificio.nivel || 1
+                        });
+                    } else {
+                        buildings.push({
+                            x: x,
+                            y: y,
+                            type: cell.edificio.tipo,
+                            level: cell.edificio.nivel || 1
+                        });
+                    }
+                }
+            }
+        }
+
+        const exportData = {
+            cityName: ciudadActual.nombre || "Sin Nombre",
+            mayor: obtenerAlcaldeActual() || "Sin Alcalde",
+            gridSize: { width: width, height: height },
+            coordinates: { lat: 4.6097, lon: -74.0817 }, // Valores fijos por ahora
+            turn: ciudadActual.turno || 0,
+            score: resultado.puntuacionFinal || 0,
+            map: map,
+            buildings: buildings,
+            roads: roads,
+            resources: {
+                dinero: ciudadActual.dinero || 0,
+                alimento: ciudadActual.alimento || 0
+            },
+            citizens: ciudadActual.misCiudadanos || [],
+            population: ciudadActual.misCiudadanos?.length || 0,
+            happiness: promedioFelicidad
+        };
+
+        const jsonString = JSON.stringify(exportData, null, 2);
+        const fecha = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+        const nombreArchivo = `ciudad_${exportData.cityName}_${fecha}.json`;
+
+        const blob = new Blob([jsonString], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = nombreArchivo;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+
+        alert("✅ Ciudad exportada exitosamente como " + nombreArchivo);
     }
 
     // function actualizarRecursosDeCiudad() {
@@ -475,26 +553,17 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    const btnVerRankingMobile = document.getElementById("btn-ver-ranking-mobile");
+    if (btnVerRankingMobile) {
+        btnVerRankingMobile.addEventListener("click", function () {
+            renderRankingModal();
+        });
+    }
+
     const btnCerrarRanking = document.getElementById("btnCerrarRanking");
     if (btnCerrarRanking) {
         btnCerrarRanking.addEventListener("click", function () {
             document.getElementById("rankingModal").classList.add("hidden");
-        });
-    }
-
-    const btnExportarRanking = document.getElementById("btnExportarRanking");
-    if (btnExportarRanking) {
-        btnExportarRanking.addEventListener("click", function () {
-            const rankingItems = leerRanking();
-            const blob = new Blob([JSON.stringify({ ranking: rankingItems }, null, 2)], { type: "application/json" });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = "ranking_ciudades.json";
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-            URL.revokeObjectURL(url);
         });
     }
 
@@ -505,6 +574,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 guardarRanking([]);
                 renderRankingModal();
             }
+        });
+    }
+
+    const btnExportarCiudad = document.getElementById("btn-exportar-ciudad");
+    if (btnExportarCiudad) {
+        btnExportarCiudad.addEventListener("click", function () {
+            exportarCiudad();
         });
     }
 
