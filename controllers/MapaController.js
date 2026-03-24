@@ -293,13 +293,41 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Función para construir un edificio
+    // function construirEdificio(fila, columna, tipo) {
+    //     console.log(`Construyendo ${tipo} en fila ${fila}, columna ${columna}`);
+    //     const resultado = mapaService.construirEdificio(ciudadActual, mapaActual, fila, columna, tipo);
+        
+    //     if (resultado.ok) {
+    //         ciudadService.actualizarCiudadCompleta(ciudadActual);
+    //         window.mapaActual = mapaActual; // Se añadio esto para exponer globalmente el mapa actual
+    //         console.log(resultado.mensaje);
+    //         renderizarMapa();
+    //         actualizarRecursosDeCiudad();
+    //     } else {
+    //         console.error(resultado.mensaje);
+    //         alert(resultado.mensaje);
+    //     }
+    // }
+
     function construirEdificio(fila, columna, tipo) {
         console.log(`Construyendo ${tipo} en fila ${fila}, columna ${columna}`);
+    
+        // ✅ Leer ciudad fresca antes de construir para no pisar el estado del TurnoService
+        const lista = StorageCiudad.load();
+        const params = new URLSearchParams(window.location.search);
+        const cityId = Number(params.get("cityId"));
+        const ciudadFresca = lista.find(c => c.id === cityId);
+        if (ciudadFresca) {
+            ciudadActual = ciudadFresca;
+            mapaActual = ciudadActual.miMapa?.matriz || [];
+            window.mapaActual = mapaActual;
+        }
+    
         const resultado = mapaService.construirEdificio(ciudadActual, mapaActual, fila, columna, tipo);
         
         if (resultado.ok) {
             ciudadService.actualizarCiudadCompleta(ciudadActual);
-            window.mapaActual = mapaActual; // Se añadio esto para exponer globalmente el mapa actual
+            window.mapaActual = mapaActual;
             console.log(resultado.mensaje);
             renderizarMapa();
             actualizarRecursosDeCiudad();
@@ -481,18 +509,39 @@ document.addEventListener("DOMContentLoaded", function () {
         `;
 
         // Manejar clic en demoler
+        // btnDemoledor.onclick = () => {
+        //     if (confirm(`¿Deseas demoler este ${nombre}?`)) {
+        //         // Actualizar la matriz en memoria
+        //         mapaActual[fila][columna] = null;
+        //         ciudadActual.miMapa.matriz[fila][columna] = null;
+                
+        //         // Guardar los cambios en el JSON
+        //         ciudadService.actualizarCiudadCompleta(ciudadActual);
+
+        //         renderizarMapa();
+        //         modal.classList.add("hidden");
+        //         console.log(`${nombre} demolido en fila ${fila}, columna ${columna}`);
+        //     }
+        // };
+
         btnDemoledor.onclick = () => {
             if (confirm(`¿Deseas demoler este ${nombre}?`)) {
-                // Actualizar la matriz en memoria
+                // ✅ Leer ciudad fresca antes de demoler
+                const lista = StorageCiudad.load();
+                const params = new URLSearchParams(window.location.search);
+                const cityId = Number(params.get("cityId"));
+                const ciudadFresca = lista.find(c => c.id === cityId);
+                if (ciudadFresca) {
+                    ciudadActual = ciudadFresca;
+                    mapaActual = ciudadActual.miMapa?.matriz || [];
+                    window.mapaActual = mapaActual;
+                }
+        
                 mapaActual[fila][columna] = null;
                 ciudadActual.miMapa.matriz[fila][columna] = null;
-                
-                // Guardar los cambios en el JSON
                 ciudadService.actualizarCiudadCompleta(ciudadActual);
-
                 renderizarMapa();
                 modal.classList.add("hidden");
-                console.log(`${nombre} demolido en fila ${fila}, columna ${columna}`);
             }
         };
 
