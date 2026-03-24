@@ -2,7 +2,7 @@
    VARIABLES GLOBALES
 ═══════════════════════════════════════════════════ */
 :root {
-    --cell-size: 32px;
+    --cell-size: 50px;
     --zoom-level: 1;
 
     --bg-900: #0f172a;
@@ -264,6 +264,19 @@ body {
     color: #4a6080;
     transition: background var(--transition), border-color var(--transition);
     user-select: none;
+    overflow: hidden;
+}
+
+.map-cell__img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.map-cell-empty {
+    background: #1f2937;
+    border-color: #4b5563;
 }
 
 .map-cell:hover        { background: #374151; border-color: var(--accent); color: #fff; }
