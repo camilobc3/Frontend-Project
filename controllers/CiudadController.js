@@ -1,10 +1,9 @@
-﻿import CiudadService from "../negocio/CiudadService.js";
-const ciudadService = new CiudadService();
-import MapaService from "../negocio/MapaService.js";
-const mapaService = new MapaService();
-import { obtenerRegiones } from "../api/RegionesApi.js";
+﻿import { obtenerRegiones } from "../api/RegionesApi.js";
 import Mapa from "../modelos/Mapa.js";
-import { iniciarClimaAutomatico } from "./ClimaController.js";
+import CiudadService from "../negocio/CiudadService.js";
+import MapaService from "../negocio/MapaService.js";
+const ciudadService = new CiudadService();
+const mapaService = new MapaService();
 
 function cargarRegiones() {
     const regionSelect = document.getElementById("region");
@@ -130,7 +129,7 @@ document.addEventListener("DOMContentLoaded", function () {
     cargarRegiones();
     renderizarCiudadesMenu();
 
-    iniciarClimaAutomatico();
+    //iniciarClimaAutomatico();
 
     
 
