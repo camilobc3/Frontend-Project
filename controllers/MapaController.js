@@ -458,7 +458,6 @@ document.addEventListener("DOMContentLoaded", function () {
         const modal = document.getElementById("modalOpciones");
         const modalTitulo = document.getElementById("modalTitulo");
         const modalContenido = document.getElementById("modalContenido");
-        const btnDemoledor = document.getElementById("btnDemoledor");
         const btnCerrar = document.getElementById("btnCerrarModal");
 
         // Llenar el modal con información del edificio
@@ -536,6 +535,7 @@ document.addEventListener("DOMContentLoaded", function () {
         //     }
         // };
 
+/*         const btnDemoledor = document.getElementById("btnDemoledor");
         btnDemoledor.onclick = () => {
             if (confirm(`¿Deseas demoler este ${nombre}?`)) {
                 // ✅ Leer ciudad fresca antes de demoler
@@ -551,11 +551,49 @@ document.addEventListener("DOMContentLoaded", function () {
         
                 mapaActual[fila][columna] = null;
                 ciudadActual.miMapa.matriz[fila][columna] = null;
+                mapaService.demolerEdificio(ciudadActual, ciudadActual.miMapa, fila, columna)    
                 ciudadService.actualizarCiudadCompleta(ciudadActual);
                 renderizarMapa();
                 actualizarRecursosDeCiudad();
                 modal.classList.add("hidden");
             }
+        }; */
+
+        const btnDemoledor = document.getElementById("btnDemoledor");
+        btnDemoledor.onclick = () => {
+            if (!confirm(`¿Deseas demoler este ${nombre}?`)) return;
+
+            // Leer ciudad fresca antes de operar para evitar pisar estado
+            const lista = StorageCiudad.load();
+            const params = new URLSearchParams(window.location.search);
+            const cityId = Number(params.get("cityId"));
+            const ciudadFresca = lista.find(c => c.id === cityId);
+
+            if (ciudadFresca) {
+                ciudadActual = ciudadFresca;
+                mapaActual = ciudadActual.miMapa?.matriz || [];
+                window.mapaActual = mapaActual;
+            }
+
+            // Importante: NO hacer null manual antes del servicio
+            // Importante: pasar la matriz, no el objeto miMapa completo
+            const resultado = mapaService.demolerEdificio(
+                ciudadActual,
+                ciudadActual.miMapa?.matriz,
+                fila,
+                columna
+            );
+
+            if (!resultado?.ok) {
+                alert(resultado?.mensaje || "No se pudo demoler el edificio");
+                return;
+            }
+
+            ciudadService.actualizarCiudadCompleta(ciudadActual);
+            window.mapaActual = ciudadActual.miMapa?.matriz || mapaActual;
+            renderizarMapa();
+            actualizarRecursosDeCiudad();
+            modal.classList.add("hidden");
         };
 
         // Manejar clic en cerrar
