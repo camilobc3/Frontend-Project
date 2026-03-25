@@ -379,11 +379,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     const contenido = mapaActual[fila][columna];
                     if (contenido === null) {
-                        celda.textContent = "•";
+                        const src = obtenerSrcEdificio(null);
+                        celda.title = "Vacío";
+                        celda.innerHTML = `<img src="${src}" alt="Vacío" class="map-cell__img" loading="lazy">`;
+                        celda.classList.add("map-cell-empty");
                     } else {
-                        celda.textContent = obtenerIconoEdificio(contenido.tipo); // ✅
-                        //celda.classList.add(contenido.tipo.toLowerCase());
-                        celda.title = contenido.tipo;; // tooltip al hacer hover
+                        const src = obtenerSrcEdificio(contenido.tipo);
+                        const nombre = obtenerNombreEdificio(contenido.tipo);
+                        celda.title = nombre;
+                        celda.innerHTML = `<img src="${src}" alt="${nombre}" class="map-cell__img" loading="lazy">`;
+                        celda.classList.add("map-cell", contenido.tipo.toLowerCase());
                     }
 
                     // Manejar clicks en las celdas
@@ -406,6 +411,26 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
         aplicarZoom();
+    }
+
+    function obtenerSrcEdificio(tipo) {
+        const rutas = {
+            R: "../assets/camino.png",
+            R1: "../assets/casa.png",
+            R2: "../assets/apartamento.png",
+            C1: "../assets/tienda.png",
+            C2: "../assets/CentroComercial.png",
+            I1: "../assets/Fabrica.png",
+            I2: "../assets/Granja.png",
+            S1: "../assets/Hospital.png",
+            S2: "../assets/EstacionBomberos.png",
+            S3: "../assets/EstacionPolicia.png",
+            P1: "../assets/Parque.png",
+            U1: "../assets/PlantaElectrica.png",
+            U2: "../assets/PlantaDeAgua.png",
+            null: "../assets/Pasto.png"
+        };
+        return rutas[tipo] || "../assets/Pasto.png";
     }
 
     function obtenerIconoEdificio(contenido) {
