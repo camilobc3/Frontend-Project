@@ -343,5 +343,24 @@
             </div>
         </div>
 
+        <!-- Modal Game Over -->
+        <div id="modalGameOver" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+            <div class="bg-slate-800 rounded-xl p-6 max-w-sm w-full mx-4 border-2 border-red-600 shadow-xl text-center">
+                <h2 class="text-2xl font-bold mb-2">💀 Game Over</h2>
+                <video id="videoGameOver" class="w-full rounded-lg mb-4" loop playsinline preload="none">
+                    <source src="../assets/GameOver.mp4" type="video/mp4">
+                </video>
+                <button id="btnPlayVideo" class="hidden mb-4 w-full bg-slate-700 hover:bg-slate-600 transition rounded-lg px-4 py-2 text-sm">
+                    ▶️ Reproducir video
+                </button>
+                <p id="modalGameOverMensaje" class="text-slate-300 text-base mb-6"></p>
+                <a id="btnGameOverVolver"
+                    href="./menuCiudades.html"
+                    class="block w-full bg-red-600 hover:bg-red-500 transition rounded-lg px-4 py-2 font-semibold">
+                    Volver al menú
+                </a>
+            </div>
+        </div>
+
     </body>
 </html>

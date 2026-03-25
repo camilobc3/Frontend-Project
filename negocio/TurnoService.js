@@ -1,24 +1,6 @@
-import CiudadService from "./CiudadService.js";
 import StorageCiudad from "../acceso_datos/StorageCiudad.js";
+import CiudadService from "./CiudadService.js";
 
-import{
-    Ciudad,
-    Edificio,
-    EdificioResidencial,
-    EdificioComercial,
-    EdificioIndustrial,
-    EdificioServicio,
-    PlantaUtilidad,
-    Fabrica,
-    Granja,
-    Hospital,
-    PlantaElectrica,
-    PlantaAgua,
-    Casa,
-    Apartamento,
-    EstacionBombero,
-    Camino
-}from "../modelos/index.js";
 
 
 class TurnoService {
@@ -36,8 +18,12 @@ class TurnoService {
             const lista = StorageCiudad.load();
             const ciudadFresca = lista.find(c => String(c.id) === String(ciudad.id));
             if (!ciudadFresca) return;
-            this.ejecutarTurno(ciudadFresca);
-        }, 10000);
+
+                const resultado = this.ejecutarTurno(ciudadFresca);
+                if (resultado?.gameOver) {
+                this.onGameOver?.(resultado.razon); // ← callback opcional
+                }
+            }, 10000);
     }
 
     // ejecutarTurno(ciudad){
@@ -70,12 +56,6 @@ class TurnoService {
     }
 
     ejecutarTurno(ciudad){
-        if(ciudad.dinero <= 0){
-            console.log("La ciudad ha quebrado. Fin del juego :,v");
-            this.detenerTurnos();
-            return;
-        }
-
         ciudad.turno++;
 
         this.aplicarEfectosRecursos(ciudad);
@@ -84,6 +64,16 @@ class TurnoService {
         const consumo = this.calcularConsumo(ciudad);
 
         this.aplicarBalance(ciudad, produccion, consumo);
+        
+        if(ciudad.dinero < 0 || ciudad.electricidad < 0 || ciudad.agua < 0){
+            this.detenerTurnos();
+            return {
+                gameOver: true,
+                razon: ciudad.dinero < 0 ? "dinero"
+                     : ciudad.electricidad < 0 ? "electricidad"
+                     : "agua"
+            };
+        }
 
         const alertas = this.verificarRecursos(ciudad);
         alertas.forEach(alerta => console.log(alerta));
@@ -93,6 +83,8 @@ class TurnoService {
         this.ciudadService.actualizarCiudadCompleta(ciudad);
 
         console.log("Turno:", ciudad.turno, "Dinero:", ciudad.dinero);
+        
+        return { gameOver: false };
     }
 
     calcularProduccion(ciudad){

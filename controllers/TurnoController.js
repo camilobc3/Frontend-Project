@@ -24,6 +24,33 @@ function cargarCiudad() {
     return ciudad;
 }
 
+function mostrarModalGameOver(razon) {
+    const mensajes = {
+        dinero:       "💸 La ciudad ha quebrado.",
+        electricidad: "⚡ La ciudad se quedó sin electricidad.",
+        agua:         "💧 La ciudad se quedó sin agua."
+    };
+
+    document.getElementById("modalGameOverMensaje").textContent =
+        mensajes[razon] || "La ciudad ha colapsado.";
+
+    document.getElementById("modalGameOver").classList.remove("hidden");
+
+    // Forzar reproducción con sonido desde interacción del usuario
+    const video = document.querySelector("#modalGameOver video");
+    const btnPlay = document.getElementById("btnPlayVideo");
+    
+    video.play().catch(() => {
+        // Si el navegador lo bloquea, mostrar el botón de play
+        btnPlay.classList.remove("hidden");
+    });
+
+    btnPlay.onclick = () => {
+        video.play();
+        btnPlay.classList.add("hidden");
+    };
+}
+
 function pausarJuego() {
     turnoService.detenerTurnos();
     pausado = true;
@@ -53,6 +80,10 @@ function iniciarJuego() {
         console.error("No se pudo cargar la ciudad. Abortando.");
         return;
     }
+
+    turnoService.onGameOver = (razon) => {
+        mostrarModalGameOver(razon);
+    };
 
     console.log("🎮 Juego iniciado con:", ciudad.nombre);
     turnoService.iniciarTurnos(ciudad);
