@@ -1,5 +1,10 @@
 import StorageCiudad from "../acceso_datos/StorageCiudad.js";
-
+import {
+    Casa,
+    Apartamento,
+    CentroComercial,
+    Tienda
+} from "../modelos/index.js";
 // ✅ Se eliminó: import CiudadService from "./CiudadService.js" — causaba el ciclo
 
 class CiudadanoService {
