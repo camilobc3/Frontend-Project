@@ -78,7 +78,7 @@ class TurnoService {
         const alertas = this.verificarRecursos(ciudad);
         alertas.forEach(alerta => console.log(alerta));
 
-        //this.crearCiudadanosXturno();
+        this.crearCiudadanosXturno();
 
         this.ciudadService.actualizarCiudadCompleta(ciudad);
 

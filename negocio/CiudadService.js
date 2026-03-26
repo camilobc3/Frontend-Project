@@ -15,7 +15,12 @@ import {
     Casa,
     Apartamento,
     EstacionBombero,
-    Camino
+    Camino,
+    Tienda,
+    CentroComercial,
+    Parque,
+    Ciudadano,
+    Contrato
 } from "../modelos/index.js";
 
 
@@ -27,11 +32,19 @@ import {
 } from "../acceso_datos/index.js";
 
 import { MapaService } from "./index.js";
+import CiudadanoService from "./CiudadanoService.js";
+import CasaService from "./CasaService.js";
+import ApartamentoService from "./ApartamentoService.js";
+import TiendaService from "./TiendaService.js";
+import CentroComercialService from "./CentroComercialService.js";
+import FabricaService from "./FabricaService.js";
+import GranjaService from "./GranjaService.js";
 
-// ✅ Las instancias se crean DENTRO de los métodos o se pasan como parámetros
-// NO se instancian aquí arriba para evitar el ciclo de importaciones
+// ✅ Las instancias se crean en el constructor (inyección de dependencias)
 
 class CiudadService {
+    constructor() {
+    }
 
     asignacionId() {
         const lista = StorageCiudad.getListaCiudades();
@@ -70,7 +83,13 @@ class CiudadService {
             return false;
         }
         const nuevaCiudad = new Ciudad(id, nombre, turno, miMapa);
-        lista.push(nuevaCiudad);
+        // Agregar 2 ciudadanos iniciales con felicidad 100
+        // Agregar 2 ciudadanos iniciales con felicidad 100
+        for (let i = 1; i <= 2; i++) {
+            const ciudadanoInicial = new Ciudadano(i, 100);
+            nuevaCiudad.misCiudadanos.push(ciudadanoInicial);
+        }
+                lista.push(nuevaCiudad);
         StorageCiudad.save(lista);
         console.log("Ciudad creada:", nuevaCiudad);
         return true;
@@ -216,11 +235,14 @@ class CiudadService {
         return listaEdificios.some(edificio => funcionVerificacion(edificio));
     }
 
-    // ✅ servicios se reciben como parámetros
-    crearCiudadanosAutomaticamente(ciudad, ciudadanoService, casaService, apartamentoService,
-        tiendaService, centroComercialService, fabricaService, granjaService) {
-
-        const felicidad = this.promedioFelicidadCiudad(ciudad, ciudadanoService);
+    crearCiudadanosAutomaticamente(ciudad) {
+        const casaService = new CasaService();
+        const apartamentoService = new ApartamentoService();
+        const tiendaService = new TiendaService();
+        const centroComercialService = new CentroComercialService();
+        const fabricaService = new FabricaService();
+        const granjaService = new GranjaService();
+        
         const hayVivienda =
             this.edificioDisponible(this.listaCasas(ciudad), e => casaService.capacidadDisponibleCasa(e)) ||
             this.edificioDisponible(this.listaApartamentos(ciudad), e => apartamentoService.capacidadDisponibleApartamento(e));
@@ -230,17 +252,26 @@ class CiudadService {
             this.edificioDisponible(this.listaFabricas(ciudad), e => fabricaService.empleoDisponibleFabrica(e)) ||
             this.edificioDisponible(this.listaGranjas(ciudad), e => granjaService.empleoDisponibleGranja(e));
 
+        console.log("🏙️ Crear Ciudadanos - Turno:", ciudad.turno, "Felicidad:", felicidad, "HayVivienda:", hayVivienda, "HayEmpleo:", hayEmpleo);
+
         if (felicidad > 60 && hayVivienda && hayEmpleo) {
+            console.log("✅ Condiciones OK - Creando 4 ciudadanos");
             for (let i = 0; i < 4; i++) {
                 const nuevoId = ciudad.misCiudadanos.length + 1;
-                const nuevoCiudadano = new Ciudadano(nuevoId, 0);
+                const nuevoCiudadano = new Ciudadano(nuevoId, 100);
                 ciudad.misCiudadanos.push(nuevoCiudadano);
             }
+        } else {
+            console.log("❌ Condiciones NO cumplidas. Felicidad debe ser > 60, hay vivienda:", hayVivienda, ", hay empleo:", hayEmpleo);
         }
     }
 
-    // ✅ servicios se reciben como parámetros
-    obtenerEdificioConEmpleoDisponible(ciudad, tiendaService, centroComercialService, fabricaService, granjaService) {
+    obtenerEdificioConEmpleoDisponible(ciudad) {
+        const tiendaService = new TiendaService();
+        const centroComercialService = new CentroComercialService();
+        const fabricaService = new FabricaService();
+        const granjaService = new GranjaService();
+        
         for (let edificio of ciudad.misEdificios) {
             if (edificio instanceof Tienda && tiendaService.empleoDisponibleTienda(edificio)) return edificio;
             if (edificio instanceof CentroComercial && centroComercialService.empleoDisponibleCentroComercial(edificio)) return edificio;
@@ -250,13 +281,13 @@ class CiudadService {
         return null;
     }
 
-    // ✅ servicios se reciben como parámetros
-    agregarCiudadanosATrabajosDisponibles(ciudad, ciudadanoService, tiendaService, centroComercialService, fabricaService, granjaService) {
+    agregarCiudadanosATrabajosDisponibles(ciudad) {
+        const ciudadanoService = new CiudadanoService();
         const ciudadanosDesempleados = this.listaCiudadanosDesempleados(ciudad, ciudadanoService);
         let contratoId = ciudad.misEdificios.reduce((acc, e) => acc + (e.misContratos ? e.misContratos.length : 0), 0);
 
         for (let ciudadano of ciudadanosDesempleados) {
-            const edificio = this.obtenerEdificioConEmpleoDisponible(ciudad, tiendaService, centroComercialService, fabricaService, granjaService);
+            const edificio = this.obtenerEdificioConEmpleoDisponible(ciudad);
             if (edificio !== null) {
                 contratoId++;
                 const nuevoContrato = new Contrato(contratoId, ciudadano, edificio);
@@ -266,7 +297,10 @@ class CiudadService {
         }
     }
 
-    obtenerViviendaConCapacidadDisponible(ciudad, casaService, apartamentoService) {
+    obtenerViviendaConCapacidadDisponible(ciudad) {
+        const casaService = new CasaService();
+        const apartamentoService = new ApartamentoService();
+        
         for (let edificio of ciudad.misEdificios) {
             if (edificio instanceof Casa && casaService.capacidadDisponibleCasa(edificio)) return edificio;
             if (edificio instanceof Apartamento && apartamentoService.capacidadDisponibleApartamento(edificio)) return edificio;
@@ -274,13 +308,13 @@ class CiudadService {
         return null;
     }
 
-    // ✅ servicios se reciben como parámetros
-    agregarCiudadanosAViviendasDisponibles(ciudad, ciudadanoService, casaService, apartamentoService) {
+    agregarCiudadanosAViviendasDisponibles(ciudad) {
+        const ciudadanoService = new CiudadanoService();
         const ciudadanosSinVivienda = this.listaCiudadanosSinVivienda(ciudad, ciudadanoService);
         let contratoId = ciudad.misEdificios.reduce((acc, e) => acc + (e.misContratos ? e.misContratos.length : 0), 0);
 
         for (let ciudadano of ciudadanosSinVivienda) {
-            const vivienda = this.obtenerViviendaConCapacidadDisponible(ciudad, casaService, apartamentoService);
+            const vivienda = this.obtenerViviendaConCapacidadDisponible(ciudad);
             if (vivienda !== null) {
                 contratoId++;
                 const nuevoContrato = new Contrato(contratoId, ciudadano, vivienda);
