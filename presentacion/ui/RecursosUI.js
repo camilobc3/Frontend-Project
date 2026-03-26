@@ -1,4 +1,4 @@
-import { CiudadService } from "../services/CiudadService.js";
+// import { CiudadService } from "../services/CiudadService.js";
 
 export function calcularBalanceRecursos(ciudad) {
     const produccion = { dinero: 0, agua: 0, electricidad: 0, alimento: 0 };
