@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     //Variables globales para el zoom
     let zoomActual = 1;
-    const ZOOM_MIN = 0.6;
+    const ZOOM_MIN = 0.1;
     const ZOOM_MAX = 2;
     const ZOOM_STEP = 0.1;
 
@@ -366,14 +366,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
             // ✅ Aplicar grid al contenedor
             contenedorMapa.style.display = "grid";
-            contenedorMapa.style.gridTemplateColumns = `repeat(${mapaActual[0].length}, 26px)`;
+            contenedorMapa.style.gridTemplateColumns = `repeat(${mapaActual[0].length}, 80px)`;
             contenedorMapa.style.gap = "1px";
             contenedorMapa.style.width = "max-content";
 
             for (let fila = 0; fila < mapaActual.length; fila++) {
                 for (let columna = 0; columna < mapaActual[fila].length; columna++) {
                     const celda = document.createElement("div");
-                    celda.className = "h-[26px] w-[26px] rounded border border-slate-700 bg-slate-800 text-[10px] text-slate-200 grid place-items-center";
+                    celda.className = " h-[80px] y w-[80px] rounded border border-slate-700 bg-slate-800 text-[10px] text-slate-200 grid place-items-center";
                     celda.dataset.fila = fila;
                     celda.dataset.columna = columna;
 
@@ -381,7 +381,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     if (contenido === null) {
                         const src = obtenerSrcEdificio(null);
                         celda.title = "Vacío";
-                        celda.innerHTML = `<img src="${src}" alt="Vacío" class="map-cell__img" loading="lazy">`;
+                        celda.innerHTML = `<img src="${src}" alt="Vacío" class="map-cell__img" style="max-width: 90%; max-height: 90%; width: auto; height: auto; margin: auto;" loading="lazy">`;
                         celda.classList.add("map-cell-empty");
                     } else {
                         const src = obtenerSrcEdificio(contenido.tipo);

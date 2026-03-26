@@ -1,3 +1,5 @@
+import { CiudadService } from "../services/CiudadService.js";
+
 export function calcularBalanceRecursos(ciudad) {
     const produccion = { dinero: 0, agua: 0, electricidad: 0, alimento: 0 };
     const consumo = { agua: 0, electricidad: 0 };
@@ -81,7 +83,7 @@ export function actualizarPanelRecursos(ciudad) {
     const alimentoLine = document.getElementById("alimento-line");
     if (alimentoLine) alimentoLine.setAttribute("title", `Producción: ${produccion.alimento}\nConsumo: 0\nBalance: ${produccion.alimento}`);
     const poblacionLine = document.getElementById("poblacion-line");
-    if (poblacionLine) poblacionLine.setAttribute("title", `Población actual: ${ciudad.misCiudadanos?.length || 0}`);
+    if (poblacionLine) poblacionLine.setAttribute("title", `Población actual: ${CiudadService.numeroCiudadanos(ciudad)}`);
     const felicidadLine = document.getElementById("felicidad-line");
     if (felicidadLine) felicidadLine.setAttribute("title", `Felicidad promedio de los ciudadanos: ${promedioFelicidad(ciudad)}%`);
 
