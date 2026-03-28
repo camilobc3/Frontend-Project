@@ -4,12 +4,14 @@
  */
 class Edificio {
     /**
+     * @param {number} id - Identificador único del edificio
      * @param {number} costo - Costo de construcción del edificio
      */
-    constructor(costo) {
+    constructor(id, costo) {
         if (new.target === Edificio) {
             throw new Error("No se puede instanciar la clase abstracta Edificio");
         }
+        this.id = id;
         this.costo = costo;
         this.activo = true;
         
@@ -31,6 +33,16 @@ class Edificio {
      */
     eliminarContrato(contratoId) {
         this.misContratos = this.misContratos.filter(contrato => contrato.id !== contratoId);
+    }
+
+    /**
+     * Obtiene un edificio por su ID de una lista
+     * @param {Array} listaEdificios - Lista de edificios
+     * @param {number} id - ID del edificio a buscar
+     * @returns {Edificio|null} El edificio encontrado o null
+     */
+    obtenerEdificioPorId(listaEdificios, id) {
+        return listaEdificios.find(e => e.id === id) ?? null;
     }
 }
 
