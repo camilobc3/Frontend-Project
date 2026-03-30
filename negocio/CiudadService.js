@@ -392,7 +392,7 @@ class CiudadService {
 
         // Calculo puntuacion final
 
-        let puntuacionFinal = poblacion + felicidadPromedio + dinero + edificios + electricidad + agua + bonus - penalizaciones;
+        let puntuacionFinal = (poblacion + felicidadPromedio + dinero + edificios + electricidad + agua + bonus - penalizaciones).toFixed(2);
         
         //console.log(poblacion, felicidadPromedio, dinero, edificios, electricidad, agua, bonus, penalizaciones)
         
