@@ -329,7 +329,7 @@ class CiudadService {
         }
 
         if (cantidadCiudadanos != 0) {
-            felicidadPromedio = felicidad / cantidadCiudadanos;
+            felicidadPromedio = (felicidad / cantidadCiudadanos).toFixed(2);
         }
 
         // BONUS
