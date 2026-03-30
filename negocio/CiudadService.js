@@ -311,108 +311,107 @@ class CiudadService {
 
     calcularPuntuacion(ciudad) {
         const ciudadanoService = new CiudadanoService();
-        // Variables que aportan constantemente a la puntuacion [IMPORTANTE]
 
-        let poblacion = (ciudad.misCiudadanos.length * 10);
-        let dinero = (ciudad.dinero/100);
-        let edificios = (ciudad.misEdificios.length * 50);
-        let electricidad = (ciudad.electricidad * 2);
-        let agua = (ciudad.agua * 2);
+        let cantidadCiudadanos = ciudad.misCiudadanos.length;
+        let poblacion = ((ciudad.misCiudadanos?.length || 0) * 10);
+        let dinero = ciudad.dinero / 100;
+        let edificios = ((ciudad.misEdificios?.length || 0) * 50);
+        let electricidad = ciudad.electricidad * 2;
+        let agua = ciudad.agua * 2;
 
-        let recursos = electricidad + agua;
+        let recursos = agua + electricidad;
 
-        let promedioFelicidad = 0;
-        
-        if (ciudad.misCiudadanos.length > 0) { 
-            for (let ciudadano of ciudad.misCiudadanos) {
-                promedioFelicidad += ciudadano.felicidad;
-            }
+        let felicidad = 0
+        let felicidadPromedio = 0
+
+        for (let ciudadano of (ciudad.misCiudadanos || [])) {
+            felicidad += ciudadano.nivelFelicidad
         }
 
-        let felicidad = 0;
-
-        if (ciudad.misCiudadanos.length > 0) {
-            felicidad = (promedioFelicidad / ciudad.misCiudadanos.length) * 5;
+        if (cantidadCiudadanos != 0) {
+            felicidadPromedio = felicidad / cantidadCiudadanos;
         }
 
-        let puntuacionFinal = poblacion + dinero + edificios + electricidad + agua + felicidad ;
+        // BONUS
 
-        // Bonus para la puntuacion
+        let bonus = 0
 
-        // Ciudadanos empleados
-
-        let ciudadanosEmpleados = 0;
-
-        let bonus = 0;
+        let ciudadanosEmpleados = 0
 
         if (ciudad.misCiudadanos.length > 0) {
             for (let ciudadano of ciudad.misCiudadanos) {
                 if (ciudadanoService.verificarContratoComercial(ciudadano, ciudad)) {
                     ciudadanosEmpleados += 1;
-                } 
-            }
-
-            if (ciudadanosEmpleados === ciudad.misCiudadanos.length) {
-                bonus += 500;
+                }
             }
         }
+        
+        if (ciudadanosEmpleados === ciudad.misCiudadanos.length) {
+            bonus += 500;
+        }
 
-        if (felicidad > 80) {
+        if (felicidadPromedio > 80) {
             bonus += 300;
         }
 
-        if (ciudad.electricidad > 0 && ciudad.agua > 0) {
+        if (recursos > 0) {
             bonus += 200;
-        }
+        } 
 
         if (ciudad.misCiudadanos.length > 1000) {
-            bonus += 1000
+            bonus += 1000;
         }
 
-        // Penalizaciones para la puntuacion
+        // Penalizaciones
 
-        let penalizaciones = 0;
+        let penalizaciones = 0
 
-        if (ciudad.dinero < 0) {
-            penalizaciones -= 500
+        if (dinero < 0) {
+            penalizaciones += 500;
         }
 
-        if (ciudad.electricidad < 0) {
-            penalizaciones -= 300
+        if (electricidad < 0) {
+            penalizaciones += 300;
         }
 
-        if (ciudad.agua < 0) {
-            penalizaciones -= 300
+        if (agua < 0) {
+            penalizaciones += 300;
         }
 
-        if (felicidad < 40) {
-            penalizaciones -= 400
+        if (felicidadPromedio < 40) {
+            penalizaciones += 400;
         }
-
-        puntuacionFinal += bonus + penalizaciones;
-
-        // Restar por ciudadano desempleado
 
         if (ciudad.misCiudadanos.length > 0) {
             for (let ciudadano of ciudad.misCiudadanos) {
                 if (!ciudadanoService.verificarContratoComercial(ciudadano, ciudad)) {
-                    puntuacionFinal -= 10
-                } 
+                    penalizaciones += 10;
+                }
             }
         }
 
+        // Calculo puntuacion final
+
+        let puntuacionFinal = poblacion + felicidadPromedio + dinero + edificios + electricidad + agua + bonus - penalizaciones;
+        
+        //console.log(poblacion, felicidadPromedio, dinero, edificios, electricidad, agua, bonus, penalizaciones)
+        
         return {
             poblacion,
+            dinero,
             edificios,
             recursos,
-            felicidad,
             bonus,
+            felicidadPromedio,
             penalizaciones,
             puntuacionFinal
-        };
-
+        }
+        
     }
+    
+        
 
+    
     // ─── RECURSOS POR TURNO ──────────────────────────────────────────────────
     actualizarRecursoXTurno(ciudad, edificio) {
         if (edificio instanceof EdificioResidencial) {
