@@ -7,7 +7,7 @@ class Edificio {
      * @param {number} id - Identificador único del edificio
      * @param {number} costo - Costo de construcción del edificio
      */
-    constructor(id, costo) {
+    constructor(costo, id = null) {
         if (new.target === Edificio) {
             throw new Error("No se puede instanciar la clase abstracta Edificio");
         }
