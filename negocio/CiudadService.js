@@ -46,6 +46,7 @@ class CiudadService {
     constructor() {
     }
 
+
     asignacionId() {
         const lista = StorageCiudad.getListaCiudades();
         
@@ -83,13 +84,7 @@ class CiudadService {
             return false;
         }
         const nuevaCiudad = new Ciudad(id, nombre, turno, miMapa);
-        // Agregar 2 ciudadanos iniciales con felicidad 100
-        // Agregar 2 ciudadanos iniciales con felicidad 100
-        for (let i = 1; i <= 2; i++) {
-            const ciudadanoInicial = new Ciudadano(i, 100);
-            nuevaCiudad.misCiudadanos.push(ciudadanoInicial);
-        }
-                lista.push(nuevaCiudad);
+        lista.push(nuevaCiudad);
         StorageCiudad.save(lista);
         console.log("Ciudad creada:", nuevaCiudad);
         return true;
@@ -136,21 +131,11 @@ class CiudadService {
     }
 
     // ─── LISTAS DE EDIFICIOS ─────────────────────────────────────────────────
-    listaHospitales(ciudad) {
-        return ciudad.misEdificios.filter(e => e instanceof Hospital);
-    }
-
-    listaParques(ciudad) {
-        return ciudad.misEdificios.filter(e => e instanceof Parque);
-    }
 
     listaEstacionesPolicia(ciudad) {
         return ciudad.misEdificios.filter(e => e instanceof EstacionPolicia);
     }
 
-    listaEstacionesBomberos(ciudad) {
-        return ciudad.misEdificios.filter(e => e instanceof EstacionBombero);
-    }
 
     listaCasas(ciudad) {
         return ciudad.misEdificios.filter(e => e instanceof Casa);
@@ -179,14 +164,16 @@ class CiudadService {
     // ─── ESTADÍSTICAS ────────────────────────────────────────────────────────
 
     // ✅ ciudadanoService se recibe como parámetro — no se importa ni instancia aquí
-    promedioFelicidadCiudad(ciudad, ciudadanoService) {
-        if (ciudad.misCiudadanos.length === 0) return 0;
+    promedioFelicidadCiudad(ciudad) {
+            const ciudadanoService = new CiudadanoService();
+        if (ciudad.misCiudadanos.length === 0) return 100;
 
         let total = 0;
         for (let ciudadano of ciudad.misCiudadanos) {
-            total += ciudadanoService.calcularFelicidad(ciudadano);
+            total += ciudadanoService.calcularFelicidad(ciudadano, ciudad);
         }
-        return total / ciudad.misCiudadanos.length;
+        let promedio = total / ciudad.misCiudadanos.length;
+        return (promedio).toFixed(2);
     }
 
     numeroCiudadanos(ciudad) {
@@ -194,40 +181,20 @@ class CiudadService {
     }
 
     // ✅ ciudadanoService se recibe como parámetro
-    numeroCiudadanosEmpleados(ciudad, ciudadanoService) {
-        let empleados = 0;
-        for (let ciudadano of ciudad.misCiudadanos) {
-            if (ciudadanoService.verificarContratoComercial(ciudadano)) {
-                empleados += 1;
-            }
-        }
-        return empleados;
-    }
-
-    // ✅ ciudadanoService se recibe como parámetro
-    numeroCiudadanosDesempleados(ciudad, ciudadanoService) {
-        let desempleados = 0;
-        for (let ciudadano of ciudad.misCiudadanos) {
-            if (!ciudadanoService.verificarContratoComercial(ciudadano)) {
-                desempleados += 1;
-            }
-        }
-        return desempleados;
-    }
-
-    // ✅ ciudadanoService se recibe como parámetro
     listaCiudadanosDesempleados(ciudad, ciudadanoService) {
         return ciudad.misCiudadanos.filter(
-            c => !ciudadanoService.verificarContratoComercial(c)
+            c => !ciudadanoService.verificarContratoComercial(c, ciudad)
         );
     }
 
-    // ✅ ciudadanoService se recibe como parámetro
-    listaCiudadanosSinVivienda(ciudad, ciudadanoService) {
-        return ciudad.misCiudadanos.filter(
-            c => !ciudadanoService.verificarContratoVivienda(c)
-        );
+    actualizarFelicidadCiudadanos(ciudad){
+        const ciudadanoService = new CiudadanoService();
+        for (let ciudadano of ciudad.misCiudadanos) {
+            ciudadano.nivelFelicidad= ciudadanoService.calcularFelicidad(ciudadano, ciudad);
+        }
     }
+    
+
 
     // ─── DISPONIBILIDAD ──────────────────────────────────────────────────────
 
@@ -236,33 +203,39 @@ class CiudadService {
     }
 
     crearCiudadanosAutomaticamente(ciudad) {
+        const TASA_CRECIMIENTO = 3; // parametrizable: entre 1 y 3
+
         const casaService = new CasaService();
         const apartamentoService = new ApartamentoService();
         const tiendaService = new TiendaService();
         const centroComercialService = new CentroComercialService();
         const fabricaService = new FabricaService();
         const granjaService = new GranjaService();
-        
+
         const hayVivienda =
             this.edificioDisponible(this.listaCasas(ciudad), e => casaService.capacidadDisponibleCasa(e)) ||
             this.edificioDisponible(this.listaApartamentos(ciudad), e => apartamentoService.capacidadDisponibleApartamento(e));
+
         const hayEmpleo =
             this.edificioDisponible(this.listaTiendas(ciudad), e => tiendaService.empleoDisponibleTienda(e)) ||
             this.edificioDisponible(this.listaCentrosComerciales(ciudad), e => centroComercialService.empleoDisponibleCentroComercial(e)) ||
             this.edificioDisponible(this.listaFabricas(ciudad), e => fabricaService.empleoDisponibleFabrica(e)) ||
             this.edificioDisponible(this.listaGranjas(ciudad), e => granjaService.empleoDisponibleGranja(e));
 
-        console.log("🏙️ Crear Ciudadanos - Turno:", ciudad.turno, "Felicidad:", felicidad, "HayVivienda:", hayVivienda, "HayEmpleo:", hayEmpleo);
+        // ✅ Calcular felicidad ANTES de usarla
+        const felicidad = this.promedioFelicidadCiudad(ciudad, new CiudadanoService());
+
+        console.log("🏙️ Crear Ciudadanos - Turno:", ciudad.turno, "| Felicidad:", felicidad, "| Vivienda:", hayVivienda, "| Empleo:", hayEmpleo);
 
         if (felicidad > 60 && hayVivienda && hayEmpleo) {
-            console.log("✅ Condiciones OK - Creando 4 ciudadanos");
-            for (let i = 0; i < 4; i++) {
+            console.log(`✅ Condiciones OK - Creando ${TASA_CRECIMIENTO} ciudadanos`);
+            for (let i = 0; i < TASA_CRECIMIENTO; i++) {
                 const nuevoId = ciudad.misCiudadanos.length + 1;
                 const nuevoCiudadano = new Ciudadano(nuevoId, 100);
                 ciudad.misCiudadanos.push(nuevoCiudadano);
             }
         } else {
-            console.log("❌ Condiciones NO cumplidas. Felicidad debe ser > 60, hay vivienda:", hayVivienda, ", hay empleo:", hayEmpleo);
+            console.log("❌ Condiciones NO cumplidas. Felicidad:", felicidad, "| Vivienda:", hayVivienda, "| Empleo:", hayEmpleo);
         }
     }
 
@@ -290,11 +263,13 @@ class CiudadService {
             const edificio = this.obtenerEdificioConEmpleoDisponible(ciudad);
             if (edificio !== null) {
                 contratoId++;
-                const nuevoContrato = new Contrato(contratoId, ciudadano, edificio);
+                const nuevoContrato = new Contrato(contratoId, ciudadano.id, edificio.id);
                 ciudadano.misContratos.push(nuevoContrato);
                 edificio.misContratos.push(nuevoContrato);
             }
         }
+
+        this.actualizarCiudadCompleta(ciudad);
     }
 
     obtenerViviendaConCapacidadDisponible(ciudad) {
@@ -308,8 +283,16 @@ class CiudadService {
         return null;
     }
 
+    // En CiudadService.js
+    listaCiudadanosSinVivienda(ciudad, ciudadanoService) {
+        return ciudad.misCiudadanos.filter(
+            c => !ciudadanoService.verificarContratoVivienda(c, ciudad)
+        );
+    }
+
     agregarCiudadanosAViviendasDisponibles(ciudad) {
         const ciudadanoService = new CiudadanoService();
+        // ✅ Así debe estar — la función es de CiudadService, se llama con this
         const ciudadanosSinVivienda = this.listaCiudadanosSinVivienda(ciudad, ciudadanoService);
         let contratoId = ciudad.misEdificios.reduce((acc, e) => acc + (e.misContratos ? e.misContratos.length : 0), 0);
 
@@ -317,16 +300,17 @@ class CiudadService {
             const vivienda = this.obtenerViviendaConCapacidadDisponible(ciudad);
             if (vivienda !== null) {
                 contratoId++;
-                const nuevoContrato = new Contrato(contratoId, ciudadano, vivienda);
+                const nuevoContrato = new Contrato(contratoId, ciudadano.id, vivienda.id);
                 ciudadano.misContratos.push(nuevoContrato);
                 vivienda.misContratos.push(nuevoContrato);
             }
         }
-        this.actualizarCiudadCompleta(ciudad); // ✅ usar this.
+
+        this.actualizarCiudadCompleta(ciudad);
     }
 
     calcularPuntuacion(ciudad) {
-
+        const ciudadanoService = new CiudadanoService();
         // Variables que aportan constantemente a la puntuacion [IMPORTANTE]
 
         let poblacion = (ciudad.misCiudadanos.length * 10);
@@ -345,7 +329,11 @@ class CiudadService {
             }
         }
 
-        let felicidad = ((promedioFelicidad / ciudad.misCiudadanos.length) * 5);
+        let felicidad = 0;
+
+        if (ciudad.misCiudadanos.length > 0) {
+            felicidad = (promedioFelicidad / ciudad.misCiudadanos.length) * 5;
+        }
 
         let puntuacionFinal = poblacion + dinero + edificios + electricidad + agua + felicidad ;
 
@@ -359,7 +347,7 @@ class CiudadService {
 
         if (ciudad.misCiudadanos.length > 0) {
             for (let ciudadano of ciudad.misCiudadanos) {
-                if (verificarContratoComercial(ciudadano)) {
+                if (ciudadanoService.verificarContratoComercial(ciudadano, ciudad)) {
                     ciudadanosEmpleados += 1;
                 } 
             }
@@ -407,7 +395,7 @@ class CiudadService {
 
         if (ciudad.misCiudadanos.length > 0) {
             for (let ciudadano of ciudad.misCiudadanos) {
-                if (!verificarContratoComercial(ciudadano)) {
+                if (!ciudadanoService.verificarContratoComercial(ciudadano, ciudad)) {
                     puntuacionFinal -= 10
                 } 
             }

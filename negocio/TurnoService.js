@@ -44,11 +44,13 @@ class TurnoService {
     //     console.log("Turno:", ciudad.turno, "Dinero:", ciudad.dinero);
     // }
 
-    crearCiudadanosXturno(){
-        this.ciudadService.crearCiudadanosAutomaticamente();
-        this.ciudadService.agregarCiudadanosATrabajosDisponibles();
-        this.ciudadService.agregarCiudadanosAViviendasDisponibles();
+    crearCiudadanosXturno(ciudad){
+        this.ciudadService.crearCiudadanosAutomaticamente(ciudad);
+        this.ciudadService.agregarCiudadanosATrabajosDisponibles(ciudad);
+        this.ciudadService.agregarCiudadanosAViviendasDisponibles(ciudad);
     }
+
+
 
     detenerTurnos(){
         clearInterval(this.intervalo);
@@ -56,6 +58,7 @@ class TurnoService {
     }
 
     ejecutarTurno(ciudad){
+        const ciudadService = new CiudadService(); // ← instancia para usar métodos de CiudadService
         ciudad.turno++;
 
         this.aplicarEfectosRecursos(ciudad);
@@ -78,7 +81,10 @@ class TurnoService {
         const alertas = this.verificarRecursos(ciudad);
         alertas.forEach(alerta => console.log(alerta));
 
-        //this.crearCiudadanosXturno();
+        this.crearCiudadanosXturno(ciudad);
+
+        ciudadService.actualizarFelicidadCiudadanos(ciudad);
+        console.log(ciudad.misCiudadanos.map(c => ({ id: c.id, felicidad: c.nivelFelicidad })));
 
         this.ciudadService.actualizarCiudadCompleta(ciudad);
 

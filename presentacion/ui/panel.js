@@ -15,7 +15,7 @@ export function actualizarEstadisticas(ciudad) {
     Felicidad.textContent = `+${resultado.felicidad || 0}`;
     Edificios.textContent = `+${resultado.edificios || 0}`;
     Recursos.textContent = `+${resultado.recursos || 0}`;
-    Bonificaciones.textContent = `+${resultado.bonificaciones || 0}`;
-    Penalizaciones.textContent = `-${Math.abs(resultado.penalizaciones || 0)}`;
-    puntuacionTotal.textContent = String(resultado.puntuacionFinal || resultado.total || 0);
+    Bonificaciones.textContent = `+${resultado.bonus || 0}`;
+    Penalizaciones.textContent = `${resultado.penalizaciones || 0}`;
+    puntuacionTotal.textContent = `${resultado.puntuacionFinal}`;
 }

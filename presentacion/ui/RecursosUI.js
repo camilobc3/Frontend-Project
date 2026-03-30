@@ -1,4 +1,5 @@
-// import { CiudadService } from "../services/CiudadService.js";
+import  CiudadService from "../../negocio/CiudadService.js";
+const ciudadService = new CiudadService(); // ← instancia para usar métodos de CiudadService
 
 export function calcularBalanceRecursos(ciudad) {
     const produccion = { dinero: 0, agua: 0, electricidad: 0, alimento: 0 };
@@ -21,11 +22,11 @@ export function calcularBalanceRecursos(ciudad) {
     return { produccion, consumo };
 }
 
-export function promedioFelicidad(ciudad) {
+/* export function promedioFelicidad(ciudad) {
     if (!Array.isArray(ciudad.misCiudadanos) || ciudad.misCiudadanos.length === 0) return 0;
     const total = ciudad.misCiudadanos.reduce((acc, c) => acc + (c.felicidad || 0), 0);
     return Math.round(total / ciudad.misCiudadanos.length);
-}
+} */
 
 export function formatMoney(valor) {
     return "$" + Number(valor).toLocaleString("es-CO");
@@ -34,7 +35,7 @@ export function formatMoney(valor) {
 export function actualizarPanelRecursos(ciudad) {
     if (!ciudad) return;
     
-    console.log("Actualizando panel. Población:", ciudadService.numeroCiudadanos(ciudad));
+    console.log("Actualizando panel. Población:", ciudad.misCiudadanos?.length || 0);
 
     const { produccion, consumo } = calcularBalanceRecursos(ciudad);
     const netoEnergia = produccion.electricidad - consumo.electricidad;
@@ -61,8 +62,8 @@ export function actualizarPanelRecursos(ciudad) {
         }
     }
 
-    if (poblacionElem) poblacionElem.textContent = String(ciudadService.numeroCiudadanos(ciudad) || 0);
-    if (felicidadElem) felicidadElem.textContent = `${promedioFelicidad(ciudad)}%`;
+    if (poblacionElem) poblacionElem.textContent = String(ciudad.misCiudadanos?.length || 0);
+    if (felicidadElem) felicidadElem.textContent = `${ciudadService.promedioFelicidadCiudad(ciudad)}%`;
     if (electricidadElem) electricidadElem.textContent = `${consumo.electricidad} / ${produccion.electricidad}`;
     if (aguaElem) aguaElem.textContent = `${consumo.agua} / ${produccion.agua}`;
     if (alimentoElem) alimentoElem.textContent = String(ciudad.alimento || 0);
@@ -85,31 +86,31 @@ export function actualizarPanelRecursos(ciudad) {
     const alimentoLine = document.getElementById("alimento-line");
     if (alimentoLine) alimentoLine.setAttribute("title", `Producción: ${produccion.alimento}\nConsumo: 0\nBalance: ${produccion.alimento}`);
     const poblacionLine = document.getElementById("poblacion-line");
-    if (poblacionLine) poblacionLine.setAttribute("title", `Población actual: ${ciudadService.numeroCiudadanos(ciudad)}`);
+    if (poblacionLine) poblacionLine.setAttribute("title", `Población actual: ${ciudad.misCiudadanos?.length || 0}`);
     const felicidadLine = document.getElementById("felicidad-line");
-    if (felicidadLine) felicidadLine.setAttribute("title", `Felicidad promedio de los ciudadanos: ${promedioFelicidad(ciudad)}%`);
+    if (felicidadLine) felicidadLine.setAttribute("title", `Felicidad promedio de los ciudadanos: ${ciudadService.promedioFelicidadCiudad(ciudad)}%`);
 
     // Actualizar recursos móviles
     const dineroMobile = document.getElementById("dinero-mobile");
     if (dineroMobile) dineroMobile.textContent = formatMoney(ciudad.dinero ?? 0);
     const poblacionMobile = document.getElementById("poblacion-mobile");
-    if (poblacionMobile) poblacionMobile.textContent = String(ciudadService.numeroCiudadanos(ciudad) || 0);
+    if (poblacionMobile) poblacionMobile.textContent = String(ciudad.misCiudadanos?.length || 0);
     const energiaMobile = document.getElementById("energia-mobile");
     if (energiaMobile) energiaMobile.textContent = String(netoEnergia);
     const aguaMobile = document.getElementById("agua-mobile");
     if (aguaMobile) aguaMobile.textContent = String(netoAgua);
     const felicidadMobile = document.getElementById("felicidad-mobile");
-    if (felicidadMobile) felicidadMobile.textContent = `${promedioFelicidad(ciudad)}%`;
+    if (felicidadMobile) felicidadMobile.textContent = `${ciudadService.promedioFelicidadCiudad(ciudad)}%`;
 
     // Actualizar recursos tablet
     const dineroTablet = document.getElementById("dinero-tablet");
     if (dineroTablet) dineroTablet.textContent = formatMoney(ciudad.dinero ?? 0);
     const poblacionTablet = document.getElementById("poblacion-tablet");
-    if (poblacionTablet) poblacionTablet.textContent = String(ciudadService.numeroCiudadanos(ciudad) || 0);
+    if (poblacionTablet) poblacionTablet.textContent = String(ciudad.misCiudadanos?.length || 0);
     const energiaTablet = document.getElementById("energia-tablet");
     if (energiaTablet) energiaTablet.textContent = String(netoEnergia);
     const aguaTablet = document.getElementById("agua-tablet");
     if (aguaTablet) aguaTablet.textContent = String(netoAgua);
     const felicidadTablet = document.getElementById("felicidad-tablet");
-    if (felicidadTablet) felicidadTablet.textContent = `${promedioFelicidad(ciudad)}%`;
+    if (felicidadTablet) felicidadTablet.textContent = `${ciudadService.promedioFelicidadCiudad(ciudad)}%`;
 }

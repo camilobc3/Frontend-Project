@@ -31,6 +31,16 @@ class Ciudadano {
     eliminarContrato(contratoId) {
         this.misContratos = this.misContratos.filter(contrato => contrato.id !== contratoId);
     }
+
+    /**
+     * Obtiene un ciudadano por su ID de una lista
+     * @param {Array} listaCiudadanos - Lista de ciudadanos
+     * @param {number} id - ID del ciudadano a buscar
+     * @returns {Ciudadano|null} El ciudadano encontrado o null
+     */
+    obtenerCiudadanoPorId(listaCiudadanos, id) {
+        return listaCiudadanos.find(c => c.id === id) ?? null;
+    }
 }
 
 export default Ciudadano;
