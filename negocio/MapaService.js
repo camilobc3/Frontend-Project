@@ -1,19 +1,42 @@
 // MapaService.js
-import {
-    Mapa, Casa, Apartamento, Camino,
-    CentroComercial, Tienda, Fabrica, Granja,
-    EstacionPolicia, EstacionBombero, Hospital,
-    PlantaElectrica, PlantaAgua, Parque
-} from "/modelos/index.js";
 import MapaRepository from "/acceso_datos/MapaRepository.js";
+import {
+    Apartamento, Camino,
+    Casa,
+    CentroComercial,
+    EstacionBombero,
+    EstacionPolicia,
+    Fabrica, Granja,
+    Hospital,
+    Mapa,
+    Parque,
+    PlantaAgua,
+    PlantaElectrica,
+    Tienda
+} from "/modelos/index.js";
 
-import{
+import {
     CiudadService
-}from "./index.js";
+} from "./index.js";
 
 class MapaService {
     mapa = Mapa.matriz; // Matriz del mapa
+
+    asignacionIdEdificio(ciudad){
+        if (!ciudad || !ciudad.misEdificios) return 1;
+        
+        let i = 0;
+        while (true) {
+            i++;
+            // Verificar que ningún edificio existente tenga este ID
+            if (!ciudad.misEdificios.some(edificio => edificio.id === i)) {
+                return i;
+            }
+        }
+    }
+
     tipoEdificio(tipo){
+        console.log("Creando edificio de tipo:", tipo);
         let edificio;
         switch (tipo) {
             case 'R1':
@@ -56,40 +79,41 @@ class MapaService {
                 edificio = new Camino();
                 break;
             default:
+                console.error("Tipo no reconocido:", tipo);
                 return null;
         }
+        console.log("Edificio creado - Costo:", edificio.costo, "Tipo:", typeof edificio.costo);
         return edificio;
     }
 
     construirEdificio(ciudad, mapa, fila, columna, tipo){
         let ciudadService = new CiudadService();
         let edificio = this.tipoEdificio(tipo);
-
+    
         if(edificio === null){
             return {ok: false, mensaje: "Tipo de edificio no válido"}
         }
-
+    
+        edificio.id = this.asignacionIdEdificio(ciudad);
+    
         let validacion = this.puedeConstruir(mapa, edificio, fila, columna, ciudad);
-
+    
         if(!validacion.ok){
             return validacion;
         }
-
+    
         if(edificio instanceof Camino || edificio instanceof Parque){
-            ciudad.dinero -= edificio.costo;
-
+            ciudad.dinero = (Number(ciudad.dinero) || 0) - edificio.costo;
         }
         else{
-            ciudad.dinero -= edificio.costo;
-            ciudad.electricidad -= edificio.consumoElectricidad();
-            ciudad.agua -= edificio.consumoAgua();
+            ciudad.dinero = (Number(ciudad.dinero) || 0) - edificio.costo;
+            ciudad.electricidad = (Number(ciudad.electricidad) || 0) - (edificio.consumoElectricidad?.() || 0);
+            ciudad.agua = (Number(ciudad.agua) || 0) - (edificio.consumoAgua?.() || 0);
         }
         
-        //ciudadService.actualizarRecursoXTurno(ciudad, edificio);
-
         mapa[fila][columna] = edificio;
         ciudad.misEdificios.push(edificio);
-
+    
         return {ok: true, mensaje: `Edificio ${edificio.constructor.name} construido exitosamente`};
     }
 
