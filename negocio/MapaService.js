@@ -86,7 +86,6 @@ class MapaService {
         }
         
         //ciudadService.actualizarRecursoXTurno(ciudad, edificio);
-
         mapa[fila][columna] = edificio;
         ciudad.misEdificios.push(edificio);
 
