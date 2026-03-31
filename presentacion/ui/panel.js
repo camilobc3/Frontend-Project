@@ -12,10 +12,10 @@ export function actualizarEstadisticas(ciudad) {
     const ciudadService = new CiudadService();
     const resultado = ciudadService.calcularPuntuacion(ciudad);
     Poblacion.textContent = `+${resultado.poblacion || 0}`;
-    Felicidad.textContent = `+${resultado.felicidad || 0}`;
+    Felicidad.textContent = `+${resultado.felicidadPromedio || 0}`;
     Edificios.textContent = `+${resultado.edificios || 0}`;
     Recursos.textContent = `+${resultado.recursos || 0}`;
-    Bonificaciones.textContent = `+${resultado.bonificaciones || 0}`;
-    Penalizaciones.textContent = `-${Math.abs(resultado.penalizaciones || 0)}`;
-    puntuacionTotal.textContent = String(resultado.puntuacionFinal || resultado.total || 0);
+    Bonificaciones.textContent = `+${resultado.bonus || 0}`;
+    Penalizaciones.textContent = `${resultado.penalizaciones || 0}`;
+    puntuacionTotal.textContent = `${resultado.puntuacionFinal}`;
 }

@@ -6,7 +6,7 @@ import CiudadService from "./CiudadService.js";
 class TurnoService {
     constructor(){
         this.intervalo = null;
-        //this.ciudadService = new CiudadService();
+        this.ciudadService = new CiudadService();
     }
 
     iniciarTurnos(ciudad){
