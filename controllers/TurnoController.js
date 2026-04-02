@@ -4,6 +4,38 @@ import TurnoService from "../negocio/TurnoService.js";
 const turnoService = new TurnoService();
 let pausado = false;
 
+const nombresEdificios = {
+    "R1": "Casas", "R2": "Apartamentos",
+    "C1": "Tiendas", "C2": "Centros Comerciales",
+    "I1": "Fábricas", "I2": "Granjas",
+    "S1": "Hospitales", "S2": "Est. Bomberos",
+    "S3": "Est. Policía", "P1": "Parques",
+    "U1": "Plantas Eléctricas", "U2": "Plantas de Agua"
+};
+
+function mostrarAlertaRecursos(alertas, edificiosInhabilitados) {
+    const contenedor = document.getElementById("alertaRecursos");
+    const mensajeEl = document.getElementById("alertaRecursosMensaje");
+    const edificiosEl = document.getElementById("alertaEdificiosInhabilitados");
+    if (!contenedor) return;
+
+    if (alertas.length === 0 && edificiosInhabilitados.length === 0) {
+        contenedor.classList.add("hidden");
+        return;
+    }
+
+    const tiposUnicos = [...new Set(edificiosInhabilitados)]
+        .map(tipo => nombresEdificios[tipo] || tipo)
+        .join(", ");
+
+    mensajeEl.textContent = alertas.join(" | ");
+    edificiosEl.textContent = tiposUnicos
+        ? `Edificios inhabilitados: ${tiposUnicos}`
+        : "";
+
+    contenedor.classList.remove("hidden");
+}
+
 function cargarCiudad() {
     const params = new URLSearchParams(window.location.search);
     const idUrl = params.get("cityId");
@@ -83,6 +115,10 @@ function iniciarJuego() {
 
     turnoService.onGameOver = (razon) => {
         mostrarModalGameOver(razon);
+    };
+
+    turnoService.onTurno = (resultado) => {
+        mostrarAlertaRecursos(resultado.alertas || [], resultado.edificiosInhabilitados || []);
     };
 
     console.log("🎮 Juego iniciado con:", ciudad.nombre);

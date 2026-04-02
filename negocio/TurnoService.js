@@ -21,7 +21,9 @@ class TurnoService {
 
                 const resultado = this.ejecutarTurno(ciudadFresca);
                 if (resultado?.gameOver) {
-                this.onGameOver?.(resultado.razon); // ← callback opcional
+                    this.onGameOver?.(resultado.razon);
+                } else {
+                    this.onTurno?.(resultado);
                 }
             }, 10000);
     }
@@ -58,14 +60,13 @@ class TurnoService {
     }
 
     ejecutarTurno(ciudad){
-        const ciudadService = new CiudadService(); // ← instancia para usar métodos de CiudadService
+        const ciudadService = new CiudadService();
         ciudad.turno++;
-
+    
         this.aplicarEfectosRecursos(ciudad);
         
         const produccion = this.calcularProduccion(ciudad);
         const consumo = this.calcularConsumo(ciudad);
-
         this.aplicarBalance(ciudad, produccion, consumo);
         
         if(ciudad.dinero < 0 || ciudad.electricidad < 0 || ciudad.agua < 0){
@@ -77,21 +78,58 @@ class TurnoService {
                      : "agua"
             };
         }
-
+    
         const alertas = this.verificarRecursos(ciudad);
         alertas.forEach(alerta => console.log(alerta));
-
+    
+        // Edificios inhabilitados para mostrar en UI
+        const edificiosInhabilitados = ciudad.misEdificios
+            .filter(e => !e.activo)
+            .map(e => e.tipo);
+    
         this.crearCiudadanosXturno(ciudad);
-
         ciudadService.actualizarFelicidadCiudadanos(ciudad);
-        console.log(ciudad.misCiudadanos.map(c => ({ id: c.id, felicidad: c.nivelFelicidad })));
-
         this.ciudadService.actualizarCiudadCompleta(ciudad);
-
         console.log("Turno:", ciudad.turno, "Dinero:", ciudad.dinero);
         
-        return { gameOver: false };
+        return { gameOver: false, alertas, edificiosInhabilitados };
     }
+
+    // ejecutarTurno(ciudad){
+    //     const ciudadService = new CiudadService(); // ← instancia para usar métodos de CiudadService
+    //     ciudad.turno++;
+
+    //     this.aplicarEfectosRecursos(ciudad);
+        
+    //     const produccion = this.calcularProduccion(ciudad);
+    //     const consumo = this.calcularConsumo(ciudad);
+
+    //     this.aplicarBalance(ciudad, produccion, consumo);
+        
+    //     if(ciudad.dinero < 0 || ciudad.electricidad < 0 || ciudad.agua < 0){
+    //         this.detenerTurnos();
+    //         return {
+    //             gameOver: true,
+    //             razon: ciudad.dinero < 0 ? "dinero"
+    //                  : ciudad.electricidad < 0 ? "electricidad"
+    //                  : "agua"
+    //         };
+    //     }
+
+    //     const alertas = this.verificarRecursos(ciudad);
+    //     alertas.forEach(alerta => console.log(alerta));
+
+    //     this.crearCiudadanosXturno(ciudad);
+
+    //     ciudadService.actualizarFelicidadCiudadanos(ciudad);
+    //     console.log(ciudad.misCiudadanos.map(c => ({ id: c.id, felicidad: c.nivelFelicidad })));
+
+    //     this.ciudadService.actualizarCiudadCompleta(ciudad);
+
+    //     console.log("Turno:", ciudad.turno, "Dinero:", ciudad.dinero);
+        
+    //     return { gameOver: false };
+    // }
 
     calcularProduccion(ciudad){
         let produccion = {
