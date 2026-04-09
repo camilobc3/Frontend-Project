@@ -1,5 +1,6 @@
 ﻿import { obtenerRegiones } from "../api/RegionesApi.js";
 import Mapa from "../modelos/Mapa.js";
+import StorageCiudad from "../acceso_datos/StorageCiudad.js";
 import CiudadService from "../negocio/CiudadService.js";
 import MapaService from "../negocio/MapaService.js";
 const ciudadService = new CiudadService();
@@ -34,12 +35,28 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
-            const matriz = await mapaService.cargarMapaDesdeArchivo();
+            const payload = await mapaService.cargarMapaDesdeArchivo();
             const id = Date.now();
 
-            ciudadService.crearCiudad(id, nombreLimpio, 1, new Mapa(matriz.length));
-            const ciudad = ciudadService.cargarCiudad(id);
-            ciudadService.asignarMapa(ciudad, matriz);
+            if (payload?.tipo === "ciudad") {
+                const lista = StorageCiudad.load();
+                const ciudadImportada = payload.ciudad;
+
+                ciudadImportada.id = id;
+                ciudadImportada.nombre = nombreLimpio;
+
+                lista.push(ciudadImportada);
+                StorageCiudad.save(lista);
+            } else {
+                const matriz = payload?.matriz;
+                if (!Array.isArray(matriz) || !matriz.length) {
+                    throw new Error("El archivo no contiene una matriz valida");
+                }
+
+                ciudadService.crearCiudad(id, nombreLimpio, 1, new Mapa(matriz.length));
+                const ciudad = ciudadService.cargarCiudad(id);
+                ciudadService.asignarMapa(ciudad, matriz);
+            }
 
             window.location.href = "./newPanel.html?cityId=" + id;
         } catch (error) {

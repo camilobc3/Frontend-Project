@@ -173,7 +173,7 @@ class CiudadService {
             total += ciudadanoService.calcularFelicidad(ciudadano, ciudad);
         }
         let promedio = total / ciudad.misCiudadanos.length;
-        return (promedio).toFixed(2);
+        return Math.max(0, Math.min(100, Number(promedio.toFixed(2))));
     }
 
     numeroCiudadanos(ciudad) {

@@ -77,16 +77,30 @@ class ApartamentoService{
     }
 
     // Calcula la felicidad promedio de los ciudadanos en el apartamento
-    felicidadPromedioApartamento(apartamento, ciudadanoService) {
+    felicidadPromedioApartamento(apartamento, ciudadanoService, ciudad) {
         const ciudadanos = this.ciudadanosEnApartamento(apartamento);
-        if (ciudadanos.length === 0) {
+        if (ciudadanos.length === 0 || !ciudad || !Array.isArray(ciudad.misCiudadanos)) {
             return 0;
         }
-        let total = 0;
-        for (let ciudadano of ciudadanos) {
-            total += ciudadanoService.calcularFelicidad(ciudadano);
+
+        const ciudadanosResueltos = ciudadanos
+            .map(ciudadano => {
+                if (typeof ciudadano === "number") {
+                    return ciudad.misCiudadanos.find(c => c.id === ciudadano) || null;
+                }
+                return ciudadano;
+            })
+            .filter(Boolean);
+
+        if (ciudadanosResueltos.length === 0) {
+            return 0;
         }
-        return Math.round((total / ciudadanos.length) * 10) / 10;
+
+        let total = 0;
+        for (let ciudadano of ciudadanosResueltos) {
+            total += ciudadanoService.calcularFelicidad(ciudadano, ciudad);
+        }
+        return Math.round((total / ciudadanosResueltos.length) * 10) / 10;
     }
 };
 

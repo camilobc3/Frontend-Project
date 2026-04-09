@@ -10,6 +10,7 @@ import GranjaService from "/negocio/GranjaService.js";
 import TiendaService from "/negocio/TiendaService.js";
 import CentroComercialService from "/negocio/CentroComercialService.js";
 import CiudadanoService from "/negocio/CiudadanoService.js";
+import Mapa from "../modelos/Mapa.js";
 import StorageCiudad from "../acceso_datos/StorageCiudad.js";
 
 // Importar todos los controllers para registrar sus funciones
@@ -190,64 +191,63 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        const ciudadService = new CiudadService();
+        const matrizActual = ciudadActual.miMapa?.matriz || [];
         const resultado = ciudadService.calcularPuntuacion(ciudadActual);
-        const promedioFelicidad = ciudadActual.misCiudadanos?.length > 0 
-            ? Math.round(ciudadActual.misCiudadanos.reduce((sum, c) => sum + (c.felicidad || 0), 0) / ciudadActual.misCiudadanos.length) 
+        const promedioFelicidad = ciudadActual.misCiudadanos?.length > 0
+            ? Math.round(ciudadActual.misCiudadanos.reduce((sum, c) => sum + (c.felicidad || 0), 0) / ciudadActual.misCiudadanos.length)
             : 0;
 
-        // Extraer buildings y roads del mapa
-        const buildings = [];
-        const roads = [];
-        const map = ciudadActual.mapa || [];
-        const height = map.length;
-        const width = height > 0 ? map[0].length : 0;
+        // Exportar una matriz ligera y compatible con el importador.
+        const matriz = matrizActual.map(fila =>
+            fila.map(celda => {
+                if (!celda) return null;
+                return celda.tipo || null;
+            })
+        );
 
-        for (let y = 0; y < height; y++) {
-            for (let x = 0; x < width; x++) {
-                const cell = map[y][x];
-                if (cell && cell.edificio) {
-                    if (cell.edificio.tipo === 'camino') {
-                        roads.push({
-                            x: x,
-                            y: y,
-                            type: cell.edificio.tipo,
-                            level: cell.edificio.nivel || 1
-                        });
-                    } else {
-                        buildings.push({
-                            x: x,
-                            y: y,
-                            type: cell.edificio.tipo,
-                            level: cell.edificio.nivel || 1
-                        });
-                    }
-                }
-            }
+        const ciudadSerializada = JSON.parse(JSON.stringify(ciudadActual));
+        if (!ciudadSerializada.miMapa) {
+            ciudadSerializada.miMapa = { matriz: [] };
         }
+        ciudadSerializada.miMapa.matriz = matriz;
+
+        const height = matriz.length;
+        const width = height > 0 ? matriz[0].length : 0;
 
         const exportData = {
+            version: 2,
+            exportedAt: new Date().toISOString(),
             cityName: ciudadActual.nombre || "Sin Nombre",
             mayor: obtenerAlcaldeActual() || "Sin Alcalde",
             gridSize: { width: width, height: height },
             coordinates: { lat: 4.6097, lon: -74.0817 }, // Valores fijos por ahora
             turn: ciudadActual.turno || 0,
             score: resultado.puntuacionFinal || 0,
-            map: map,
-            buildings: buildings,
-            roads: roads,
+            matriz,
+            ciudad: ciudadSerializada,
             resources: {
                 dinero: ciudadActual.dinero || 0,
+                electricidad: ciudadActual.electricidad || 0,
+                agua: ciudadActual.agua || 0,
                 alimento: ciudadActual.alimento || 0
             },
             citizens: ciudadActual.misCiudadanos || [],
             population: ciudadActual.misCiudadanos?.length || 0,
-            happiness: promedioFelicidad
+            happiness: promedioFelicidad,
+            estadisticas: {
+                poblacion: ciudadActual.misCiudadanos?.length || 0,
+                felicidad: promedioFelicidad,
+                puntuacion: resultado.puntuacionFinal || 0,
+                turno: ciudadActual.turno || 0
+            }
         };
 
         const jsonString = JSON.stringify(exportData, null, 2);
-        const fecha = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
-        const nombreArchivo = `ciudad_${exportData.cityName}_${fecha}.json`;
+        const fecha = new Date().toISOString().split("T")[0];
+        const nombreCiudadSeguro = (exportData.cityName || "Sin_Nombre")
+            .replace(/[\\/:*?"<>|]/g, "_")
+            .replace(/\s+/g, "_");
+        const nombreArchivo = `ciudad_${nombreCiudadSeguro}_${fecha}.json`;
 
         const blob = new Blob([jsonString], { type: "application/json" });
         const url = URL.createObjectURL(blob);
@@ -259,7 +259,7 @@ document.addEventListener("DOMContentLoaded", function () {
         a.remove();
         URL.revokeObjectURL(url);
 
-        alert("✅ Ciudad exportada exitosamente como " + nombreArchivo);
+        alert("Ciudad exportada exitosamente como " + nombreArchivo);
     }
 
     // function actualizarRecursosDeCiudad() {
@@ -473,7 +473,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Función para mostrar opciones de un edificio
     function mostrarOpciones(fila, columna) {
-        const contenido = mapaActual[fila][columna];
+        let contenido = mapaActual[fila][columna];
+
+        // Sincronizar con storage para mostrar contratos actualizados por turno
+        const lista = StorageCiudad.load();
+        const params = new URLSearchParams(window.location.search);
+        const cityId = Number(params.get("cityId"));
+        const ciudadFresca = lista.find(c => c.id === cityId);
+
+        if (ciudadFresca) {
+            ciudadActual = ciudadFresca;
+            mapaActual = ciudadActual.miMapa?.matriz || mapaActual;
+            window.mapaActual = mapaActual;
+
+            const edificioPorId = contenido?.id != null
+                ? ciudadActual.misEdificios?.find(e => e.id === contenido.id)
+                : null;
+            const edificioEnMatriz = ciudadActual.miMapa?.matriz?.[fila]?.[columna] || null;
+            contenido = edificioPorId || edificioEnMatriz || contenido;
+        }
         
         if (contenido === null) {
             alert("Esta celda está vacía");
@@ -507,7 +525,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (contenido.tipo === "R1") {
             const ciudadanos = casaService.ciudadanosEnCasa(contenido);
             const felicidadPromedio = ciudadanos.length > 0
-                ? casaService.felicidadPromedioCasa(contenido, ciudadanoService)
+                ? casaService.felicidadPromedioCasa(contenido, ciudadanoService, ciudadActual)
                 : 0;
 
             bloquesInfo.push(`<p><strong>Ciudadanos viviendo:</strong> ${ciudadanos.length}</p>`);
@@ -515,7 +533,7 @@ document.addEventListener("DOMContentLoaded", function () {
         } else if (contenido.tipo === "R2") {
             const ciudadanos = apartamentoService.ciudadanosEnApartamento(contenido);
             const felicidadPromedio = ciudadanos.length > 0
-                ? apartamentoService.felicidadPromedioApartamento(contenido, ciudadanoService)
+                ? apartamentoService.felicidadPromedioApartamento(contenido, ciudadanoService, ciudadActual)
                 : 0;
 
             bloquesInfo.push(`<p><strong>Ciudadanos viviendo:</strong> ${ciudadanos.length}</p>`);
@@ -668,17 +686,31 @@ document.addEventListener("DOMContentLoaded", function () {
         btnCargarMapa.addEventListener("click", async () => {
             try {
                 const nombre = document.getElementById("cityName").value.trim();
-                if (!nombre) {
-                    alert("Ingresa un nombre para la ciudad antes de cargar el mapa");
-                    return;
-                }
-
-                const matriz = await mapaService.cargarMapaDesdeArchivo();
+                const payload = await mapaService.cargarMapaDesdeArchivo();
                 const id = Date.now();
 
-                ciudadService.crearCiudad(id, nombre, 1, matriz.length);
-                const ciudad = ciudadService.cargarCiudad(id);
-                ciudadService.asignarMapa(ciudad, matriz);
+                if (payload?.tipo === "ciudad") {
+                    const lista = StorageCiudad.load();
+                    const ciudadImportada = payload.ciudad;
+
+                    ciudadImportada.id = id;
+                    if (!ciudadImportada.nombre || !ciudadImportada.nombre.trim()) {
+                        ciudadImportada.nombre = nombre || "Ciudad importada";
+                    }
+
+                    lista.push(ciudadImportada);
+                    StorageCiudad.save(lista);
+                } else {
+                    const matriz = payload?.matriz;
+                    if (!Array.isArray(matriz) || !matriz.length) {
+                        throw new Error("El archivo no contiene una matriz valida");
+                    }
+
+                    const nombreCiudad = nombre || "Ciudad importada";
+                    ciudadService.crearCiudad(id, nombreCiudad, 1, new Mapa(matriz.length));
+                    const ciudad = ciudadService.cargarCiudad(id);
+                    ciudadService.asignarMapa(ciudad, matriz);
+                }
 
                 window.location.href = `./newPanel.html?cityId=${id}`;
             } catch (error) {
