@@ -1,4 +1,4 @@
-import { rehidratarMatriz, rehidratarEdificios } from "../acceso_datos/ReconstuirObjetosMapa.js";
+import { rehidratarEdificios, rehidratarMatriz } from "../acceso_datos/ReconstuirObjetosMapa.js";
 
 const StorageCiudad = {
     key: "ciudades_v1",
@@ -17,6 +17,9 @@ const StorageCiudad = {
     load() {
         const lista = JSON.parse(localStorage.getItem(this.key) || "[]");
         return lista.map(ciudad => {
+            if (!ciudad.duracionTurnoSeg) {
+                ciudad.duracionTurnoSeg = 300; // Si la ciudad no tiene duracionTurnoSeg, asignamos el valor por defecto, especialmente con las ciudades que antes no tenian este atributo
+            }
             if (ciudad.miMapa?.matriz) {
                 ciudad.miMapa.matriz = rehidratarMatriz(ciudad.miMapa.matriz); // ← intacto
             }

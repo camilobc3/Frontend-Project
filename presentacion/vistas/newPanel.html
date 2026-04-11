@@ -98,6 +98,13 @@
                     <button id="btn-exportar-ciudad" class="w-full rounded-lg bg-blue-600 hover:bg-blue-500 px-3 py-2 text-xs font-semibold">📤 Exportar Ciudad</button>
                 </div>
 
+                <!-- Botón configurar duración (Desktop) -->
+                <div class="bg-slate-800 p-4 rounded-xl shadow">
+                    <button id="btn-config-duracion-desktop" class="w-full rounded-lg bg-purple-600 hover:bg-purple-500 px-3 py-2 text-xs font-semibold">
+                        ⏱️ Duración Turno
+                    </button>
+                </div>
+
             </aside>
 
 
@@ -213,9 +220,12 @@
                         <button id="btn-plantaelectrica-tablet" class="bg-slate-700 hover:bg-indigo-600 transition rounded-lg p-3 text-sm">⚡ Power</button>
                     </div>
                 </div>
-                <div class="w-full lg:hidden bg-slate-800 p-4 rounded-xl shadow">
+                <div class="w-full lg:hidden bg-slate-800 p-4 rounded-xl shadow flex justify-between items-center">
                     <span class="font-semibold">Turno:</span>
-                    <span class="text-slate-400 " id="turno-tablet">0</span>
+                    <span class="text-slate-400" id="turno-tablet">0</span>
+                    <button id="btn-config-duracion-mobile" class="bg-purple-600 hover:bg-purple-500 rounded-lg px-3 py-1 text-xs font-semibold ml-2">
+                        ⏱️ Configurar
+                    </button>
                 </div>
 
             </main>
@@ -365,6 +375,19 @@
                     class="block w-full bg-red-600 hover:bg-red-500 transition rounded-lg px-4 py-2 font-semibold">
                     Volver al menú
                 </a>
+            </div>
+        </div>
+
+        <!-- Modal Configurar Duración del Turno -->
+        <div id="modalConfigDuracion" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+            <div class="bg-slate-800 rounded-xl p-6 max-w-sm w-full mx-4 border border-slate-700 shadow-xl">
+                <h2 class="text-xl font-bold mb-4">⏱️ Duración del Turno</h2>
+                <p class="text-sm text-slate-300 mb-3">Ingresa la duración en segundos:</p>
+                <input type="number" id="inputDuracionSegundos" class="w-full bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-white mb-4" placeholder="Ej: 60" value="300" step="1" min="1">
+                <div class="flex gap-2 justify-end">
+                    <button id="btnCancelarDuracion" class="bg-slate-700 hover:bg-slate-600 transition rounded-lg px-4 py-2">Cancelar</button>
+                    <button id="btnGuardarDuracion" class="bg-purple-600 hover:bg-purple-500 transition rounded-lg px-4 py-2 font-semibold">Guardar</button>
+                </div>
             </div>
         </div>
 
