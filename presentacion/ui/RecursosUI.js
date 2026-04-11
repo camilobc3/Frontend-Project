@@ -64,7 +64,10 @@ export function actualizarPanelRecursos(ciudad) {
     }
 
     if (poblacionElem) poblacionElem.textContent = String(ciudad.misCiudadanos?.length || 0);
-    if (empleoElem) empleoElem.textContent = `${ciudadService.calcularEmpleados(ciudad)}`
+    if (empleoElem) {
+        let resultado = ciudadService.calcularPuntuacion(ciudad)
+        empleoElem.textContent = `${resultado.ciudadanosEmpleados} / ${ciudad.misCiudadanos.length}`
+    }
     if (felicidadElem) felicidadElem.textContent = `${ciudadService.promedioFelicidadCiudad(ciudad)}%`;
     if (electricidadElem) electricidadElem.textContent = `${consumo.electricidad} / ${produccion.electricidad}`;
     if (aguaElem) aguaElem.textContent = `${consumo.agua} / ${produccion.agua}`;
