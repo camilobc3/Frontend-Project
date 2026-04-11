@@ -3,6 +3,7 @@ import TurnoService from "../negocio/TurnoService.js";
 
 const turnoService = new TurnoService();
 let pausado = false;
+let ciudadActual = null; 
 
 const nombresEdificios = {
     "R1": "Casas", "R2": "Apartamentos",
@@ -105,12 +106,75 @@ function togglePausa() {
     }
 }
 
-function iniciarJuego() {
-    const ciudad = cargarCiudad();
+// Mostrar el modal y cargar el valor actual
+function mostrarModalDuracion() {
+    const modal = document.getElementById("modalConfigDuracion");
+    const input = document.getElementById("inputDuracionSegundos");
+    if (!modal || !input || !ciudadActual) return;
+    
+    // Cargar la duración actual de la ciudad (en segundos)
+    input.value = ciudadActual.duracionTurnoSeg || 300;
+    modal.classList.remove("hidden");
+}
 
+// Cerrar modal
+function cerrarModalDuracion() {
+    const modal = document.getElementById("modalConfigDuracion");
+    if (modal) modal.classList.add("hidden");
+}
+
+// Guardar la nueva duración
+async function guardarDuracionTurno() {
+    const input = document.getElementById("inputDuracionSegundos");
+    if (!input || !ciudadActual) return;
+    
+    let segundos = parseInt(input.value, 10);
+    if (isNaN(segundos) || segundos <= 0) segundos = 300;
+    
+    await turnoService.cambiarDuracionTurno(ciudadActual, segundos);
+    
+    // Recargar la ciudad para mantener la referencia actualizada
+    ciudadActual = cargarCiudad();
+    
+    cerrarModalDuracion();
+    console.log(`✅ Duración cambiada a ${segundos} segundos`);
+}
+
+// Conectar eventos al cargar la página
+function conectarEventosDuracion() {
+    // Botones desktop y mobile
+    const btnDesktop = document.getElementById("btn-config-duracion-desktop");
+    const btnMobile = document.getElementById("btn-config-duracion-mobile");
+    const btnGuardar = document.getElementById("btnGuardarDuracion");
+    const btnCancelar = document.getElementById("btnCancelarDuracion");
+    
+    if (btnDesktop) btnDesktop.addEventListener("click", mostrarModalDuracion);
+    if (btnMobile) btnMobile.addEventListener("click", mostrarModalDuracion);
+    if (btnGuardar) btnGuardar.addEventListener("click", guardarDuracionTurno);
+    if (btnCancelar) btnCancelar.addEventListener("click", cerrarModalDuracion);
+    
+    // Cerrar modal si se hace clic fuera del contenido (opcional)
+    const modal = document.getElementById("modalConfigDuracion");
+    if (modal) {
+        modal.addEventListener("click", (e) => {
+            if (e.target === modal) cerrarModalDuracion();
+        });
+    }
+}
+
+
+
+function iniciarJuego() {
+    const ciudad = cargarCiudad();   // ✅ declaramos variable local
     if (!ciudad) {
         console.error("No se pudo cargar la ciudad. Abortando.");
         return;
+    }
+    ciudadActual = ciudad;           // ✅ asignamos la global
+
+    const inputDuracion = document.getElementById("duracionTurno");
+    if (inputDuracion) {
+        inputDuracion.value = ciudad.duracionTurnoSeg || 300;
     }
 
     turnoService.onGameOver = (razon) => {
@@ -123,6 +187,7 @@ function iniciarJuego() {
 
     console.log("🎮 Juego iniciado con:", ciudad.nombre);
     turnoService.iniciarTurnos(ciudad);
+    conectarEventosDuracion();      // ✅ botones activados
 
     const btnPause = document.getElementById("btnPause");
     if (btnPause) {
@@ -136,14 +201,10 @@ function iniciarJuego() {
         if (pausado) reanudarJuego();
     });
 
-    // ⏸️ Pausar cuando se sale de la pestaña
     document.addEventListener("visibilitychange", () => {
-        if (document.hidden) {
-        pausarJuego();
-        } else {
-        reanudarJuego();
-        }
-});
+        if (document.hidden) pausarJuego();
+        else reanudarJuego();
+    });
 }
 
 document.addEventListener("DOMContentLoaded", function () {

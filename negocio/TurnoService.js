@@ -9,23 +9,28 @@ class TurnoService {
         this.ciudadService = new CiudadService();
     }
 
-    iniciarTurnos(ciudad){
+    iniciarTurnos(ciudad) {
         if (this.intervalo) {
             clearInterval(this.intervalo);
             this.intervalo = null;
         }
+        this.ciudadActual = ciudad;
+
+        // Convertir segundos a milisegundos
+        const duracionMs = (ciudad.duracionTurnoSeg || 300) * 1000;
+
         this.intervalo = setInterval(() => {
             const lista = StorageCiudad.load();
             const ciudadFresca = lista.find(c => String(c.id) === String(ciudad.id));
             if (!ciudadFresca) return;
 
-                const resultado = this.ejecutarTurno(ciudadFresca);
-                if (resultado?.gameOver) {
-                    this.onGameOver?.(resultado.razon);
-                } else {
-                    this.onTurno?.(resultado);
-                }
-            }, 10000);
+            const resultado = this.ejecutarTurno(ciudadFresca);
+            if (resultado?.gameOver) {
+                this.onGameOver?.(resultado.razon);
+            } else {
+                this.onTurno?.(resultado);
+            }
+        }, duracionMs);
     }
 
     // ejecutarTurno(ciudad){
@@ -45,6 +50,26 @@ class TurnoService {
     //     this.ciudadService.actualizarCiudadCompleta(ciudad);
     //     console.log("Turno:", ciudad.turno, "Dinero:", ciudad.dinero);
     // }
+
+    async cambiarDuracionTurno(ciudad, segundos) {
+        if (segundos <= 0) segundos = 300;
+    
+        // 🔁 Obtener la versión más actualizada de la ciudad (con recursos, edificios, etc.)
+        const lista = StorageCiudad.load();
+        const ciudadActualizada = lista.find(c => String(c.id) === String(ciudad.id));
+        if (!ciudadActualizada) return;
+    
+        // Modificar la duración en la ciudad actualizada
+        ciudadActualizada.duracionTurnoSeg = segundos;
+    
+        // Guardar los cambios (incluyendo el progreso actual)
+        await this.ciudadService.actualizarCiudadCompleta(ciudadActualizada);
+    
+        // Si el juego está corriendo, reiniciar turnos con la ciudad actualizada
+        if (this.intervalo && this.ciudadActual && this.ciudadActual.id === ciudad.id) {
+            this.iniciarTurnos(ciudadActualizada);
+        }
+    }
 
     crearCiudadanosXturno(ciudad){
         this.ciudadService.crearCiudadanosAutomaticamente(ciudad);

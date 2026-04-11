@@ -1,6 +1,6 @@
-﻿import { obtenerRegiones } from "../api/RegionesApi.js";
+﻿import StorageCiudad from "../acceso_datos/StorageCiudad.js";
+import { obtenerRegiones } from "../api/RegionesApi.js";
 import Mapa from "../modelos/Mapa.js";
-import StorageCiudad from "../acceso_datos/StorageCiudad.js";
 import CiudadService from "../negocio/CiudadService.js";
 import MapaService from "../negocio/MapaService.js";
 const ciudadService = new CiudadService();
@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             const payload = await mapaService.cargarMapaDesdeArchivo();
-            const id = Date.now();
+            const id = ciudadService.asignacionId();
 
             if (payload?.tipo === "ciudad") {
                 const lista = StorageCiudad.load();
