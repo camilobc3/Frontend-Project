@@ -1,33 +1,33 @@
 ﻿// MapaController.js
-import MapaService from "/negocio/MapaService.js";
-import CiudadService from "/negocio/CiudadService.js";
+import StorageCiudad from "../acceso_datos/StorageCiudad.js";
+import Mapa from "../modelos/Mapa.js";
 import { actualizarPanelRecursos } from "../presentacion/ui/RecursosUI.js";
 import { actualizarEstadisticas } from "../presentacion/ui/panel.js";
-import CasaService from "/negocio/CasaService.js";
 import ApartamentoService from "/negocio/ApartamentoService.js";
+import CasaService from "/negocio/CasaService.js";
+import CentroComercialService from "/negocio/CentroComercialService.js";
+import CiudadService from "/negocio/CiudadService.js";
+import CiudadanoService from "/negocio/CiudadanoService.js";
 import FabricaService from "/negocio/FabricaService.js";
 import GranjaService from "/negocio/GranjaService.js";
+import MapaService from "/negocio/MapaService.js";
 import TiendaService from "/negocio/TiendaService.js";
-import CentroComercialService from "/negocio/CentroComercialService.js";
-import CiudadanoService from "/negocio/CiudadanoService.js";
-import Mapa from "../modelos/Mapa.js";
-import StorageCiudad from "../acceso_datos/StorageCiudad.js";
 
 // Importar todos los controllers para registrar sus funciones
-import "./CasaController.js";
 import "./ApartamentoController.js";
-import "./FabricaController.js";
-import "./TiendaController.js";
-import "./GranjaController.js";
-import "./HospitalController.js";
-import "./CentroComercialController.js";
 import "./CaminoController.js";
+import "./CasaController.js";
+import "./CentroComercialController.js";
 import "./EstacionBomberoController.js";
 import "./EstacionPoliciaController.js";
+import "./FabricaController.js";
+import "./GranjaController.js";
+import "./HospitalController.js";
 import "./ParqueController.js";
 import "./PlantaAguaController.js";
 import "./PlantaElectricaController.js";
 import { manejarClickCelda } from "./RutaController.js";
+import "./TiendaController.js";
 
 document.addEventListener("DOMContentLoaded", function () {
     console.log("DOM cargado - MapaController");
@@ -682,43 +682,43 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     
-    const btnCargarMapa = document.getElementById("btnCargarMapa");
-    if (btnCargarMapa) {
-        btnCargarMapa.addEventListener("click", async () => {
-            try {
-                const nombre = document.getElementById("cityName").value.trim();
-                const payload = await mapaService.cargarMapaDesdeArchivo();
-                const id = Date.now();
+    // const btnCargarMapa = document.getElementById("btnCargarMapa");
+    // if (btnCargarMapa) {
+    //     btnCargarMapa.addEventListener("click", async () => {
+    //         try {
+    //             const nombre = document.getElementById("cityName").value.trim();
+    //             const payload = await mapaService.cargarMapaDesdeArchivo();
+    //             const id = ciudadService.asignacionId;
 
-                if (payload?.tipo === "ciudad") {
-                    const lista = StorageCiudad.load();
-                    const ciudadImportada = payload.ciudad;
+    //             if (payload?.tipo === "ciudad") {
+    //                 const lista = StorageCiudad.load();
+    //                 const ciudadImportada = payload.ciudad;
 
-                    ciudadImportada.id = id;
-                    if (!ciudadImportada.nombre || !ciudadImportada.nombre.trim()) {
-                        ciudadImportada.nombre = nombre || "Ciudad importada";
-                    }
+    //                 ciudadImportada.id = id;
+    //                 if (!ciudadImportada.nombre || !ciudadImportada.nombre.trim()) {
+    //                     ciudadImportada.nombre = nombre || "Ciudad importada";
+    //                 }
 
-                    lista.push(ciudadImportada);
-                    StorageCiudad.save(lista);
-                } else {
-                    const matriz = payload?.matriz;
-                    if (!Array.isArray(matriz) || !matriz.length) {
-                        throw new Error("El archivo no contiene una matriz valida");
-                    }
+    //                 lista.push(ciudadImportada);
+    //                 StorageCiudad.save(lista);
+    //             } else {
+    //                 const matriz = payload?.matriz;
+    //                 if (!Array.isArray(matriz) || !matriz.length) {
+    //                     throw new Error("El archivo no contiene una matriz valida");
+    //                 }
 
-                    const nombreCiudad = nombre || "Ciudad importada";
-                    ciudadService.crearCiudad(id, nombreCiudad, 1, new Mapa(matriz.length));
-                    const ciudad = ciudadService.cargarCiudad(id);
-                    ciudadService.asignarMapa(ciudad, matriz);
-                }
+    //                 const nombreCiudad = nombre || "Ciudad importada";
+    //                 ciudadService.crearCiudad(id, nombreCiudad, 1, new Mapa(matriz.length));
+    //                 const ciudad = ciudadService.cargarCiudad(id);
+    //                 ciudadService.asignarMapa(ciudad, matriz);
+    //             }
 
-                window.location.href = `./newPanel.html?cityId=${id}`;
-            } catch (error) {
-                alert("❌ " + error.message);
-            }
-        });
-    }
+    //             window.location.href = `./newPanel.html?cityId=${id}`;
+    //         } catch (error) {
+    //             alert("❌ " + error.message);
+    //         }
+    //     });
+    // }
     
 
     window.construirEdificio = construirEdificio;
