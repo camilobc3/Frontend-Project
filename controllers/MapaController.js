@@ -1,6 +1,5 @@
 ﻿// MapaController.js
 import StorageCiudad from "../acceso_datos/StorageCiudad.js";
-import Mapa from "../modelos/Mapa.js";
 import { actualizarPanelRecursos } from "../presentacion/ui/RecursosUI.js";
 import { actualizarEstadisticas } from "../presentacion/ui/panel.js";
 import ApartamentoService from "/negocio/ApartamentoService.js";
@@ -604,6 +603,22 @@ document.addEventListener("DOMContentLoaded", function () {
             capacidad !== null ? `<p><strong>Capacidad:</strong> ${capacidad}</p>` : "",
             capacidad !== null ? `<p><strong>Ocupación actual:</strong> ${ocupacionActual}/${capacidad}</p>` : ""
         ];
+
+        
+         // dinero generado
+         const produccionDinero = contenido.produccionXTurno();
+         if (produccionDinero) bloquesInfo.push(`<p><strong>Produccion de dinero:</strong> ${produccionDinero}</p>`);
+         
+         // Consumo de dinero
+        const consumoDinero = contenido.consumoDinero();
+        if (consumoDinero) bloquesInfo.push(`<p><strong>Consumo de dinero:</strong> ${consumoDinero}</p>`);
+         // Consumo de agua
+        const consumoAgua = contenido.consumoAgua();
+        if (consumoAgua) bloquesInfo.push(`<p><strong>Consumo de agua:</strong> ${consumoAgua}</p>`);
+
+        // Consumo de electricidad
+        const consumoElec = contenido.consumoElectricidad();
+        if (consumoElec) bloquesInfo.push(`<p><strong>Consumo de electricidad:</strong> ${consumoElec}</p>`);   
 
         if (contenido.tipo === "R1") {
             const ciudadanos = casaService.ciudadanosEnCasa(contenido);

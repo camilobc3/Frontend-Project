@@ -187,6 +187,7 @@ class TurnoService {
         ciudad.misEdificios.forEach(edificio => {
             if(!edificio.activo) return;
 
+            consumo.dinero += edificio.consumoDinero?.() || 0;
             consumo.agua += edificio.consumoAgua?.() || 0;
             consumo.electricidad += edificio.consumoElectricidad?.() || 0;
         });

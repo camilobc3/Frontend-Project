@@ -27,6 +27,10 @@ class Edificio {
         this.misContratos.push(contrato);
     }
 
+    consumoDinero(){
+        return this.costo * 0.0001
+    }
+
     /**
      * Elimina un contrato del edificio
      * @param {number} contratoId - ID del contrato a eliminar
