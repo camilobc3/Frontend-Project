@@ -44,6 +44,7 @@ export function actualizarPanelRecursos(ciudad) {
     const dineroElem = document.getElementById("dinero");
     const dineroLine = document.getElementById("dinero-line");
     const poblacionElem = document.getElementById("poblacion");
+    const empleoElem = document.getElementById("empleo")
     const felicidadElem = document.getElementById("felicidad");
     const electricidadElem = document.getElementById("energia");
     const aguaElem = document.getElementById("agua");
@@ -63,6 +64,7 @@ export function actualizarPanelRecursos(ciudad) {
     }
 
     if (poblacionElem) poblacionElem.textContent = String(ciudad.misCiudadanos?.length || 0);
+    if (empleoElem) empleoElem.textContent = `${ciudadService.calcularEmpleados(ciudad)}`
     if (felicidadElem) felicidadElem.textContent = `${ciudadService.promedioFelicidadCiudad(ciudad)}%`;
     if (electricidadElem) electricidadElem.textContent = `${consumo.electricidad} / ${produccion.electricidad}`;
     if (aguaElem) aguaElem.textContent = `${consumo.agua} / ${produccion.agua}`;

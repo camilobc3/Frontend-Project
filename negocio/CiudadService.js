@@ -408,6 +408,18 @@ class CiudadService {
         }
         
     }
+
+    calcularEmpleados(ciudad) {
+        let ciudadanosEmpleados = 0
+        if (ciudad.misCiudadanos.length > 0) {
+            for (let ciudadano of ciudad.misCiudadanos) {
+                if (ciudadanoService.verificarContratoComercial(ciudadano, ciudad)) {
+                    ciudadanosEmpleados += 1;
+                }
+            }
+        }
+        return ciudadanosEmpleados;
+    }
     
         
 
