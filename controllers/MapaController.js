@@ -231,6 +231,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 agua: ciudadActual.agua || 0,
                 alimento: ciudadActual.alimento || 0
             },
+            duracionTurnoSeg : ciudadActual.duracionTurnoSeg || 300,
             citizens: ciudadActual.misCiudadanos || [],
             population: ciudadActual.misCiudadanos?.length || 0,
             happiness: promedioFelicidad,
