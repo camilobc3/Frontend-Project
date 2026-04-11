@@ -1,4 +1,4 @@
-import  CiudadService from "../../negocio/CiudadService.js";
+import CiudadService from "../../negocio/CiudadService.js";
 const ciudadService = new CiudadService(); // ← instancia para usar métodos de CiudadService
 
 export function calcularBalanceRecursos(ciudad) {
@@ -101,6 +101,8 @@ export function actualizarPanelRecursos(ciudad) {
     if (aguaMobile) aguaMobile.textContent = String(netoAgua);
     const felicidadMobile = document.getElementById("felicidad-mobile");
     if (felicidadMobile) felicidadMobile.textContent = `${ciudadService.promedioFelicidadCiudad(ciudad)}%`;
+    const turnoMobile = document.getElementById("turno-mobile");
+    if (turnoMobile) turnoMobile.textContent = String(ciudad.turno || 0);
 
     // Actualizar recursos tablet
     const dineroTablet = document.getElementById("dinero-tablet");
@@ -113,4 +115,6 @@ export function actualizarPanelRecursos(ciudad) {
     if (aguaTablet) aguaTablet.textContent = String(netoAgua);
     const felicidadTablet = document.getElementById("felicidad-tablet");
     if (felicidadTablet) felicidadTablet.textContent = `${ciudadService.promedioFelicidadCiudad(ciudad)}%`;
+    const turnoTablet = document.getElementById("turno-tablet");
+    if (turnoTablet) turnoTablet.textContent = String(ciudad.turno || 0);
 }
