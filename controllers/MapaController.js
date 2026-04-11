@@ -48,12 +48,91 @@ document.addEventListener("DOMContentLoaded", function () {
     let mapaActual = null;
     let refreshInterval = null;
     window.modoConstruccion = null; // Variable para indicar si estamos en modo construcción
+    window.modoDemoledorActivo = false;
 
     //Variables globales para el zoom
     let zoomActual = 1;
     const ZOOM_MIN = 0.1;
     const ZOOM_MAX = 2;
     const ZOOM_STEP = 0.1;
+
+    function actualizarUIBotonModoDemoledor() {
+        const botones = [
+            document.getElementById("btn-modo-eliminar-desktop"),
+            document.getElementById("btn-modo-eliminar-mobile")
+        ].filter(Boolean);
+
+        botones.forEach(btn => {
+            if (window.modoDemoledorActivo) {
+                btn.classList.remove("bg-red-600", "hover:bg-red-500");
+                btn.classList.add("bg-red-700", "hover:bg-red-600", "ring-2", "ring-red-300");
+                btn.textContent = "Activo modo demoledor";
+            } else {
+                btn.classList.remove("bg-red-700", "hover:bg-red-600", "ring-2", "ring-red-300");
+                btn.classList.add("bg-red-600", "hover:bg-red-500");
+                btn.textContent = "🚫 Modo demoledor";
+            }
+        });
+    }
+
+    function actualizarCursorModoDemoledor() {
+        const cursor = window.modoDemoledorActivo ? "not-allowed" : "default";
+        const cursorCelda = window.modoDemoledorActivo ? "not-allowed" : "pointer";
+
+        ["gameMap", "gameMapTablet", "gameMapMobile"].forEach(id => {
+            const contenedor = document.getElementById(id);
+            if (contenedor) {
+                contenedor.style.cursor = cursor;
+            }
+        });
+
+        const celdas = document.querySelectorAll(
+            "#gameMap [data-fila], #gameMapTablet [data-fila], #gameMapMobile [data-fila]"
+        );
+        celdas.forEach(celda => {
+            celda.style.cursor = cursorCelda;
+        });
+    }
+
+    function alternarModoDemoledor() {
+        window.modoDemoledorActivo = !window.modoDemoledorActivo;
+
+        if (window.modoDemoledorActivo) {
+            window.modoConstruccion = null;
+        }
+
+        actualizarUIBotonModoDemoledor();
+        actualizarCursorModoDemoledor();
+    }
+
+    function demolerCelda(fila, columna) {
+        if (!confirm("¿Estás seguro de que deseas eliminar este edificio?")) {
+            return;
+        }
+
+        // Leer ciudad fresca antes de operar para no pisar estado de otros servicios
+        const lista = StorageCiudad.load();
+        const params = new URLSearchParams(window.location.search);
+        const cityId = Number(params.get("cityId"));
+        const ciudadFresca = lista.find(c => c.id === cityId);
+
+        if (ciudadFresca) {
+            ciudadActual = ciudadFresca;
+            mapaActual = ciudadActual.miMapa?.matriz || [];
+            window.mapaActual = mapaActual;
+        }
+
+        const resultado = mapaService.demolerEdificio(ciudadActual, mapaActual, fila, columna);
+        if (!resultado?.ok) {
+            alert(resultado?.mensaje || "No se pudo demoler el edificio");
+            return;
+        }
+
+        ciudadService.actualizarCiudadCompleta(ciudadActual);
+        window.mapaActual = mapaActual;
+        renderizarMapa();
+        actualizarRecursosDeCiudad();
+    }
 
     function obtenerAlcaldeActual() {
         return localStorage.getItem("currentMayor") || "Alcalde Anónimo";
@@ -393,7 +472,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     // Manejar clicks en las celdas
                     celda.addEventListener("click", () => {
-                        if (window.modoConstruccion) {
+                        if (window.modoDemoledorActivo) {
+                            demolerCelda(fila, columna);
+                        } else if (window.modoConstruccion) {
                             // Si estamos en modo construcción, construir el edificio
                             console.log(`Celda clickeada en modo construcción: ${window.modoConstruccion}`);
                             construirEdificio(fila, columna, window.modoConstruccion);
@@ -411,6 +492,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
         aplicarZoom();
+        actualizarCursorModoDemoledor();
     }
 
     function obtenerSrcEdificio(tipo) {
@@ -718,6 +800,8 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     }
+
+    
     
 
     window.construirEdificio = construirEdificio;
@@ -759,6 +843,20 @@ document.addEventListener("DOMContentLoaded", function () {
             exportarCiudad();
         });
     }
+
+    const botonesModoDemoledor = [
+        document.getElementById("btn-modo-eliminar-desktop"),
+        document.getElementById("btn-modo-eliminar-mobile")
+    ];
+
+    botonesModoDemoledor.forEach(btn => {
+        if (btn) {
+            btn.addEventListener("click", alternarModoDemoledor);
+        }
+    });
+
+    actualizarUIBotonModoDemoledor();
+    actualizarCursorModoDemoledor();
 
 
 
