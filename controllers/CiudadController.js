@@ -1,23 +1,29 @@
 ﻿import StorageCiudad from "../acceso_datos/StorageCiudad.js";
-import { obtenerRegiones } from "../api/RegionesApi.js";
 import Mapa from "../modelos/Mapa.js";
 import CiudadService from "../negocio/CiudadService.js";
 import MapaService from "../negocio/MapaService.js";
 const ciudadService = new CiudadService();
 const mapaService = new MapaService();
+import { listarRegiones } from "../negocio/RegionService.js";
 
-function cargarRegiones() {
-    const regionSelect = document.getElementById("region");
-    if (!regionSelect) return;
+async function cargarRegiones() {
+    const select = document.getElementById("region");
+    if (!select) return; // evita errores si no existe
 
-    obtenerRegiones().then(data => {data.forEach(r => {
-                const option = document.createElement("option");
-                option.value = r.name;
-                option.textContent = r.name;
-                regionSelect.appendChild(option);
-            });
-        }).catch(error => {
-            console.error("No se pudieron cargar regiones:", error);});
+    try {
+        const regiones = await listarRegiones();
+
+        regiones.forEach(region => {
+            const option = document.createElement("option");
+            option.value = region.id;
+            option.textContent = region.nombre;
+
+            select.appendChild(option);
+        });
+
+    } catch (error) {
+        console.error("Error cargando regiones:", error);
+    }
 }
 
 
@@ -164,8 +170,8 @@ document.addEventListener("DOMContentLoaded", function () {
         actualizarContadores();
     }
 
-    cargarRegiones();
     renderizarCiudadesMenu();
+    cargarRegiones();
 
     //iniciarClimaAutomatico();
 

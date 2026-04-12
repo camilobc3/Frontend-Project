@@ -11,7 +11,7 @@ const CLASES = {
     "R2": Apartamento,
     "C1": Tienda,
     "C2": CentroComercial,
-    "I1": Fabrica,
+    "I1": Fabrica,  
     "I2": Granja,
     "S1": Hospital,
     "S2": EstacionBombero,

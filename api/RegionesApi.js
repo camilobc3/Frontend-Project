@@ -1,4 +1,8 @@
+const API_URL = "https://api-colombia.com/api/v1/Department";
+
 export async function obtenerRegiones() {
-    const response = await fetch("https://api-colombia.com/api/v1/Region");
-    return response.json();
+  const response = await fetch(API_URL);
+  const data = await response.json();
+
+  return data; 
 }
