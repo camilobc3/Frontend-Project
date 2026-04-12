@@ -24,6 +24,25 @@ function cargarRegiones() {
 document.addEventListener("DOMContentLoaded", function () {
     console.log("DOM cargado - CiudadController");
 
+    function seleccionarArchivoJson() {
+        return new Promise((resolve, reject) => {
+            const input = document.createElement("input");
+            input.type = "file";
+            input.accept = ".json";
+
+            input.addEventListener("change", (evento) => {
+                const archivo = evento.target.files?.[0];
+                if (!archivo) {
+                    reject(new Error("No se selecciono ningun archivo"));
+                    return;
+                }
+                resolve(archivo);
+            });
+
+            input.click();
+        });
+    }
+
     async function cargarMapaDesdeArchivo() {
         try {
             const nombre = prompt("Ingresa el nombre para la ciudad cargada:", "Ciudad cargada");
@@ -35,7 +54,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
-            const payload = await mapaService.cargarMapaDesdeArchivo();
+            const archivo = await seleccionarArchivoJson();
+            const texto = await archivo.text();
+            const payload = mapaService.cargarMapaDesdeTexto(texto);
             const id = ciudadService.asignacionId();
 
             if (payload?.tipo === "ciudad") {

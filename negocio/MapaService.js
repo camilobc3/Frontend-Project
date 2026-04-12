@@ -300,8 +300,8 @@ class MapaService {
         return mapa[codigo];
     }
     
-    async cargarMapaDesdeArchivo() {
-        return await MapaRepository.cargarDesdeArchivo();
+    cargarMapaDesdeTexto(texto) {
+        return MapaRepository.cargarDesdeTexto(texto);
     }
 
     asignarMapaACiudad(ciudad, matriz) {
