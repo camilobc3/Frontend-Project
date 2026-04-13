@@ -2,17 +2,9 @@ import { rehidratarEdificios, rehidratarMatriz } from "../acceso_datos/Reconstui
 
 const StorageCiudad = {
     key: "ciudades_v1",
+    rankingKey: "ranking_v1",
 
-    // load() {
-    //     const lista = JSON.parse(localStorage.getItem(this.key) || "[]");
-    //     // ✅ Rehidrata antes de entregar los datos
-    //     return lista.map(ciudad => {
-    //         if (ciudad.miMapa?.matriz) {
-    //             ciudad.miMapa.matriz = rehidratarMatriz(ciudad.miMapa.matriz);
-    //         }
-    //         return ciudad;
-    //     });
-    // },
+
 
     load() {
         const lista = JSON.parse(localStorage.getItem(this.key) || "[]");
@@ -39,6 +31,22 @@ const StorageCiudad = {
 
     save(lista) {
         localStorage.setItem(this.key, JSON.stringify(lista));
+    },
+
+    loadRanking() {
+        const raw = localStorage.getItem(this.rankingKey);
+        if (!raw) return [];
+
+        try {
+            const parsed = JSON.parse(raw);
+            return Array.isArray(parsed.ranking) ? parsed.ranking : [];
+        } catch {
+            return [];
+        }
+    },
+
+    saveRanking(rankingItems) {
+        localStorage.setItem(this.rankingKey, JSON.stringify({ ranking: rankingItems }));
     },
 
     clear() {

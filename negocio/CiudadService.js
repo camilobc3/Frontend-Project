@@ -46,6 +46,10 @@ class CiudadService {
     constructor() {
     }
 
+    obtenerAlcaldeActual() {
+        return localStorage.getItem("currentMayor") || "Alcalde Anónimo";
+    }
+
 
     asignacionId() {
         const lista = StorageCiudad.getListaCiudades();
@@ -115,6 +119,11 @@ class CiudadService {
         StorageCiudad.save(lista);
         console.log("Ciudad actualizada:", lista[indice]);
         return true;
+    }
+
+    cargarCiudadFresca(ciudadId, ciudadFallback = null) {
+        const ciudad = this.cargarCiudad(ciudadId);
+        return ciudad || ciudadFallback;
     }
 
     // ─── DELETE ──────────────────────────────────────────────────────────────
@@ -408,6 +417,105 @@ class CiudadService {
             ciudadanosEmpleados
         }
         
+    }
+
+    construirEntradaRanking(ciudad, mayor = this.obtenerAlcaldeActual()) {
+        const scoreData = this.calcularPuntuacion(ciudad);
+
+        return {
+            cityName: ciudad?.nombre || "Ciudad",
+            mayor,
+            score: scoreData?.puntuacionFinal || 0,
+            population: ciudad?.misCiudadanos?.length || 0,
+            happiness: this.promedioFelicidadCiudad(ciudad),
+            turns: ciudad?.turno || 0,
+            date: new Date().toISOString(),
+            id: ciudad?.id
+        };
+    }
+
+    obtenerRanking() {
+        const rankingItems = StorageCiudad.loadRanking();
+        return rankingItems.sort((a, b) => Number(b.score) - Number(a.score));
+    }
+
+    reiniciarRanking() {
+        StorageCiudad.saveRanking([]);
+    }
+
+    actualizarRankingConCiudad(ciudad, mayor = this.obtenerAlcaldeActual()) {
+        if (!ciudad) return;
+
+        const entry = this.construirEntradaRanking(ciudad, mayor);
+        const rankingItems = StorageCiudad.loadRanking();
+        const existingIndex = rankingItems.findIndex(r => r.id === entry.id && r.mayor === entry.mayor);
+
+        if (existingIndex !== -1) {
+            rankingItems[existingIndex] = entry;
+        } else {
+            rankingItems.push(entry);
+        }
+
+        rankingItems.sort((a, b) => Number(b.score) - Number(a.score));
+        StorageCiudad.saveRanking(rankingItems);
+    }
+
+    obtenerPosicionEnRanking(ciudad, mayor = this.obtenerAlcaldeActual()) {
+        if (!ciudad) return -1;
+        const rankingItems = this.obtenerRanking();
+        const matchIndex = rankingItems.findIndex(item => item.id === ciudad.id && item.mayor === mayor);
+        return matchIndex === -1 ? -1 : matchIndex + 1;
+    }
+
+    construirExportData(ciudad, mayor = this.obtenerAlcaldeActual()) {
+        const matrizActual = ciudad?.miMapa?.matriz || [];
+        const resultado = this.calcularPuntuacion(ciudad);
+        const promedioFelicidad = this.calcularFelicidadPromedio(ciudad);
+
+        const matriz = matrizActual.map(fila =>
+            fila.map(celda => {
+                if (!celda) return null;
+                return celda.tipo || null;
+            })
+        );
+
+        const ciudadSerializada = JSON.parse(JSON.stringify(ciudad));
+        if (!ciudadSerializada.miMapa) {
+            ciudadSerializada.miMapa = { matriz: [] };
+        }
+        ciudadSerializada.miMapa.matriz = matriz;
+
+        const height = matriz.length;
+        const width = height > 0 ? matriz[0].length : 0;
+
+        return {
+            version: 2,
+            exportedAt: new Date().toISOString(),
+            cityName: ciudad?.nombre || "Sin Nombre",
+            mayor: mayor || "Sin Alcalde",
+            gridSize: { width: width, height: height },
+            coordinates: { lat: 4.6097, lon: -74.0817 },
+            turn: ciudad?.turno || 0,
+            score: resultado.puntuacionFinal || 0,
+            matriz,
+            ciudad: ciudadSerializada,
+            resources: {
+                dinero: ciudad?.dinero || 0,
+                electricidad: ciudad?.electricidad || 0,
+                agua: ciudad?.agua || 0,
+                alimento: ciudad?.alimento || 0
+            },
+            duracionTurnoSeg : ciudad?.duracionTurnoSeg || 300,
+            citizens: ciudad?.misCiudadanos || [],
+            population: ciudad?.misCiudadanos?.length || 0,
+            happiness: promedioFelicidad,
+            estadisticas: {
+                poblacion: ciudad?.misCiudadanos?.length || 0,
+                felicidad: promedioFelicidad,
+                puntuacion: resultado.puntuacionFinal || 0,
+                turno: ciudad?.turno || 0
+            }
+        };
     }
 
     // calcularEmpleados(ciudad) {
