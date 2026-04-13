@@ -2,7 +2,7 @@ import {
     Casa, Apartamento, Tienda, CentroComercial,
     Fabrica, Granja, Hospital, EstacionBombero,
     EstacionPolicia, Parque, PlantaElectrica,
-    PlantaAgua, Camino
+    PlantaAgua, Camino, Ciudadano
 } from "../modelos/index.js";
 
 const CLASES = {
@@ -39,4 +39,27 @@ export function rehidratarMatriz(matriz) {
 
 export function rehidratarEdificios(edificios) {
     return edificios.map(e => rehidratarEdificio(e));
+}
+
+export function rehidratarCiudadanos(ciudadanosData) {
+    // Si no es un array o está vacío, devolver array vacío
+    if (!Array.isArray(ciudadanosData)) return [];
+    
+    return ciudadanosData.map(data => {
+        try {
+            // Buscar la felicidad: puede estar en 'nivelFelicidad' o 'felicidad'
+            const felicidad = data.nivelFelicidad ?? data.felicidad ?? 0;
+            // Crear instancia con los datos básicos
+            const ciudadano = new Ciudadano(data.id, felicidad);
+            // Copiar otras propiedades si existen (sin sobrescribir métodos)
+            if (data.misContratos) ciudadano.misContratos = data.misContratos;
+            if (data.tieneEmpleo !== undefined) ciudadano.tieneEmpleo = data.tieneEmpleo;
+            // Puedes agregar más propiedades si las necesitas
+            return ciudadano;
+        } catch (error) {
+            console.error("Error al rehidratar ciudadano:", data, error);
+            // Si falla, devolvemos el objeto original (como objeto plano)
+            return data;
+        }
+    });
 }

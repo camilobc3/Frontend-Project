@@ -94,13 +94,14 @@ class TurnoService {
         const consumo = this.calcularConsumo(ciudad);
         this.aplicarBalance(ciudad, produccion, consumo);
         
-        if(ciudad.dinero < 0 || ciudad.electricidad < 0 || ciudad.agua < 0){
+        if(ciudad.dinero < 0 || ciudad.electricidad < 0 || ciudad.agua < 0 || ciudad.alimento < 0){
             this.detenerTurnos();
             return {
                 gameOver: true,
                 razon: ciudad.dinero < 0 ? "dinero"
                      : ciudad.electricidad < 0 ? "electricidad"
-                     : "agua"
+                     : ciudad.agua < 0 ? "agua"
+                     : "alimento"
             };
         }
     
@@ -157,6 +158,11 @@ class TurnoService {
             consumo.electricidad += edificio.consumoElectricidad?.() || 0;
         });
 
+        //  Consumo de alimento por ciudadanos
+        ciudad.misCiudadanos.forEach(ciudadano => {
+            consumo.alimento += ciudadano.consumoAlimento?.() || 0;
+        });
+
         return consumo;
     }
 
@@ -169,15 +175,15 @@ class TurnoService {
 
     verificarRecursos(ciudad){
         const alertas = [];
-
         if(ciudad.agua <= 0){
             alertas.push("¡Alerta! Te has quedado sin agua.");
         }
-
         if(ciudad.electricidad <= 0){
             alertas.push("¡Alerta! Te has quedado sin electricidad.");
         }
-
+        if(ciudad.alimento <= 0){
+            alertas.push("¡Alerta! Te has quedado sin alimentos.");
+        }
         return alertas;
     }
 
