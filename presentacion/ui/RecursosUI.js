@@ -1,32 +1,7 @@
-import CiudadService from "../../negocio/CiudadService.js";
+import {CiudadService, TurnoService } from "../../negocio/index.js";
+
 const ciudadService = new CiudadService(); // ← instancia para usar métodos de CiudadService
-
-export function calcularBalanceRecursos(ciudad) {
-    const produccion = { dinero: 0, agua: 0, electricidad: 0, alimento: 0 };
-    const consumo = { agua: 0, electricidad: 0 };
-
-    if (Array.isArray(ciudad.misEdificios)) {
-        ciudad.misEdificios.forEach(edificio => {
-            if (edificio && edificio.activo !== false) {
-                produccion.dinero += edificio.produccionXTurno?.() || 0;
-                produccion.agua += edificio.produccionAgua?.() || 0;
-                produccion.electricidad += edificio.produccionElectricidad?.() || 0;
-                produccion.alimento += edificio.produccionAlimento?.() || 0;
-
-                consumo.agua += edificio.consumoAgua?.() || 0;
-                consumo.electricidad += edificio.consumoElectricidad?.() || 0;
-            }
-        });
-    }
-
-    return { produccion, consumo };
-}
-
-/* export function promedioFelicidad(ciudad) {
-    if (!Array.isArray(ciudad.misCiudadanos) || ciudad.misCiudadanos.length === 0) return 0;
-    const total = ciudad.misCiudadanos.reduce((acc, c) => acc + (c.felicidad || 0), 0);
-    return Math.round(total / ciudad.misCiudadanos.length);
-} */
+const turnoService = new TurnoService();
 
 export function formatMoney(valor) {
     return "$" + Number(valor).toLocaleString("es-CO");
@@ -37,7 +12,9 @@ export function actualizarPanelRecursos(ciudad) {
     
     console.log("Actualizando panel. Población:", ciudad.misCiudadanos?.length || 0);
 
-    const { produccion, consumo } = calcularBalanceRecursos(ciudad);
+    // const { produccion, consumo } = calcularBalanceRecursos(ciudad);
+    const produccion = turnoService.calcularProduccion(ciudad);
+    const consumo = turnoService.calcularConsumo(ciudad);
     const netoEnergia = produccion.electricidad - consumo.electricidad;
     const netoAgua = produccion.agua - consumo.agua;
 

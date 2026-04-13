@@ -329,7 +329,7 @@ class CiudadService {
         }
 
         if (cantidadCiudadanos != 0) {
-            felicidadPromedio = (felicidad / cantidadCiudadanos).toFixed(2);
+            felicidadPromedio = (felicidad / cantidadCiudadanos)
         }
 
         // BONUS
@@ -392,7 +392,7 @@ class CiudadService {
 
         // Calculo puntuacion final
 
-        let puntuacionFinal = (poblacion + felicidadPromedio + dinero + edificios + electricidad + agua + bonus - penalizaciones).toFixed(2);
+        let puntuacionFinal = (poblacion + felicidadPromedio + dinero + edificios + electricidad + agua + bonus - penalizaciones);
         
         //console.log(poblacion, felicidadPromedio, dinero, edificios, electricidad, agua, bonus, penalizaciones)
         
@@ -402,9 +402,9 @@ class CiudadService {
             edificios,
             recursos,
             bonus,
-            felicidadPromedio,
+            felicidadPromedio: felicidadPromedio.toFixed(2),
             penalizaciones,
-            puntuacionFinal,
+            puntuacionFinal: puntuacionFinal.toFixed(2),
             ciudadanosEmpleados
         }
         

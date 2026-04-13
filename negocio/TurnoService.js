@@ -120,41 +120,6 @@ class TurnoService {
         return { gameOver: false, alertas, edificiosInhabilitados };
     }
 
-    // ejecutarTurno(ciudad){
-    //     const ciudadService = new CiudadService(); // ← instancia para usar métodos de CiudadService
-    //     ciudad.turno++;
-
-    //     this.aplicarEfectosRecursos(ciudad);
-        
-    //     const produccion = this.calcularProduccion(ciudad);
-    //     const consumo = this.calcularConsumo(ciudad);
-
-    //     this.aplicarBalance(ciudad, produccion, consumo);
-        
-    //     if(ciudad.dinero < 0 || ciudad.electricidad < 0 || ciudad.agua < 0){
-    //         this.detenerTurnos();
-    //         return {
-    //             gameOver: true,
-    //             razon: ciudad.dinero < 0 ? "dinero"
-    //                  : ciudad.electricidad < 0 ? "electricidad"
-    //                  : "agua"
-    //         };
-    //     }
-
-    //     const alertas = this.verificarRecursos(ciudad);
-    //     alertas.forEach(alerta => console.log(alerta));
-
-    //     this.crearCiudadanosXturno(ciudad);
-
-    //     ciudadService.actualizarFelicidadCiudadanos(ciudad);
-    //     console.log(ciudad.misCiudadanos.map(c => ({ id: c.id, felicidad: c.nivelFelicidad })));
-
-    //     this.ciudadService.actualizarCiudadCompleta(ciudad);
-
-    //     console.log("Turno:", ciudad.turno, "Dinero:", ciudad.dinero);
-        
-    //     return { gameOver: false };
-    // }
 
     calcularProduccion(ciudad){
         let produccion = {
