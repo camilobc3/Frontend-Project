@@ -94,13 +94,14 @@ class TurnoService {
         const consumo = this.calcularConsumo(ciudad);
         this.aplicarBalance(ciudad, produccion, consumo);
         
-        if(ciudad.dinero < 0 || ciudad.electricidad < 0 || ciudad.agua < 0){
+        if(ciudad.dinero < 0 || ciudad.electricidad < 0 || ciudad.agua < 0 || ciudad.alimento < 0){
             this.detenerTurnos();
             return {
                 gameOver: true,
                 razon: ciudad.dinero < 0 ? "dinero"
                      : ciudad.electricidad < 0 ? "electricidad"
-                     : "agua"
+                     : ciudad.agua < 0 ? "agua"
+                     : "alimento"
             };
         }
     
@@ -120,41 +121,6 @@ class TurnoService {
         return { gameOver: false, alertas, edificiosInhabilitados };
     }
 
-    // ejecutarTurno(ciudad){
-    //     const ciudadService = new CiudadService(); // ← instancia para usar métodos de CiudadService
-    //     ciudad.turno++;
-
-    //     this.aplicarEfectosRecursos(ciudad);
-        
-    //     const produccion = this.calcularProduccion(ciudad);
-    //     const consumo = this.calcularConsumo(ciudad);
-
-    //     this.aplicarBalance(ciudad, produccion, consumo);
-        
-    //     if(ciudad.dinero < 0 || ciudad.electricidad < 0 || ciudad.agua < 0){
-    //         this.detenerTurnos();
-    //         return {
-    //             gameOver: true,
-    //             razon: ciudad.dinero < 0 ? "dinero"
-    //                  : ciudad.electricidad < 0 ? "electricidad"
-    //                  : "agua"
-    //         };
-    //     }
-
-    //     const alertas = this.verificarRecursos(ciudad);
-    //     alertas.forEach(alerta => console.log(alerta));
-
-    //     this.crearCiudadanosXturno(ciudad);
-
-    //     ciudadService.actualizarFelicidadCiudadanos(ciudad);
-    //     console.log(ciudad.misCiudadanos.map(c => ({ id: c.id, felicidad: c.nivelFelicidad })));
-
-    //     this.ciudadService.actualizarCiudadCompleta(ciudad);
-
-    //     console.log("Turno:", ciudad.turno, "Dinero:", ciudad.dinero);
-        
-    //     return { gameOver: false };
-    // }
 
     calcularProduccion(ciudad){
         let produccion = {
@@ -192,6 +158,11 @@ class TurnoService {
             consumo.electricidad += edificio.consumoElectricidad?.() || 0;
         });
 
+        //  Consumo de alimento por ciudadanos
+        ciudad.misCiudadanos.forEach(ciudadano => {
+            consumo.alimento += ciudadano.consumoAlimento?.() || 0;
+        });
+
         return consumo;
     }
 
@@ -204,15 +175,15 @@ class TurnoService {
 
     verificarRecursos(ciudad){
         const alertas = [];
-
         if(ciudad.agua <= 0){
             alertas.push("¡Alerta! Te has quedado sin agua.");
         }
-
         if(ciudad.electricidad <= 0){
             alertas.push("¡Alerta! Te has quedado sin electricidad.");
         }
-
+        if(ciudad.alimento <= 0){
+            alertas.push("¡Alerta! Te has quedado sin alimentos.");
+        }
         return alertas;
     }
 

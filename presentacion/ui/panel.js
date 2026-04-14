@@ -18,4 +18,4 @@ export function actualizarEstadisticas(ciudad) {
     Bonificaciones.textContent = `+${resultado.bonus || 0}`;
     Penalizaciones.textContent = `${resultado.penalizaciones || 0}`;
     puntuacionTotal.textContent = `${resultado.puntuacionFinal}`;
-}
+}   

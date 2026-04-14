@@ -61,7 +61,8 @@ function mostrarModalGameOver(razon) {
     const mensajes = {
         dinero:       "💸 La ciudad ha quebrado.",
         electricidad: "⚡ La ciudad se quedó sin electricidad.",
-        agua:         "💧 La ciudad se quedó sin agua."
+        agua:         "💧 La ciudad se quedó sin agua.",
+        alimento:     "🍽️ La ciudad se quedó sin alimentos."
     };
 
     document.getElementById("modalGameOverMensaje").textContent =

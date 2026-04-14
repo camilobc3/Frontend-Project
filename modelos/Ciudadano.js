@@ -41,6 +41,10 @@ class Ciudadano {
     obtenerCiudadanoPorId(listaCiudadanos, id) {
         return listaCiudadanos.find(c => c.id === id) ?? null;
     }
+
+    consumoAlimento() {
+        return 3
+    }
 }
 
 export default Ciudadano;

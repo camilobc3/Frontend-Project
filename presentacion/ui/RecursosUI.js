@@ -1,32 +1,7 @@
-import CiudadService from "../../negocio/CiudadService.js";
+import {CiudadService, TurnoService } from "../../negocio/index.js";
+
 const ciudadService = new CiudadService(); // ← instancia para usar métodos de CiudadService
-
-export function calcularBalanceRecursos(ciudad) {
-    const produccion = { dinero: 0, agua: 0, electricidad: 0, alimento: 0 };
-    const consumo = { agua: 0, electricidad: 0 };
-
-    if (Array.isArray(ciudad.misEdificios)) {
-        ciudad.misEdificios.forEach(edificio => {
-            if (edificio && edificio.activo !== false) {
-                produccion.dinero += edificio.produccionXTurno?.() || 0;
-                produccion.agua += edificio.produccionAgua?.() || 0;
-                produccion.electricidad += edificio.produccionElectricidad?.() || 0;
-                produccion.alimento += edificio.produccionAlimento?.() || 0;
-
-                consumo.agua += edificio.consumoAgua?.() || 0;
-                consumo.electricidad += edificio.consumoElectricidad?.() || 0;
-            }
-        });
-    }
-
-    return { produccion, consumo };
-}
-
-/* export function promedioFelicidad(ciudad) {
-    if (!Array.isArray(ciudad.misCiudadanos) || ciudad.misCiudadanos.length === 0) return 0;
-    const total = ciudad.misCiudadanos.reduce((acc, c) => acc + (c.felicidad || 0), 0);
-    return Math.round(total / ciudad.misCiudadanos.length);
-} */
+const turnoService = new TurnoService();
 
 export function formatMoney(valor) {
     return "$" + Number(valor).toLocaleString("es-CO");
@@ -37,7 +12,11 @@ export function actualizarPanelRecursos(ciudad) {
     
     console.log("Actualizando panel. Población:", ciudad.misCiudadanos?.length || 0);
 
-    const { produccion, consumo } = calcularBalanceRecursos(ciudad);
+    // const { produccion, consumo } = calcularBalanceRecursos(ciudad);
+    const produccion = turnoService.calcularProduccion(ciudad);
+    const consumo = turnoService.calcularConsumo(ciudad);
+    const resultado = ciudadService.calcularPuntuacion(ciudad);
+    const totalCiudadanos = ciudad.misCiudadanos?.length || 0;
     const netoEnergia = produccion.electricidad - consumo.electricidad;
     const netoAgua = produccion.agua - consumo.agua;
 
@@ -65,8 +44,7 @@ export function actualizarPanelRecursos(ciudad) {
 
     if (poblacionElem) poblacionElem.textContent = String(ciudad.misCiudadanos?.length || 0);
     if (empleoElem) {
-        let resultado = ciudadService.calcularPuntuacion(ciudad)
-        empleoElem.textContent = `${resultado.ciudadanosEmpleados} / ${ciudad.misCiudadanos.length}`
+        empleoElem.textContent = `${resultado.ciudadanosEmpleados} / ${totalCiudadanos}`;
     }
     if (felicidadElem) felicidadElem.textContent = `${ciudadService.promedioFelicidadCiudad(ciudad)}%`;
     if (electricidadElem) electricidadElem.textContent = `${consumo.electricidad} / ${produccion.electricidad}`;
@@ -104,6 +82,10 @@ export function actualizarPanelRecursos(ciudad) {
     if (energiaMobile) energiaMobile.textContent = String(netoEnergia);
     const aguaMobile = document.getElementById("agua-mobile");
     if (aguaMobile) aguaMobile.textContent = String(netoAgua);
+    const empleoMobile = document.getElementById("empleo-mobile");
+    if (empleoMobile) empleoMobile.textContent = `${resultado.ciudadanosEmpleados} / ${totalCiudadanos}`;
+    const alimentoMobile = document.getElementById("alimento-mobile");
+    if (alimentoMobile) alimentoMobile.textContent = String(ciudad.alimento || 0);
     const felicidadMobile = document.getElementById("felicidad-mobile");
     if (felicidadMobile) felicidadMobile.textContent = `${ciudadService.promedioFelicidadCiudad(ciudad)}%`;
     const turnoMobile = document.getElementById("turno-mobile");
@@ -118,6 +100,10 @@ export function actualizarPanelRecursos(ciudad) {
     if (energiaTablet) energiaTablet.textContent = String(netoEnergia);
     const aguaTablet = document.getElementById("agua-tablet");
     if (aguaTablet) aguaTablet.textContent = String(netoAgua);
+    const empleoTablet = document.getElementById("empleo-tablet");
+    if (empleoTablet) empleoTablet.textContent = `${resultado.ciudadanosEmpleados} / ${totalCiudadanos}`;
+    const alimentoTablet = document.getElementById("alimento-tablet");
+    if (alimentoTablet) alimentoTablet.textContent = String(ciudad.alimento || 0);
     const felicidadTablet = document.getElementById("felicidad-tablet");
     if (felicidadTablet) felicidadTablet.textContent = `${ciudadService.promedioFelicidadCiudad(ciudad)}%`;
     const turnoTablet = document.getElementById("turno-tablet");

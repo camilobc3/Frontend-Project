@@ -62,6 +62,7 @@ class CiudadanoService {
 
         return puntos;
     }
+    
     calcularFactoresNegativos(ciudadano, ciudad) {
         let puntos = 0;
 
